@@ -1,0 +1,8 @@
+.highlight{background-color: aqua;}
+
+.off-screen {
+	display: none;
+}
+td.clickUtter {
+    cursor: pointer;
+}

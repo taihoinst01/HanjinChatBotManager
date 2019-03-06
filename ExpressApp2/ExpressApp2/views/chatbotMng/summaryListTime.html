@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <%include  ../common/commonLib.html%>
+        <!--<script src="/common/js/bootstrap.min.js"></script>-->
+        <link rel="stylesheet" href="/common/css/bootstrap-datepicker.min.css">
+        <script type="text/javascript" src="/js/common/summaryMngTime.js"></script>
+        
+        <script src="/common/js/bootstrap-datepicker.min.js"></script>
+        <script src="/common/js/excel/exceljs.js"></script>
+        <script src="/common/js/excel/FileSaver.js"></script>
+        <style>
+            .dropdown-menu
+            {
+                background-color: #cccccc;
+            }
+        </style>
+
+        
+
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+
+        <!-- Header -->
+        <%include  ../header.html%>
+            <!-- //Header -->
+
+            <!-- Left Menu Side -->
+            <%include  ../leftSideBar.html%>
+                <!--// Left Menu Side -->
+
+
+                <!-- Content Wrapper -->
+                <div class="content-wrapper">
+                    <section class="content-header">
+                        <h1>일일통계(시간대별)</h1>
+                    </section>
+
+                    <!-- Main content -->
+                    <section class="content">
+                        <div class="box  color-palette-box">
+                            <div class="box-body">
+                                  <div class="modal-body search_op">
+                                        <div class="form-group col-lg-3 form-inline"  style=" padding-left:0px !important" >
+                                            <label for="inputEmail3" class="control-label">시작일/시작시간</label>
+                                            <input type="text" name="startDate" id="startDate" class="form-control" placeholder="<%= __('SELECT_DATE') %>">
+                                            <script>
+                                                $(function() {
+                                                  $( "#startDate" ).datepicker({
+                                                    dateFormat: 'mm/dd/yy'
+                                                  });
+                                                });
+                                            </script>
+                                            <select name="startTime" id="startTime" class="form-control">
+                                                <option value="">선택</option>
+                                                <option value="00:00:00">00:00</option>
+                                                <option value="01:00:00">01:00</option>
+                                                <option value="02:00:00">02:00</option>
+                                                <option value="03:00:00">03:00</option>
+                                                <option value="04:00:00">04:00</option>
+                                                <option value="05:00:00">05:00</option>
+                                                <option value="06:00:00">06:00</option>
+                                                <option value="07:00:00">07:00</option>
+                                                <option value="08:00:00">08:00</option>
+                                                <option value="09:00:00">09:00</option>
+                                                <option value="10:00:00">10:00</option>
+                                                <option value="11:00:00">11:00</option>
+                                                <option value="12:00:00">12:00</option>
+                                                <option value="13:00:00">13:00</option>
+                                                <option value="14:00:00">14:00</option>
+                                                <option value="15:00:00">15:00</option>
+                                                <option value="16:00:00">16:00</option>
+                                                <option value="17:00:00">17:00</option>
+                                                <option value="18:00:00">18:00</option>
+                                                <option value="19:00:00">19:00</option>
+                                                <option value="20:00:00">20:00</option>
+                                                <option value="21:00:00">21:00</option>
+                                                <option value="22:00:00">22:00</option>
+                                                <option value="23:00:00">23:00</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-lg-3 form-inline"  style=" padding-left:0px !important" >
+                                            <label for="inputEmail3" class="control-label">종료일/종료시간</label>
+                                            <input type="text" name="endDate" id="endDate" class="form-control" placeholder="<%= __('SELECT_DATE') %>">
+                                            <script>
+                                                $(function() {
+                                                  $( "#endDate" ).datepicker({
+                                                    dateFormat: 'mm/dd/yy'
+                                                  });
+                                                });
+                                            </script>
+                                            <select name="endTime" id="endTime" class="form-control">
+                                                <option value="">선택</option>
+                                                <option value="00:59:59">00:00</option>
+                                                <option value="01:59:59">01:00</option>
+                                                <option value="02:59:59">02:00</option>
+                                                <option value="03:59:59">03:00</option>
+                                                <option value="04:59:59">04:00</option>
+                                                <option value="05:59:59">05:00</option>
+                                                <option value="06:59:59">06:00</option>
+                                                <option value="07:59:59">07:00</option>
+                                                <option value="08:59:59">08:00</option>
+                                                <option value="09:59:59">09:00</option>
+                                                <option value="10:59:59">10:00</option>
+                                                <option value="11:59:59">11:00</option>
+                                                <option value="12:59:59">12:00</option>
+                                                <option value="13:59:59">13:00</option>
+                                                <option value="14:59:59">14:00</option>
+                                                <option value="15:59:59">15:00</option>
+                                                <option value="16:59:59">16:00</option>
+                                                <option value="17:59:59">17:00</option>
+                                                <option value="18:59:59">18:00</option>
+                                                <option value="19:59:59">19:00</option>
+                                                <option value="20:59:59">20:00</option>
+                                                <option value="21:59:59">21:00</option>
+                                                <option value="22:59:59">22:00</option>
+                                                <option value="23:59:59">23:00</option>
+                                            </select>
+                                        </div>    
+                                                    
+                                        <div class="form-group col-lg-3">
+                                                <p class="form-control-static">Total Count : <span id="totCnt">0</span></p>
+                                            </div>
+
+                                        <div class="form-group col-lg-3 fr"  style=" margin-top:20px;text-align:right; padding-right:0px;">
+                                            <button type="button" id="searchDlgBtn" class="btn btn_01"><i class="fa fa-search"></i> <%= __('SEARCH') %></button> 
+                                            <button type="button" id="excelDownload" class="btn btn_01"><i class="fa fa-file-excel-o"></i> <%= __('Excel Download') %></button>
+                                        </div>
+                                     </div>
+                                     
+
+                                    <!-- 학습 추천 테이블 --> 
+                                    <div class="Tbl_wrap">
+                                        <table class="Tbl" summary="analysis 관리">
+                                            <!--<colgroup><col width="40%"/><col width="20%"/><col width="10%"/><col width="10%"><col width="20%"></colgroup>-->
+                                                  <tr>
+                                                      <th>일시</th>
+                                                      <th>응답</th>
+                                                      <th>미응답</th>
+                                                      <th>Error</th>
+                                                      <th>SmallTalk</th>
+                                                      <th>용어사전</th>
+                                                      <th>용어사전실패</th>
+                                                      <th>SAP 초기화</th>
+                                                      <th>건의사항</th>
+                                                      <th>비속어</th>
+                                                      <th>총합</th>
+                                                  </tr>
+                                                <tbody id="summarytbody">
+                                                    <tr><td colspan="11" class="text-center">NO DATA</td></tr>
+                                                </tbody>
+                                        </table>
+                                    </div> 
+                            </div>
+                    </div>
+            </section>
+                    <!-- //Main content -->
+
+                </div>
+                <!--// Content Wrapper -->
+
+
+                <!--  Footer -->
+                <%include  ../footer.html%>
+                    <!-- // Footer -->
+                    <!-- Modal -->
+                    
+                    <div class="modal fade" id="procAnalysis" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel">Analysis Log 관리</h4>
+                                </div>
+                                <div class="modal-body"><p id="proc_content"></p></div>
+                                <div class="modal-footer" id="footer_button">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        //iCheck for checkbox and radio inputs
+                        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                            checkboxClass: 'icheckbox_minimal-blue',
+                            radioClass: 'iradio_minimal-blue'
+                        })
+                        //Red color scheme for iCheck
+                        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+                            checkboxClass: 'icheckbox_minimal-red',
+                            radioClass: 'iradio_minimal-red'
+                        })
+                        //Flat red color scheme for iCheck
+                        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                            checkboxClass: 'icheckbox_flat-green',
+                            radioClass: 'iradio_flat-green'
+                        })
+
+                    </script>
+</body>
+
+</html>

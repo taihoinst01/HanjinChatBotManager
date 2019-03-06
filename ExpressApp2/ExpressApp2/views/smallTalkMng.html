@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <%include  ./common/commonLib.html%>
+    <link rel='stylesheet' href='/css/utterances.css' />
+        
+        <script type="text/javascript" src="/js/common/smallTalkMng.js"></script>
+        <script src="/common/js/excel/exceljs.js"></script>
+        <script src="/common/js/excel/FileSaver.js"></script>
+        
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+
+        <!-- Header -->
+        <%include  ./header.html%>
+            <!-- //Header -->
+
+            <!-- Left Menu Side -->
+            <%include  ./leftSideBar.html%>
+                <!--// Left Menu Side -->
+
+
+                <!-- Content Wrapper -->
+                <div class="content-wrapper">
+                    <section class="content-header">
+                        <h1><%= __('SmallTalk_Title') %></h1>
+                    </section>
+
+                    <!-- Main content -->
+                    <section class="content">
+                            <input type="hidden" name='currentPage' id="currentPage" value="1" />
+                        <div class="box  color-palette-box">
+                                <div class="box-body">
+                                      <div class="modal-body search_op">
+                                            <input type="hidden" id="sourceType2" name="sourceType" value="D">
+                                            <input type="hidden" id="searchIntentHidden" name="searchIntentHidden" value="">
+                                            <input type="hidden" id="searchQuestionHidden" name="searchQuestionHidden" value="">
+                                            <div class="form-group w50 fl"  style="width: 150px; padding: 0 1em;">
+                                                <select id="smallTalkYn" class="form-control"> 
+                                                    <option value="ALL"><%= __('ALL') %></option>
+                                                    <option value="Y"><%= __('USE_Y') %></option>
+                                                    <option value="N"><%= __('USE_N') %></option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-lg-3"  style=" padding-left:0px !important" >
+                                                <input type="text" name="searchIntent" id="searchIntent" class="form-control" placeholder="<%= __('Enter_Connection_entity') %>">
+                                            </div> 
+                                            <div class="form-group col-lg-4"  style=" padding-left:0px !important" >
+                                                <input type="text" name="searchQuestion" id="searchQuestion" class="form-control" placeholder="<%= __('Please_enter_a_question') %>">
+                                            </div>     
+                                                        
+                                            <div class="form-group col-lg-4 fr"  style=" margin-top:20px;text-align:right; padding-right:0px;">
+                                                <button type="button" id="searchDlgBtn" class="btn btn_01 "><i class="fa fa-search"></i> <%= __('SEARCH') %></button> 
+                                                <button type="button" id="createSmallTalkBtn" class="btn btn-default "><i class="fa fa-plus"></i> <%= __('SmallTalk_Insert') %></button> 
+                                                <button type="button" class="btn btn-default" id="deleteSmallTalkBtnModal"><i class="fa fa-trash"></i> <%= __('SmallTalk_Delete') %></button>
+                                                <button type="button" id="excelDownload" class="btn btn_01"><i class="fa fa-file-excel-o"></i> <%= __('Excel Download') %></button>
+                                            </div>
+                                         </div>
+                                         
+    
+                                        <!-- 학습 추천 테이블 --> 
+                                        <div class="Tbl_wrap">
+                                            <table class="Tbl" summary="small talk 관리">
+                                                <colgroup><col width="5%"/><col width="5%"/><col width="15%"/><col width="30%"><col width="40%"><col width="5%"></colgroup>
+                                                      <tr>
+                                                          <th><%= __('NUM') %></th>
+                                                          <th>&nbsp;</th>
+                                                          <th><%= __('ENTITY') %></th>
+                                                          <th><%= __('DLG_QUESTION') %></th>
+                                                          <th><%= __('REPLY') %></th>
+                                                          <th><%= __('USE_YN') %></th>
+                                                      </tr>
+                                                    <tbody id="smallTalktbody">
+                                                        
+                                                    </tbody>
+                                            </table>
+                                        </div> 
+                                        <!-- 페이징 --> 
+                                        <div class="pagination_wrap" id="smallTalkTablePaging">
+                                                <ul class="pagination pagination-sm no-margin">
+    
+                                                </ul>
+                                            </div>
+                                </div>
+                        </div>
+                </section>
+                    <!-- //Main content -->
+
+                </div>
+                <!--// Content Wrapper -->
+
+
+                <!--  Footer -->
+                <%include  ./footer.html%>
+                    <!-- // Footer -->
+                    <script>
+                        //iCheck for checkbox and radio inputs
+                        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                            checkboxClass: 'icheckbox_minimal-blue',
+                            radioClass: 'iradio_minimal-blue'
+                        })
+                        //Red color scheme for iCheck
+                        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+                            checkboxClass: 'icheckbox_minimal-red',
+                            radioClass: 'iradio_minimal-red'
+                        })
+                        //Flat red color scheme for iCheck
+                        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                            checkboxClass: 'icheckbox_flat-green',
+                            radioClass: 'iradio_flat-green'
+                        })
+
+                    </script>
+<div class="modal fade" id="smallTalkMngModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel"><%= __('SmallTalk_Title') %></h4>
+            </div>
+            <div class="modal-body">
+                <form name="smallTalkForm" id="smallTalkForm" method="post">
+                    <input type="hidden" name="s_answer" id="s_answer">
+                    <input type="hidden" name="s_entity" id="s_entity">
+                    <div class="form-group">
+                        <label for="inputEmail3" ><i class="fa fa-asterisk"></i> Question</label>
+                        
+                            <input type="text" class="form-control" id="s_query" name="s_query" placeholder="<%= __('Please_enter_a_sentence') %>" spellcheck="false"
+                            autocomplete='off'>
+                            <p id="squeryEntity" name="squeryEntity" style="margin-top:10px">Question Entity</p>
+                        
+                    </div>
+                    <div class="form-group" >
+                        <label for="inputEmail3"><i class="fa fa-asterisk"></i> Answer</label>
+                        <button type="button" class="btn btn_01" id="addAnswerValBtn" ><i class="fa fa-plus"></i> <%= __('ADD') %></button>
+                        * <%= __('SmallTalk_3ITEM') %>
+                        <div class="answerValDiv">
+                            <div style="margin-top:4px;">
+                                <input name="answerValue" id="answerValue" type="text" tabindex="2" class="form-control" style=" float: left; width:80%;" placeholder=" <%= __('Please_enter') %>">
+                                <a href="#" name="delAnswerBtn" class="answer_delete" style="display:inline-block; margin:7px 0 0 7px; "><span class="fa fa-trash" style="font-size: 25px;"></span></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </form>
+            <div class="modal-footer">
+                    <button type="button" class="btn btn-default addDialogCancel" data-dismiss="modal"><i class="fa fa-times"></i> <%= __('CLOSE') %></button>
+                    <button type="button" class="btn btn_01" id="addSmallTalk"><i class="fa fa-edit"></i> <%= __('SAVE') %></button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="modal fade" id="smallTalkUpdateModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel"><%= __('SmallTalk_Title') %></h4>
+                </div>
+                <div class="modal-body">
+                    <form name="updateSmallTalkForm" id="updateSmallTalkForm" method="post">
+                        <input type="hidden" name="update_s_answer" id="update_s_answer">
+                        <input type="hidden" name="update_seq" id="update_seq">
+                        <div class="form-group">
+                            <label for="inputEmail3" ><i class="fa fa-asterisk"></i> Question</label>
+                            <p class="form-control-static" id="ori_utterance"><%= __('SmallTalk_ORI_UTTERANCE') %></p>
+                            
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" ><i class="fa fa-asterisk"></i> <%= __('USE_YN') %></label>
+                            <select name="useYn" id="useYn" class="form-control" style="width: 20%">
+                                <option value="Y"><%= __('USE_Y') %></option>
+                                <option value="N"><%= __('USE_N') %></option>
+                            </select>
+                        </div>
+                        <div class="form-group" >
+                            <label for="inputEmail3"><i class="fa fa-asterisk"></i> Answer</label>
+                            <button type="button" class="btn btn_01" id="update_addAnswerValBtn" ><i class="fa fa-plus"></i> <%= __('ADD') %></button>
+                            * <%= __('SmallTalk_3ITEM') %>
+                            <div class="updateAnswerValDiv">
+                                
+                            </div>
+                        </div>
+                        
+                    </form>
+                <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> <%= __('CLOSE') %></button>
+                        <button type="button" class="btn btn_01" id="updateSmallTalk"><i class="fa fa-edit"></i> <%= __('UPDATE') %></button>
+                        <button type="button" class="btn btn_01" id="deleteEntities"><i class="fa fa-edit"></i> 단어삭제</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>   
+
+<div class="modal fade" id="procSmallTalk" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel"><%= __("SmallTalk_Title") %></h4>
+            </div>
+            <div class="modal-body"><p id="proc_content"></p></div>
+            <div class="modal-footer" id="footer_button">
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="loadingBar" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel" aria-hidden="true" >
+    <img src="/image/ajax_loader.gif" style="width:50px; height:50px;" id="loadingImg">
+</div>
+
+</body>
+
+</html>

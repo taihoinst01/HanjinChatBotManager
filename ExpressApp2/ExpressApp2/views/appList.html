@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title></title>
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="common/css/bootstrap.min.css">
+<link rel="stylesheet" href="common/css/font-awesome.min.css">
+<link rel="stylesheet" href="common/css/AdminLTE.min.css">
+<link rel="stylesheet" href="common/css/skin-blue.min.css">
+<link rel="stylesheet" href="common/css/default.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">-->
+<!--[if lt IE 9]>
+<script src="common/js/html5shiv.min.js"></script>
+<script src="common/js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<script src="common/js/jquery.min.js"></script>
+<script src="common/js/bootstrap.min.js"></script>
+<script src="common/js/adminlte.js"></script>
+<!--<script src="common/js/jquery-2.2.4.min.js"  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script> -->
+<script src="common/js/icheck.min.js"></script>
+
+<script type="text/javascript" src="/js/common/appList.js"></script>
+<script type="text/javascript" src="/js/common/index.js"></script>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+      <!-- Header -->
+      <%include  ./header.html%>
+      <!-- //Header -->
+
+      <!-- Left Menu Side -->
+      <%include  ./leftSideBar.html%>
+      <!--// Left Menu Side -->
+
+      <!-- Content Wrapper -->
+      <div class="content-wrapper">
+                        <section class="content-header"><h1><%= __('CHAT_LIST') %></h1>  </section>
+    
+                        <!-- Main content -->
+                        <section class="content">
+                            
+                            <%
+                            if(sid) {
+                                if(list.length > 0) {
+                            %>
+
+                                <%
+                                    for(var i=0; i<list.length; i++) {
+                                %>
+                                     <!--row -->
+                                    <%
+                                        if (i%4 == 0) {
+                                    %>
+                                      <div class="row">
+
+                                    <%
+                                        }
+                                    %>
+                                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                                         <div class="box">
+                                                               <div class=" box_chatlist_h <%=list[i].APP_COLOR %>"><span class="lan"> <%= list[i].CULTURE %></span></div>
+                                                               <div class="box-body tc">
+                                                                     <a href="/board?appName=<%= encodeURI(list[i].CHATBOT_NAME) %>" class="title"><%= list[i].CHATBOT_NAME %>
+                                                                         <span><%= list[i].DESCRIPTION %></span>
+                                                                     </a>
+                                                               </div>
+                                                               <div class="chatlis_result">
+                                                                   <div class="re01"><%= __('INTENT') %> <span><%= list[i].INTENT_CNT %></span></div>
+                                                                   <div class="re02"><%= __('REPLY') %> <span><%= list[i].DLG_CNT %></span></div>
+                                                               </div>
+                                                        </div>
+                                                 </div>
+                                    <%
+                                        if (i%4 == 3) {
+                                    %>
+                                        </div>
+                                    <%
+                                        }
+                                    %>             
+                                        
+                                <%
+                                    }   
+                                %>
+
+
+                            <%
+                                } else {
+                            %>
+
+                            <%
+                                }
+                            } else {
+
+                            %>
+                                <script>
+                                    alert($('#signMassage').val());
+                                    location.href = '/';
+                                </script>  
+                            <%
+                                }   
+                            %>
+                        </section>
+                        <!-- //Main content -->
+        
+    </div>
+    <!--// Content Wrapper -->
+    
+              
+    <!--  Footer -->
+    <%include  ./footer.html%>
+    <!-- // Footer -->
+
+
+<script>
+  //iCheck for checkbox and radio inputs
+    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+      checkboxClass: 'icheckbox_minimal-blue',
+      radioClass   : 'iradio_minimal-blue'
+    })
+    //Red color scheme for iCheck
+    $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+      checkboxClass: 'icheckbox_minimal-red',
+      radioClass   : 'iradio_minimal-red'
+    })
+    //Flat red color scheme for iCheck
+    $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+      checkboxClass: 'icheckbox_flat-green',
+      radioClass   : 'iradio_flat-green'
+    })
+
+</script>
+</body>
+</html>

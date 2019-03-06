@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <%include  ../common/commonLib.html%>
+        <!--<script src="/common/js/bootstrap.min.js"></script>-->
+        <script type="text/javascript" src="/js/common/chatBotEnv.js"></script>
+        <script>
+            
+        </script>
+
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+
+
+        <!-- Header -->
+        <%include  ../header.html%>
+        <!-- //Header -->
+
+        <!-- Left Menu Side -->
+        <%include  ../leftSideBar.html%>
+        <!--// Left Menu Side -->
+
+        <!-- Content Wrapper -->
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1><%= __('CHATBOT_ENV') %></h1>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                
+                <div class="box  color-palette-box">
+                    <div class="box-body">   
+                        <div class="col-lg-12" style="padding-left:0px !important">
+                                <h4 class="col-lg-12">
+                                    ChatBot Luis Infomation
+                                </h4>
+                                <div class="Tbl_wrap">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <form name="chatBotEnvForm" id="chatBotEnvForm">
+                                            <div class="form-group col-lg-6">
+                                                <label>LUIS Time Limit&nbsp;<small>(ms)</small></label>
+                                                <input type="text" class="form-control" id="luisTimeLimit">
+                                            </div>
+                                            <div class="form-group col-lg-6">
+                                                <label>LUIS Score Limit<span class="nec_ico">(%)*</span></label>
+                                                <input type="number" class="form-control" id="luisScoreLimitNum" name ="luisScoreLimitNum" min="0" max="100" 
+                                                       onKeyUp="if(this.value>100){this.value='100';}else if(this.value<0){this.value='0';}"
+                                                />
+                                                <!--<input type="text" class="form-control" id="luisScoreLimit">-->
+                                                <!--
+                                                <select name="luisScoreLimit" id="luisScoreLimit" class="form-control">
+                                                    <option value="0.1">10%</option>
+                                                    <option value="0.7">70%</option>
+                                                    <option value="0.75">75%</option>
+                                                    <option value="0.8">80%</option>
+                                                    <option value="0.85">85%</option>
+                                                    <option value="0.9">90%</option>
+                                                    <option value="1.0">100%</option>
+                                                </select>
+                                                -->
+                                            </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="btn_wrap">
+                                <button type="button" class="btn btn_01" id="updateChatBotEnvBtn"><i
+                                    class="fa fa-edit"></i>
+                                <%= __('SAVE') %></button>
+                        </div>
+                    </div>
+                </div>
+                <!--
+                <div class="box  color-palette-box">
+                        <div class="box-body">   
+                            <div class="col-lg-12" style="padding-left:0px !important">
+                                    <h4 class="col-lg-12">
+                                        ChatBot API Infomation
+                                        <button type="button" class="btn btn_01" id="addAPIBtn" ><i class="fa fa-plus"></i> <%= __('ADD') %></button>
+                                    </h4>
+                                    <div class="Tbl_wrap">
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+                                                <form name="apiForm" id="apiForm">
+                                                        <div class="form-group form-inline" >
+                                                            <div class="apiFormDiv">
+                                                            </div>
+                                                        </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="btn_wrap">
+                                <button type="button" class="btn btn_01" id="insertAPIInfo"><i class="fa fa-edit"></i> <%= __('SAVE') %></button>
+                            </div>
+                        </div>
+                    </div>
+                    -->
+                    <div class="box  color-palette-box">
+                        <div class="box-body">
+                                <input type="hidden" name="chatbotName" id="chatbotName" value="<%=appName%>">
+                                <div class="col-lg-12" style="padding-left:0px !important">
+                                    <h4 class="col-lg-12">
+                                        ChatBot Database Infomation
+                                    </h4>
+                                    <div class="Tbl_wrap">
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+    
+                                                <div class="form-group col-lg-6">
+                                                    <label>DB ID<span class="nec_ico">*</span></label>
+                                                    <p class="form-control-static" id="dbId"></p>
+                                                </div>
+                                                <div class="form-group col-lg-6">
+                                                    <label>DB PASSWORD<span class="nec_ico">*</span></label>
+                                                    <p class="form-control-static" id="dbPassword"></p>
+                                                </div>
+                                                <div class="form-group col-lg-6">
+                                                    <label>DB SERVER URL<span class="nec_ico">*</span></label>
+                                                    <p class="form-control-static" id="dbServer"></p>
+                                                </div>
+                                                <div class="form-group col-lg-6">
+                                                    <label>DB NAME<span class="nec_ico">*</span></label>
+                                                    <p class="form-control-static" id="dbName"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+            </section>
+            <!-- //Main content -->
+
+        </div>
+        <!--// Content Wrapper -->
+
+
+        <!--  Footer -->
+        <footer class="main-footer">Copyright &copy; <strong> TAIHOINST. </strong> All rights reserved.</footer>
+        <!-- // Footer -->
+
+        <script>
+            //iCheck for checkbox and radio inputs
+            $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                checkboxClass: 'icheckbox_minimal-blue',
+                radioClass: 'iradio_minimal-blue'
+            })
+            //Red color scheme for iCheck
+            $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+                checkboxClass: 'icheckbox_minimal-red',
+                radioClass: 'iradio_minimal-red'
+            })
+            //Flat red color scheme for iCheck
+            $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+
+        </script>
+
+<div class="modal fade" id="loadingModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="margin:0;">Loading...</h3>
+            </div>
+            <div class="modal-body">
+                <div class="progress progress-striped active" style="margin-bottom:0;">
+                    <div class="progress-bar" style="width: 100%"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <strong>TIIZ</strong> ChatBot Manager
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="chatBotEnvModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel"><%= __('CHATBOT_ENV') %></h4>
+                </div>
+                <div class="modal-body">
+                    <p id="proc_content"></p>
+                </div>
+                <div class="modal-footer" id="delete_footer_button">
+                    <p id="footer_button"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

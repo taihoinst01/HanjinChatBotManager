@@ -1,0 +1,33 @@
+{
+  "name": "express-app2",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node index.js"
+  },
+  "description": "ExpressApp2",
+  "author": {
+    "name": "Taiho"
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.15.0",
+    "cookie-parser": "^1.4.0",
+    "crypto": "1.0.1",
+    "debug": "^2.2.0",
+    "ejs": "^2.5.7",
+    "express": "^4.14.0",
+    "express-session": "^1.15.6",
+    "fs": "0.0.1-security",
+    "i18n": "~0.8.3",
+    "moment": "^2.22.2",
+    "morgan": "^1.7.0",
+    "mssql": "4.1.0",
+    "node-rest-client": "^3.1.0",
+    "pug": "^2.0.0-beta6",
+    "serve-favicon": "^2.3.0",
+    "sync-rest-client": "^1.0.3",
+    "winston": "^2.4.2",
+    "winston-daily-rotate-file": "^3.3.0"
+  }
+}

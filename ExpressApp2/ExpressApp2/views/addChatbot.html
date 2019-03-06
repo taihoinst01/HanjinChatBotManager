@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="common/css/bootstrap.min.css">
+    <link rel="stylesheet" href="common/css/font-awesome.min.css">
+    <link rel="stylesheet" href="common/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="common/css/skin-blue.min.css">
+    <link rel="stylesheet" href="common/css/default.css">
+    <!--[if lt IE 9]>
+<script src="common/js/html5shiv.min.js"></script>
+<script src="common/js/1.4.2/respond.min.js"></script>
+<![endif]-->
+    <script src="common/js/jquery.min.js"></script>
+    <script src="common/js/bootstrap.min.js"></script>
+    <script src="common/js/adminlte.min.js"></script>
+    <!--<script src="common/js/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous"></script>-->
+    <script src="common/js/icheck.min.js"></script>
+
+    <script type="text/javascript" src="/js/common/addChatbot.js"></script>
+
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+
+
+        <!-- Header -->
+        <%include  ./header.html%>
+        <!-- //Header -->
+
+        <!-- Left Menu Side -->
+        <%include  ./leftSideBar_admin.html%>
+        <!--// Left Menu Side -->
+
+        <!-- Content Wrapper -->
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1><%= __('ADD_CHAT') %></h1>
+                <!--
+                <div class="nec"><span class="nec_ico">*</span>
+                    <%= __('IS_REQUIRED') %>
+                </div>
+                -->
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="box  color-palette-box">
+                    <div class="box-body">
+                        <form name="templateForm" id="templateForm">
+                            <div class="col-lg-12" style="padding-left:0px !important">
+                                <h4 class="col-lg-12">
+                                    ChatBot Basic Infomation
+                                </h4>
+                                <div class="Tbl_wrap">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+
+                                            <div class="form-group col-lg-8">
+                                                <label>
+                                                    <%= __('CHATBOT_NAME') %><span class="nec_ico">*</span></label>
+                                                <input type="text" class="form-control" id="appInsertName">
+                                            </div>
+                                            <div class="form-group col-lg-4">
+                                                <label>
+                                                    <%= __('CHATBOT_LANGUAGE') %> <span class="nec_ico">*</span></label>
+                                                <p> <input type="radio" name="r3" class="flat-red" checked value="ko-kr">
+                                                    <span class="mr30">
+                                                        <%= __('KOREAN') %> </span>
+                                                    <input type="radio" name="r3" class="flat-red" value="en-us">
+                                                    <%= __('ENGLISH') %>
+                                                </p>
+                                            </div>
+                                            <div class="form-group col-lg-6">
+                                                <label class="fl">
+                                                    <%= __('SELET_COLOR') %></label>
+                                                <div class="img-circle_wrap">
+                                                    <div id="selColor" class="img-circle_l color_01"> </div>
+                                                    <div class="img-circle_wrap02">
+                                                        <div name="colorCircle" class="img-circle color_01"></div>
+                                                        <div name="colorCircle" class="img-circle color_02"></div>
+                                                        <div name="colorCircle" class="img-circle color_03"></div>
+                                                        <div name="colorCircle" class="img-circle color_04"></div>
+                                                        <div name="colorCircle" class="img-circle color_05"></div>
+                                                        <div name="colorCircle" class="img-circle color_06"></div>
+                                                        <div name="colorCircle" class="img-circle color_07"></div>
+                                                        <div name="colorCircle" class="img-circle color_08"></div>
+                                                        <div name="colorCircle" class="img-circle color_09"></div>
+                                                        <div name="colorCircle" class="img-circle color_10"></div>
+                                                        <div name="colorCircle" class="img-circle color_11"></div>
+                                                        <div name="colorCircle" class="img-circle color_12"></div>
+                                                        <div name="colorCircle" class="img-circle color_13"></div>
+                                                        <div name="colorCircle" class="img-circle color_14"></div>
+                                                        <div name="colorCircle" class="img-circle color_15"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-lg-6">
+                                                <label>
+                                                    <%= __('CHATBOT_DESCRIPTION') %></label>
+                                                <textarea class="form-control" rows="5" id="appDes"> </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12" style="padding-left:0px !important">
+                                <h4 class="col-lg-12">
+                                    ChatBot Database Infomation
+                                </h4>
+                                <div class="Tbl_wrap">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+
+                                            <div class="form-group col-lg-6">
+                                                <label>DB ID<span class="nec_ico">*</span></label>
+                                                <input type="text" class="form-control" id="dbId">
+                                            </div>
+                                            <div class="form-group col-lg-6">
+                                                <label>DB PASSWORD<span class="nec_ico">*</span></label>
+                                                <input type="password" class="form-control" id="dbPassword">
+                                            </div>
+                                            <div class="form-group col-lg-6">
+                                                <label>DB SERVER URL<span class="nec_ico">*</span></label>
+                                                <input type="text" class="form-control" id="dbUrl">
+                                            </div>
+                                            <div class="form-group col-lg-6">
+                                                <label>DB NAME<span class="nec_ico">*</span></label>
+                                                <input type="text" class="form-control" id="dbName">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--
+                            <div class="col-lg-12" style="padding-left:0px !important">
+                                <h4 class="col-lg-12">
+                                    ChatBot LUIS Infomation
+                                </h4>
+                                <div class="Tbl_wrap">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+
+                                            <div class="form-group col-lg-6">
+                                                <label>LUIS Subscription<span class="nec_ico">*</span></label>
+                                                <input type="text" class="form-control" id="luisSubscription">
+                                            </div>
+                                            <div class="form-group col-lg-6">
+                                                <label>Simulation URL<span class="nec_ico">*</span></label>
+                                                <input type="text" class="form-control" id="simulationUrl">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            -->
+                        </form>
+                        <div class="btn_wrap">
+                            <button type="button" class="btn btn-default" id="cancelApp"><i class="fa fa-times"></i>
+                                <%= __('CANCEL') %></button> <button type="button" class="btn btn_01" id="saveApp"><i
+                                    class="fa fa-edit"></i>
+                                <%= __('SAVE') %></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- //Main content -->
+
+        </div>
+        <!--// Content Wrapper -->
+
+
+        <!--  Footer -->
+        <footer class="main-footer">Copyright &copy; <strong> TAIHOINST. </strong> All rights reserved.</footer>
+        <!-- // Footer -->
+
+        <script>
+            //iCheck for checkbox and radio inputs
+            $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                checkboxClass: 'icheckbox_minimal-blue',
+                radioClass: 'iradio_minimal-blue'
+            })
+            //Red color scheme for iCheck
+            $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+                checkboxClass: 'icheckbox_minimal-red',
+                radioClass: 'iradio_minimal-red'
+            })
+            //Flat red color scheme for iCheck
+            $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+
+        </script>
+
+<div class="modal fade" id="loadingModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+aria-labelledby="myModalLabel">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 style="margin:0;">Processing...</h3>
+        </div>
+        <div class="modal-body">
+            <div class="progress progress-striped active" style="margin-bottom:0;">
+                <div class="progress-bar" style="width: 100%"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+
+</html>

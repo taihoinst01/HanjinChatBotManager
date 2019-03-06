@@ -1,0 +1,542 @@
+
+
+
+
+
+<aside class="main-sidebar">
+    <section class="sidebar">
+        <input type="hidden" id="successHidden" value="<%= __('SUCCESS') %> " />
+        <input type="hidden" id="failHidden" value="<%= __('FAIL') %> " />
+        <input type="hidden" id="simulURL" value="<%=simul_url%>" />
+                           <div class="sidebar-form"><%= __('CHATBOT') %> 
+                            <%
+                                if(sAuth>=99) {
+                            %>
+                            <li class="btn_set01"> <a href="/users/userMng" class="left_set"></a></li>
+                            <%
+                                }
+                            %>
+        </div>
+        <!-- chat bot list -->
+        <div class="sidebar-form se02">
+            <div class="pull-left image img-circle color_01"> </div>
+            <ul class="dropdown">
+                <li class="dropdown tasks-menu">
+                    <% 
+                                                if(sid) { 
+                                                    if(appName) {
+                                            %>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="return false;">&nbsp;&nbsp;<%=appName %><span></span></a>
+                    <%
+                                                    } else {
+                                                        if(leftList && leftList.length >0) {
+                                                %>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="return false;">
+                        <%=leftList[0].CHATBOT_NAME %><span></span></a>
+                    <%
+                                                        } 
+                                                    }
+                                                %>
+
+                    <ul class="dropdown-menu">
+                        <%
+                                                        if(leftList) {
+                                                            for(var i=0; i<leftList.length; i++) {
+                                                        %>
+                        <!--row -->
+                        <a href="/board?appName=<%= encodeURI(leftList[i].CHATBOT_NAME) %>" class="circle_col" >
+                            <li><span class="pull-left image img-circle_s <%=leftList[i].APP_COLOR %>"> </span><span
+                                    class="tex01">
+                                    <%= leftList[i].CHATBOT_NAME %></span> </li>
+                        </a>
+                        <%
+                                                            }   
+                                                        } else {
+                                                    %>
+
+
+                        <%
+                                                        }
+                                                    %>
+
+                        <li class="tline"></li>
+                        <a href="/list" class="fa fa-list" >
+                            <%= __('CHAT_LIST') %></a>
+                    </ul>
+                </li>
+            </ul>
+            <%                  
+                                            }
+                                          %>
+        </div>
+        <!-- //chat bot list -->
+
+        <% 
+                        if(sid) { 
+                            if(appName) {
+                        %>
+
+        <!--left Menu-->
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">
+                <%= __('MENU') %>
+            </li>
+            <li class="treeview" id="dashboardClick">
+                <a href="/board">
+                    <i class="fa fa-dashboard"></i> <span>
+                        <%= __('DASHBOARD') %></span>
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i> </span>
+                </a>
+            </li>
+<!--
+            <li class="treeview" id="dashboardClick">
+                <a href="#" class="spmenu" id="simulBtn" data-toggle="control-sidebar">
+                    <i class="fa fa-eye"></i> <span><%= __('SIMULATION') %></span>
+                </a>
+            </li>
+-->
+            <li class="treeview" id="luisMenuLi">
+                <a href="#" onclick="return false;">
+                    <i class="fa fa-braille"></i> <span>LUIS</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <%
+                                for(var k=0; k<selChatInfo.chatbot.appList.length; k++) {
+                                                                %>
+                <ul class="treeview-menu">
+                    <li class=" treeview" name="appListLi">
+                        <a href="#" onclick="return false;">
+                            <i class="fa fa-book"></i> <span name="appNameSpan">
+                                <%=appName %>
+                                <%=k+1 %></span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li name='intentIndex_<%=k%>'><a href="/luis/intentList?appIndex=<%=k%>" ><i class="fa  fa-circle-o"></i><%= __('INTENT_LIST') %></a></li>
+                            <!--<li><a href="/luis/entityList?appIndex=<%=k%>"><i class="fa  fa-circle-o"></i><%= __('ENTITY_LIST') %></a></li>-->
+                            <li class="active" id="trainBtn" name="trainBtn" ><a href="#" class="spmenu" onclick="return false;">
+                                    <%= __('TRAIN') %></a></li>
+                            <input type="hidden" name="hiddenAppIndex" value="<%=k%>" />
+                        </ul>
+                    </li>
+                </ul>
+                <%
+                                    }
+                                    %>
+<!--
+            <li class="treeview" id="newUtterClick">
+                <a href="/luis/newUtterList" >
+                    <i class="fa fa-handshake-o"></i> <span><%= __('QNA_CONNECT') %></span>
+                </a>
+            </li>
+-->
+            <li class=" treeview">
+                <!--<li class="active treeview">-->
+                <a href="#" onclick="return false;">
+                    <i class="fa fa-bullhorn"></i> <span>
+                        <%= __('QNAMNG_TITLE') %></span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="/qna/newQnaMng" ><i class="fa fa-circle-o"></i> 신규질문답변 등록</a></li>
+                    <li><a href="/qna/qnaList" ><i class="fa fa-circle-o"></i> <%= __('QNA_TITLE') %></a></li>
+                    <li><a href="/qna/noAnswerQList" ><i class="fa fa-circle-o"></i> <%= __('NOANSWER_TITLE') %></a></li>
+                    <li><a href="/qna/dialogMng" ><i class="fa fa-circle-o"></i> <%= __('DIALOG_MNG_TITLE') %></a></li>
+                    <li><a href="/qna/initDialogMng" ><i class="fa fa-circle-o"></i> <%= __('INITDLG_TITLE') %></a></li>
+                </ul>
+            </li>
+            <li class=" treeview">
+                    <a href="#" onclick="return false;">
+                        <i class="fa fa-coffee"></i> <span>
+                            <%= __('SmallTalk_Title') %></span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="/smallTalkMng/smallTalkMng" ><i class="fa fa-circle-o"></i>
+                                <%= __('SmallTalk_Title') %></a></li>
+                        <li><a href="/smallTalkMng/smallTalkEntity" ><i class="fa fa-circle-o"></i>
+                            <%= __('SmallTalk_ENTITY_TITLE') %></a></li>
+                    </ul>
+                </li>
+            <li class=" treeview">
+                <!--<li class="active treeview">-->
+                <a href="#" onclick="return false;">
+                    <i class="fa fa-tasks"></i> <span><%= __('CHATBOTMNG_TITLE') %></span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <!--<li><a href="/learning/context"><i class="fa fa-circle-o"></i> Context 관리</a></li>-->
+                    <li><a href="/bannedWordMng/bannedWordMng" ><i class="fa fa-circle-o"></i> <%= __('BANDEDWORD_TITLE') %></a></li>
+                    <!--<li><a href="/autoCompleteMng/autoCompleteMng"><i class="fa fa-circle-o"></i> 자동완성 관리</a></li>-->
+                    <!--<li><a href="/templateMng/templateMng" ><i class="fa fa-circle-o"></i> <%= __('TEMPLATE_TITLE') %></a></li>-->
+                    <li><a href="/chatBotEnv/chatBotEnv" ><i class="fa fa-circle-o"></i> <%= __('CHATBOT_ENV') %></a></li>
+                </ul>
+            </li>
+
+            <li class=" treeview">
+                <!--<li class="active treeview">-->
+                <a href="#" onclick="return false;">
+                    <i class="fa fa-tasks"></i> <span><%= __('LOG_TITLE') %></span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="/historyMng/historyList" ><i class="fa fa-circle-o"></i> History Log 관리</a></li>
+                    <li><a href="/historyMng/analysisList" ><i class="fa fa-circle-o"></i> Analysis Log 관리</a></li>
+                    <li><a href="/historyMng/summaryList" ><i class="fa fa-circle-o"></i> 일일통계</a></li>
+                    <li><a href="/historyMng/summaryListTime" ><i class="fa fa-circle-o"></i> 일일통계(시간대별)</a></li>
+                    <li><a href="/historyMng/summaryListUser" ><i class="fa fa-circle-o"></i> 일일통계(사용자별)</a></li>
+                    <li><a href="/historyMng/summaryListIntentDate" ><i class="fa fa-circle-o"></i> 일일통계(Intent날짜별)</a></li>
+                    <li><a href="/historyMng/summaryListIntent" ><i class="fa fa-circle-o"></i> 일일통계(Intent분류별)</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview" id="synchronizeLuis">
+                <a href="/luis/synchronizeLuis" >
+                    <i class="fa fa-window-restore"></i> <span><%= __('SYNCH') %></span>
+                </a>
+            </li>
+            
+
+            <a href="#" class="spmenu" id="trainBtnHidden" data-toggle="modal" data-target="#myModal" style="visibility: hidden;" onclick="return false;">
+                <%= __('TRAIN') %></a>
+
+        </ul>
+        <!--// left Menu-->
+        <%
+                            }
+                        }
+                        %>
+
+    </section>
+</aside>
+<!--// Left Menu Side -->
+
+
+
+
+<!--  Footer -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">
+                    <%= __('TRAIN') %>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <p class="txt_center mt20" id="trainResultTag">
+                    <%= __('TRAIN_COMPLETE') %>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <div class="btn_wrap">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        <%= __('OK') %></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="luisSyncModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static"
+    data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">TIIZ Manager</h4>
+            </div>
+            <div class="modal-body">
+                    <%= __('LUIS_SYNCING') %>
+            </div>
+            <div class="modal-footer" id="delete_footer_button">
+                <button type="button" class="btn btn-primary" id="luisSync"><i class="fa fa-window-restore"></i> Start Sync</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Control Sidebar -->
+<aside class="control-sidebar control-sidebar-dark" id="simulDiv" style="height:90%; max-height: 750px; position: fixed; padding-top: 0 !important; top: 50px;">
+    <div class="hd_top ">
+        <h4>
+            <%= __('CHATBOT_SIMUL') %>
+        </h4>
+        <div class="btn_wrap04">
+            <button type="button" class="btn btn_02" id="startOver"><span class="fa fa-rotate-right  "></span></button>
+            <button type="button" class="btn btn_02" data-toggle="control-sidebar"><span class="fa fa-close"></span></button>
+        </div>
+    </div>
+    <div class="chat_con" id="iframChatbot" style="height:100%; padding:0; ">
+        챗봇 넣기
+        <!-- 챗팅창-->
+    </div>
+</aside>
+<!-- /.control-sidebar -->
+
+<div class="control-sidebar-bg" style="max-height: 800px; top: 50px;">
+</div>
+
+<div class="modal fade" id="loadingBar" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <img src="/image/ajax_loader.gif" style="width:50px; height:50px;" id="loadingImg">
+</div>
+
+<script>
+
+    $(window).on('load', function () {
+
+        /*
+        $('.settingBtn').each(function () {
+            if ( $(this).text() === $('#selLeftMenu').val()) {
+                $(this).addClass('now');
+            } else {
+                $(this).removeClass('now');
+            }
+        });
+        */
+        //learningg menu active
+        $('.treeview-menu').find('i').each(function () {
+            var menuName = $.trim($(this).parent().text()).replace(/\s/gi, "");
+            var pageTitle = $.trim($('.content-header>h1').text()).replace(/\s/gi, "");
+            if ($('#hiddenMenuTitle').length > 0) {
+                pageTitle = $.trim($('#hiddenMenuTitle').val()).replace(/\s/gi, "");;
+            }
+            if (menuName === pageTitle) {
+                if ($(this).parents('#luisMenuLi').length > 0) {
+                    var appIndex = $('#appIndex').val();
+                    var appCompare = $(this).parents('li[name=appListLi]').find('span[name=appNameSpan]').text().split(' ');
+                    appCompare = appCompare[appCompare.length-1];
+                    if (appIndex == --appCompare) {
+                        $(this).parents('li').addClass('active');
+                    }
+                } else {
+                    $(this).parents('li').addClass('active');
+                }
+            }
+        });
+        //대시보드 active
+        $('.treeview').find('i').each(function () {
+            var menuName = $.trim($(this).next().text()).replace(/ /gi, "");
+            var pageTitle = $.trim($('.content-header').text()).replace(/ /gi, "");
+            if (menuName === pageTitle) {
+                $(this).parents('li').addClass('active');
+            }
+        });
+    });
+
+    $(document).ready(function () {   
+        $('.more').click(function () {
+            if ($('.more').hasClass('more')) {
+                $('.more').addClass('close').removeClass('more');
+                $('.board').css('visibility', 'visible');
+            } else if ($('.close').hasClass('close')) {
+                $('.close').addClass('more').removeClass('close');
+                $('.board').css('visibility', 'hidden');
+            }
+        });
+
+        $('#dashboardClick').click(function () {
+            var width = 0;
+            var height = 0;
+            var left = 0;
+            var top = 0;
+
+            width = 50;
+            height = 50;
+
+            top = ($(window).height() - height) / 2 + $(window).scrollTop();
+            left = ($(window).width() - width) / 2 + $(window).scrollLeft();
+
+            $("#loadingBar").addClass("in");
+            $("#loadingImg").css({ position: 'absolute' }).css({ left: left, top: top });
+            $("#loadingBar").css("display", "block");
+
+            var url = "/board";
+            $(location).attr('href', url);
+        });
+
+        
+        $('#synchronizeLuis').click(function () {
+            /*
+            var width = 0;
+            var height = 0;
+            var left = 0;
+            var top = 0;
+
+            width = 50;
+            height = 50;
+
+            top = ($(window).height() - height) / 2 + $(window).scrollTop();
+            left = ($(window).width() - width) / 2 + $(window).scrollLeft();
+
+            $("#loadingBar").addClass("in");
+            $("#loadingImg").css({ position: 'absolute' }).css({ left: left, top: top });
+            $("#loadingBar").css("display", "block");
+
+            var url = "/luis/synchronizeLuis";
+            $(location).attr('href', url);
+            */
+            $('#luisSyncModal').modal('show');
+        });
+
+        /*
+        //simulataion url 아이디별로 구분.
+        $('#simulBtn').click(function () {
+            if (!$('#simulDiv').hasClass('control-sidebar-open')) {
+                var simulUrl = $('#simulURL').val();
+
+                var chatbotItem = '<iframe id="testChatBot" name="testChatBot" style="height:100%; width:100%;" class="" src="' + simulUrl + '"></iframe>';
+                $('#iframChatbot').html(chatbotItem);
+            }
+        });
+        */
+        //test 챗봇 새로고침
+        $('#startOver').click(function () {
+            var simulUrl = $('#simulURL').val();
+            $('#testChatBot').removeAttr('src');
+            $('#testChatBot').attr('src', simulUrl);
+            return false;
+        });
+
+        //train --start
+        $('li[name=trainBtn]').click(function () {
+            if(!confirm("학습하시겠습니까?")) {
+                return false;
+            } 
+            var appIndex = $(this).parents('ul').find('input[name=hiddenAppIndex]').val();
+            var params = {
+                'appIndex': appIndex
+            };
+            $.ajax({
+                url: "/luis/trainApp",
+                type: "post",
+                data: params
+                , timeout: 0
+                , beforeSend: function () {
+
+                    var width = 0;
+                    var height = 0;
+                    var left = 0;
+                    var top = 0;
+
+                    width = 50;
+                    height = 50;
+
+                    top = ($(window).height() - height) / 2 + $(window).scrollTop();
+                    left = ($(window).width() - width) / 2 + $(window).scrollLeft();
+
+                    $("#loadingBar").addClass("in");
+                    $("#loadingImg").css({ position: 'absolute' }).css({ left: left, top: top });
+                    $("#loadingBar").css("display", "block");
+                }
+                , complete: function () {
+                    $("#loadingBar").removeClass("in");
+                    $("#loadingBar").css("display", "none");
+                }
+            }).done(function (data) {
+                if (data.result === 400) {
+                    $('#trainResultTag').text(data.message);
+                    //alert(data.message);
+                } else if (data.result === 401) {
+                    $('#trainResultTag').text(data.message);
+                    //alert(data.message);
+                } else if (data.result === 402) {
+                    $('#trainResultTag').text("Luis App의 공간이 없습니다. 관리자에게 문의하여 Luis App을 만들어야 합니다.");
+                } else { //200
+                    //var result = data.resultValue;
+                    //alert("학습을 완료하였습니다.");
+                    //$('#trainResultTag').text($('#successHidden').val() + " : " + result.sucCnt + "  " + $('#failHidden').val() + " : " + result.failCnt);
+                    //alert("성공 : " + result.sucCnt + "실패 : " + result.failCnt);
+                    $('#trainBtnHidden').trigger('click');
+                }
+            })
+
+        });
+
+        $('#newUtterClick').click(function () {
+            var width = 0;
+            var height = 0;
+            var left = 0;
+            var top = 0;
+
+            width = 50;
+            height = 50;
+
+            top = ($(window).height() - height) / 2 + $(window).scrollTop();
+            left = ($(window).width() - width) / 2 + $(window).scrollLeft();
+
+            $("#loadingBar").addClass("in");
+            $("#loadingImg").css({ position: 'absolute' }).css({ left: left, top: top });
+            $("#loadingBar").css("display", "block");
+
+            var url = "/luis/newUtterList";
+            $(location).attr('href', url);
+        });
+
+
+
+        //train --end
+
+        $("a[name=batchTest]").click(function () {
+
+            if ($("#learningTest").css('display') != 'none') {
+                $("#learningTest").hide();
+                $("#batchTestPanel").show();
+                $("#toggleDiv").toggleClass('open');
+
+                //$("#toggleDiv").css('right', '0px');
+            } else {
+
+                $("#batchTestPanel").hide();
+                $("#learningTest").show();
+                $("#toggleDiv").toggleClass('open');
+                //$("#toggleDiv").css('right', '-900px');
+            }
+        });
+
+        $('#luisSync').click(function () {
+            $('#luisSyncModal').modal('hide');
+            var width = 0;
+            var height = 0;
+            var left = 0;
+            var top = 0;
+
+            width = 50;
+            height = 50;
+
+            top = ($(window).height() - height) / 2 + $(window).scrollTop();
+            left = ($(window).width() - width) / 2 + $(window).scrollLeft();
+
+            $("#loadingBar").addClass("in");
+            $("#loadingImg").css({ position: 'absolute' }).css({ left: left, top: top });
+            $("#loadingBar").css("display", "block");
+
+            var url = "/luis/synchronizeLuis";
+            $(location).attr('href', url);
+        });
+
+
+        $('.dropdown-menu .circle_col ').click(function() {
+            $('#loadingModalMain').modal('show');
+        });
+    });
+
+
+
+
+</script>

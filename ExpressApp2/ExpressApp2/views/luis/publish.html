@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>
+        
+    </title>
+    <%include  ../common/commonLib.html%>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!--[if lt IE 9]>
+    <script src="common/js/html5shiv.min.js"></script>
+    <script src="common/js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="/css/luis/publish.css">
+    <script type="text/javascript" src="/js/common/luis/publish.js"></script>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+
+    <input type="hidden" name='hiddenMenuTitle' id="hiddenMenuTitle" value="Publish" />
+    <!-- HOST -->
+    <input type="hidden" id="host" value="<%=HOST%>">
+    <!-- subscription key -->
+    <input type="hidden" id="subKeys" value="<%=subscriptionkey%>">
+    <!-- app id -->
+    <input type="hidden" id="appId" value="<%=appid%>">
+    <!-- Time Zone-->
+    <input type="hidden" id="timeZone" value="540">
+    <!-- spell check -->
+    <input type="hidden" id="spellcheckFlag" value="<%=spellChecker%>">
+
+    <!-- Get your Bing Key -->
+    <div class="modal-backdrop" id="modal-backdrop" style="display: none;">
+        <div class="modal-center">
+            <div class="prompt-container">
+                <h1 class="prompt-title" id="promptTitle">Get your Bing Key</h1>
+                <p class="prompt-content">
+                    You have enabled Bing Spell Checker. Please retrieve a Bing Spell Check key 
+                </p>
+                <div class="prompt-btn-row" id="prompt-btn-row">
+                    <div class="tabbableElement m-button-primary-md">OK</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="wrapper">
+        <!-- Header -->
+        <%include ../header.html%>
+        <!-- //Header -->
+        <!-- Left Menu Side -->
+        <%include ../leftSideBar.html%>
+        <!--// Left Menu Side -->
+        <div class="content-wrapper">
+            <section class="content-header"><h1>Publish app</h1>  </section>
+            <!-- Main content -->
+            <section class="content">
+                <div class="box  color-palette-box">
+                    <div class="box-body">
+                        <div class="m-row margin-35-bottom m-align-end">
+                            <div class="m-col m-col-md-4">
+                                <label>Select slot</label>
+                                <select name="" class="form-control" id="isStaging" onchange="endpointSlot(this.value)">
+                                    <option value="false" selected="selected">Production</option>
+                                    <option value="true">Staging</option>
+                                </select>
+                            </div>
+                            <div class="m-col m-col-md-2">
+                                <button type="button" class="btn btn_01" id="publishBtn">Publish</button>		
+                            </div>
+                            <div class="m-col m-col-md-4">
+                                <div class="margin-5-bottom">
+                                    <span class="weighted">Published version:</span>
+                                    <span class="margin-left-1">0.1</span>
+                                </div>
+                                <div>
+                                    <!-- <span class="weighted">Published date:</span> -->
+                                    <!-- <span class="margin-left-1">Jun 14, 2018, 9:56:27 AM</span>
+                                    <span class="margin-left-1">(Approximately 3 month(s) ago)</span> -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="m-content-hr">
+
+                        <div class="m-row margin-25-bottom m-align-end">
+                            <div class="m-col m-col-md-12">
+                                <h3 class="m-header-3">EndPoint url settings</h3>
+                            </div>
+                            <div class="m-col m-col-md-12 margin-15-bottom">
+                                <label class="m-label">Timezone</label>
+                                <select class="form-control" style="width: 50%;" onchange="timezone(this.value)">
+                                    <option value="-12.0">(GMT -12:00) Eniwetok, Kwajalein</option>
+                                    <option value="-11.0">(GMT -11:00) Midway Island, Samoa</option>
+                                    <option value="-10.0">(GMT -10:00) Hawaii</option>
+                                    <option value="-9.0">(GMT -9:00) Alaska</option>
+                                    <option value="-8.0">(GMT -8:00) Pacific Time (US & Canada)</option>
+                                    <option value="-7.0">(GMT -7:00) Mountain Time (US & Canada)</option>
+                                    <option value="-6.0">(GMT -6:00) Central Time (US & Canada), Mexico City</option>
+                                    <option value="-5.0">(GMT -5:00) Eastern Time (US & Canada), Bogota, Lima</option>
+                                    <option value="-4.0">(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz</option>
+                                    <option value="-3.5">(GMT -3:30) Newfoundland</option>
+                                    <option value="-3.0">(GMT -3:00) Brazil, Buenos Aires, Georgetown</option>
+                                    <option value="-2.0">(GMT -2:00) Mid-Atlantic</option>
+                                    <option value="-1.0">(GMT -1:00 hour) Azores, Cape Verde Islands</option>
+                                    <option value="0.0">(GMT) Western Europe Time, London, Lisbon, Casablanca</option>
+                                    <option value="1.0">(GMT +1:00 hour) Brussels, Copenhagen, Madrid, Paris</option>
+                                    <option value="2.0">(GMT +2:00) Kaliningrad, South Africa</option>
+                                    <option value="3.0">(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg</option>
+                                    <option value="3.5">(GMT +3:30) Tehran</option>
+                                    <option value="4.0">(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi</option>
+                                    <option value="4.5">(GMT +4:30) Kabul</option>
+                                    <option value="5.0">(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent</option>
+                                    <option value="5.5">(GMT +5:30) Bombay, Calcutta, Madras, New Delhi</option>
+                                    <option value="5.75">(GMT +5:45) Kathmandu</option>
+                                    <option value="6.0">(GMT +6:00) Almaty, Dhaka, Colombo</option>
+                                    <option value="7.0">(GMT +7:00) Bangkok, Hanoi, Jakarta</option>
+                                    <option value="8.0">(GMT +8:00) Beijing, Perth, Singapore, Hong Kong</option>
+                                    <option value="9.0" selected="selected">(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk</option>
+                                    <option value="9.5">(GMT +9:30) Adelaide, Darwin</option>
+                                    <option value="10.0">(GMT +10:00) Eastern Australia, Guam, Vladivostok</option>
+                                    <option value="11.0">(GMT +11:00) Magadan, Solomon Islands, New Caledonia</option>
+                                    <option value="12.0">(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka</option>
+                                </select>
+                            </div>
+                            <div class="m-col m-col-md-12">
+                                <input type="checkbox" name="tableAllChk" class="flat-red" id="verboseFlag" checked>
+                                <label class="m-checkbox-container" style="padding-left: 12px;">Include all predicted intent scores</label>
+                            </div>
+                            <div class="m-col m-col-md-12">
+                                <input type="checkbox" name="tableAllChk" class="flat-red" id="spellFlag">
+                                <label class="m-checkbox-container" style="padding-left: 12px;">Enble Bing spell checker</label>
+                            </div>
+                        </div>
+
+                        <hr class="m-content-hr">
+
+                        <div class="m-col m-col-md-12">
+                            <div class="m-row">
+                                <div class="m-col m-col-md-12 margin-10-bottom">
+                                    <h3 class="m-header-3">Resources and Key</h3>
+                                    <!-- <div>
+                                        <button type="button" class="btn btn_01" id="addKey">Add Key</button>		
+                                    </div> -->
+                                </div>
+                                <!--
+                                <div class="m-col m-col-md-12" role="radiogroup">
+                                    <div class="radio inline-block margin-10-right">
+                                        <label>
+                                            <input type="radio" name="visibleContinent" checked="checked" onclick="radioRegions(this)">
+                                            <span class="text-body">North America Regions</span>
+                                        </label>
+                                    </div>
+                                    <div class="radio inline-block margin-10-right">
+                                        <label>
+                                            <input type="radio" name="visibleContinent" onclick="radioRegions(this)">
+                                            <span class="text-body">South America Regions</span>
+                                        </label>
+                                    </div>
+                                    <div class="radio inline-block margin-10-right">
+                                        <label>
+                                            <input type="radio" name="visibleContinent" onclick="radioRegions(this)">
+                                            <span class="text-body">Europe Regions</span>
+                                        </label>
+                                    </div>
+                                    <div class="radio inline-block margin-10-right">
+                                        <label>
+                                            <input type="radio" name="visibleContinent" onclick="radioRegions(this)">
+                                            <span class="text-body">Asia Regions</span>
+                                        </label>
+                                    </div>
+                                    <div class="radio inline-block margin-10-right">
+                                        <label>
+                                            <input type="radio" name="visibleContinent" onclick="radioRegions(this)">
+                                            <span class="text-body">Australia Regions</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                 -->
+                                <div class="m-col m-col-md-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Resource Name</th>
+                                                    <th>Region</th>
+                                                    <th>Key String</th>
+                                                    <th>Endpoint</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr id="temp1">
+                                                    <td>Starter_Key</td>
+                                                    <td>westus</td>
+                                                    <td class="key-cell" id="keyString"></td>
+                                                    <td><a href="#" target="_blank" id="endPointUrl"></a></td>
+                                                </tr>
+                                                <tr id="temp2" style="display: none;">
+                                                    <td colspan="4" class="spacer-16-top text-align-center">You have no keys in this region yet.</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                       
+
+                    </div>
+                </div>
+            </section>
+            <!-- //Main content -->
+        </div>
+
+        <!--  Footer -->
+        <%include  ../footer.html%>
+        <!-- // Footer -->
+    </div>
+    <!--// Content Wrapper -->
+
+    <script>
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass   : 'iradio_minimal-blue'
+        })
+        //Red color scheme for iCheck
+        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+            checkboxClass: 'icheckbox_minimal-red',
+            radioClass   : 'iradio_minimal-red'
+        })
+        //Flat red color scheme for iCheck
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass   : 'iradio_flat-green'
+        })
+
+    </script>
+</body>
+</html>

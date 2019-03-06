@@ -1,0 +1,214 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel='stylesheet' href='/stylesheets/style.css' />
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>
+        TIIS Manager
+    </title>
+
+    <%include  ./common/commonUse.html%>
+    <script type="text/javascript" src="/js/common/appList.js"></script>
+    <script type="text/javascript" src="/js/common/index.js"></script>
+    
+
+    <style type="text/css">
+        .appLayout { position:absolute; z-index:999; display:none; background-color:#ffffff; border:solid 2px gray; width:160px; height:90px;  } 
+        .layerMenu{width: 100%; height: 50%; cursor: pointer;}
+        .layerMenu:hover{background-color:#a7a4a4 !important;}
+        #layoutBackground { position:absolute; z-index:900; background-color:#000; display:none; left:0; top:0; } 
+
+        .layoutFont { 
+            box-sizing: border-box;
+            display: flex;
+            -webkit-box-orient: horizontal;
+            -webkit-box-direction: normal;
+            flex-flow: row nowrap;
+            -webkit-box-align: center;
+            align-items: center;
+            height: 40px;
+            width: 100%;
+            padding: 8px 24px;
+            font-family: "Segoe UI Semibold";
+            font-size: 15px;
+            line-height: 24px;
+            letter-spacing: 0.5px;
+            background-image: none;
+            color: #2b2b2b;
+            cursor: pointer; 
+        }
+
+        .dashLink:link {text-decoration:none; color:#0078D7;}
+        .dashLink:visited {text-decoration:none; color:#0078D7;}
+        .dashLink:active {text-decoration:none; color:#0078D7;}
+        .dashLink:hover {text-decoration:none; color:#0078D7;}
+        
+    </style>
+
+
+    
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"> test-->
+</head>
+
+<body class="main">
+    <input type="hidden" name="deleteAppId" id="deleteAppId" /> <!-- app 삭제용 (edit레이어가 공통으로 사용되기 때문에 id 저장할 필요 있음)-->
+    <input type="hidden" name="currentAppName" id="currentAppName" /> <!-- app 이름 재설정용 -->
+    <input type="hidden" name="deleteAsk" id="deleteAsk" value="<%= __('ASK_DELETE') %>"/> <!-- app 이름 재설정용 -->
+    
+    <!--<link rel="import" href="./header.html">-->
+    <%include  ./header.html%>
+    <div id="wrap">
+        <div id="container" class="main">
+            <div id="sub_cont03">
+                <!-- 챗봇앱 관리 -->
+                <div class="tbl_area">
+                        <div class="tbl_area_l">
+                            <a href="#" class="btn js-open-modal"  id="btn_crte_botCrte" onclick="openModalBox('#new_chatbot')"><%= __('create_app') %><!-- 신규챗봇추가 --></a>
+                            
+                        </div>
+                </div>
+
+
+                <%
+                    if(list.length > 0) {
+                %>
+
+                <table class="Tbl" id="sampleTable">
+                    <thead>
+                        <tr>
+                                <th class="txt_left"> <%= __('NAME') %> <span></span></th>
+                                <th class="txt_left"> <%= __('Culture') %> <span></span> </th>
+                                <th class="txt_left"> <%= __('create_date') %> <span></span></th>
+                                <th class="txt_left"> <%= __('DESC') %> <span></span></th>
+                            <th class="txt_right02"> <%= __('edit') %> </th>
+                        </tr>
+                    </thead>
+                    <%
+                    for(var i=0; i<list.length; i++) {
+                    %>
+                        <tr>
+                            <td class="txt_left"><a href="/board?appName=<%= list[i].APP_NAME %>&appId=<%= list[i].APP_ID %>" class="dashLink" ><%= list[i].APP_NAME %></a></td> <!-- dyyo 1228추가 -->
+                            <td class="txt_left"><%= list[i].CULTURE %></td>
+                            <td class="txt_left"><%= list[i].REG_DT %></td>
+                            <td class="txt_left"><%= list[i].DESCRIPTION %></td>
+                            <td class="txt_right02"><a href="#" class="btn_util" onclick="itemClick(event, this, '<%= list[i].APP_ID %>', '<%= list[i].APP_NAME %>');"></a></td>
+                        </tr>
+                        <%
+                        }
+                        %>
+                </table>
+                <%
+                } else {
+                %>
+
+                <%
+                }
+                %>
+            </div>
+        </div>
+    </div>
+        <hr>
+        <footer>
+            <p>&copy; Company 2014</p>
+        </footer>
+	<!-- /container -->
+
+    <div id="lay" class="appLayout">
+        <div class="layerMenu" id="btn_crte_appEdit" onclick="openModalBox('#rename_chatbot')">
+            <span class="layoutFont"><%= __('rename_app') %></span> <!-- class="btn_edit js-open-modal" 수정아이콘 -->
+        </div>
+        <div class="layerMenu" onclick="deleteApp()">
+            <span class="layoutFont"><%= __('delete_app') %></span>
+        </div>
+    </div>
+
+    <div id="layoutBackground" >
+    </div>
+
+
+<div class="mask"></div>    
+<!--신규 챗봇 등록 -->
+<div id="new_chatbot" class="modal_box w600" style="height: auto !important">
+    <header> <a href="#" id="addAppClose" class="js-modal-close close">×</a>
+      <h3><%= __('create_app') %></h3><!-- 신규 앱 등록 -->
+    </header>
+
+    <!-- form start -->
+    <form name="appInsertForm" id="appInsertForm" method="post">
+
+    <div class="modal-body">
+      <p class="texcon01"><%= __('service') %><!-- 서비스 -->  <span>(<%= __('required') %>) </span></p>
+      <p><select  name="appInsertService" class="inbox02" id="appInsertService" style="width:100%" onchange="appValidation('appInsert');">
+            <option selected="selected" disabled="disabled"><%= __('Select_service') %><!-- 서비스 선택 --></option>
+            <option value="1">service1<!-- service1 --></option>
+            <option value="2">service2<!-- service2 --></option>
+         </select>
+      </p>
+      <p class="texcon01"><%= __('NAME') %>  <span>(<%= __('required') %>) </span></p>
+      <p><input name="appInsertName" type="text" class="inbox02" id="appInsertName" style="width:100%" placeholder="Input name.." onkeyup="appValidation('appInsert');"></p><!-- onkeyup에 함수달아서 해도되요 -->
+      <p class="texcon01"><%= __('Culture') %><span>(<%= __('required') %>) </span></p>
+      <p><select name="appInsertCulture" class="inbox02" id="appInsertCulture" style="width:100%" onchange="appValidation('appInsert');"><!-- onchange 참고 함수형식 -->
+            <option value="en-us"><%= __('English') %></option>
+            <option value="ko-kr"><%= __('Korean') %></option>
+         </select></p>
+      <p class="texcon01"><%= __('DESC') %>  <span>(<%= __('optional') %>) </span></p>
+      <p><textarea name="appInsertDes" id="appInsertDes" cols="" rows="3" style="width:100%; resize:none;" placeholder="Input text.."></textarea></p>
+
+      <!--
+      <p class="texcon01">using key <span>(optional) </span></p>
+      <p><select  name="subkeyBox" class="inbox02" id="subkeyBox" style="width:100%" >
+            <option selected="selected" disabled="disabled">Select endpoint key</option>
+            <c:forEach var="key" items="${subscriptionKeyList}">
+              <c:if test="${not empty key.subscriptionName}">
+                  <option value="${key.subscriptionKey}">${key.subscriptionName}</option>
+              </c:if>
+              <c:if test="${empty key.subscriptionName}">
+                  <option value="${key.subscriptionKey}">${key.subscriptionKey}</option>
+              </c:if>
+            </c:forEach>
+         </select>
+      </p>
+       엔드포인트 키 선택 -->
+    </div>
+
+    </form>
+    <!-- form end -->
+
+    <footer>
+      <button class="btn disable" id="btnAppInsert" onclick="save('appInsert')" disabled="disabled"><%= __('SAVE') %></button>
+      <a href="#" class="btn b02  btn-small js-modal-close"><%= __('CANCEL') %></a>
+    </footer>
+
+</div>
+<!--//신규 챗봇 등록 -->
+
+<!--루이스 APP 이름 재설정 -->
+<div id="rename_chatbot" class="modal_box w600" style="height: auto !important">
+    <header> <a href="#" id="renameAppClose" class="js-modal-close close">×</a>
+        <h3><%= __('rename_app') %></h3>
+    </header>
+
+    <!-- form start -->
+    <form name="renameForm" id="renameForm" method="post">
+        <div class="modal-body">
+        <p class="texcon01"><%= __('app_name') %>  <span>(<%= __('required') %>) </span></p>
+        <p><input name="reName" type="text" class="inbox02" id="reName" style="width:100%" placeholder="<%= __('Please_enter') %>" onkeyup="appValidation('renameApp')"></p>
+        </div>
+    </form>
+    <!-- form end -->
+
+    <footer>
+        <button class="btn disable" id="btnRenameApp" onclick="renameApp()" disabled="disabled"><%= __('SAVE') %></button>
+        <a href="#" class="btn b02  btn-small js-modal-close"><%= __('CANCEL') %></a>
+    </footer>
+
+</div>
+<!--//루이스 APP 이름 재설정 -->
+</body>
+
+    
+    
+</html>

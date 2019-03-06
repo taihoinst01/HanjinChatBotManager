@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <%include  ../common/commonLib.html%>
+        <script src="/common/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/js/common/authMng.js"></script>
+        <script>
+            function show_authMasterForm() {
+                document.authMasterForm.reset();
+                $('#footer_button').html('<button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button><button type="button" class="btn btn-primary" id="addAuthGrpBtn"><i class="fa fa-edit"></i> Save</button>');
+                $('#authMasterFormModal').modal('show');
+            }
+        </script>
+
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+
+        <!-- Header -->
+        <%include  ../header.html%>
+            <!-- //Header -->
+
+            <!-- Left Menu Side -->
+            <%include  ../leftSideBar_admin.html%>
+                <!--// Left Menu Side -->
+
+
+                <!-- Content Wrapper -->
+                <div class="content-wrapper">
+                    <section class="content-header">
+                        <h1><%= __('AUTHGROUP_MSG') %></h1>
+                    </section>
+
+                    <!-- Main content -->
+                    <section class="content">
+                        <div class="box  color-palette-box">
+                            <div class="box-body">
+                                <div class="row search_op">
+                                    <div class="form-group col-lg-4">
+                                        <!--<label class="fl mr10"><%= __('USER_NAME') %></label>-->
+                                        <select name="searchType" id="searchType" class="form-control">
+                                            <option value="AUTHGRP_M_ID"><%= __('AUTHGROUP_ID') %></option>
+                                            <option value="AUTHGRP_M_NM" selected><%= __('AUTHGROUP_NAME') %></option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-4">
+                                        <!--<label  class="fl mr10"><%= __('USER_ID') %></label>-->
+                                        <input type="text" class="form-control" name="searchWord" id="searchWord" placeholder="<%= __('Please_enter') %>" spellcheck="false"
+                                            autocomplete='off' style="width:80%">
+                                    </div>
+                                    <div class="form-group col-lg-4" style="text-align:right">
+                                        <button type="button" class="btn btn_01" id="searchBtn">
+                                            <i class="fa fa-search"></i>
+                                            <%= __('SEARCH') %>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="row mt20">
+                                    <h4 class=" col-lg-6">권한그룹 목록</h4>
+                                    <div class=" col-lg-6" style="text-align:right">
+                                        <!--<button type="button" class="btn btn-default" id="addBtn"><%= __('ADD') %></button>-->
+                                        <!--<button type="button" class="btn btn-default" onClick="show_authMasterForm();">
+                                            <i class="fa fa-plus"></i>
+                                            <%= __('ADD') %>
+                                        </button>
+                                        -->
+                                    </div>
+                                </div>
+
+                                <!-- 공통코드 마스터 테이블 -->
+                                <div class="Tbl_wrap">
+                                    <table class="Tbl" summary="권한그룹목록">
+                                        <colgroup>
+                                            <col width="15%" />
+                                            <col width="10%" />
+                                            <col width="30%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th><%= __('AUTHGROUP_NAME') %></th>
+                                                <th><%= __('AUTHGROUP_LEVEL') %></th>
+                                                <th><%= __('AUTHGROUP_DESC') %></th>
+                                                <th><%= __('DASHBOARD_ITEMREGDT') %></th>
+                                                <th><%= __('UPDATE_DATE') %></th>
+                                                <th>...</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="authMasterTbody">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="pagination_wrap">
+                                <ul class="pagination pagination-sm no-margin">
+
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- //Main content -->
+
+                </div>
+                <!--// Content Wrapper -->
+
+
+                <!--  Footer -->
+                <%include  ../footer.html%>
+                    <!-- // Footer -->
+                    <!-- Modal -->
+                    <div class="modal fade" id="authMasterFormModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel"><%= __('AUTHGROUP_MSG') %></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="form-horizontal" name="authMasterForm" id="authMasterForm">
+                                            <input type="hidden" name="AUTHGRP_M_ID" id="AUTHGRP_M_ID">
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3 control-label"><i class="fa fa-asterisk"></i> <%= __('AUTHGROUP_NAME') %></label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" id="AUTHGRP_M_NM" name="AUTHGRP_M_NM" placeholder="<%= __('AUTHGROUP_NAME') %>">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                                <label for="inputEmail3" class="col-sm-3 control-label"><i class="fa fa-asterisk"></i> <%= __('AUTHGROUP_LEVEL') %></label>
+                                                <div class="col-sm-9">
+                                                    <select name="AUTH_LEVEL" id="AUTH_LEVEL" class="form-control" disabled>
+                                                        <option value="99" selected><%= __('AUTH_99') %></option>
+                                                        <option value="88"><%= __('AUTH_88') %></option>
+                                                        <option value="77"><%= __('AUTH_77') %></option>
+                                                        <option value="66"><%= __('AUTH_66') %></option>
+                                                        <option value="55"><%= __('AUTH_55') %></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3 control-label"><%= __('AUTHGROUP_DESC') %></label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" id="DESCR" name="DESCR" placeholder="<%= __('AUTHGROUP_DESC') %>">
+                                            </div>
+                                        </div>
+                                        
+                                    </form>
+                                </div>
+                                <div class="modal-footer" id="footer_button">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="authDeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h4 class="modal-title" id="myModalLabel">권한그룹관리</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form class="form-horizontal" name="authDeleteForm" id="authDeleteForm">
+                                            <input type="hidden" name="DELETE_AUTH_ID" id="DELETE_AUTH_ID">
+                                        </form>
+                                        정말로 삭제하시겠습니까? 복구할 수 없으며 메뉴및 사용자 권한에 영향을 줄 수 있습니다.'
+                                    </div>
+                                    <div class="modal-footer" id="delete_footer_button">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+                                            <button type="button" class="btn btn-primary" id="deleteAuthBtn"><i class="fa fa-trash"></i> Delete</button> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <script>
+                        //iCheck for checkbox and radio inputs
+                        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                            checkboxClass: 'icheckbox_minimal-blue',
+                            radioClass: 'iradio_minimal-blue'
+                        })
+                        //Red color scheme for iCheck
+                        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+                            checkboxClass: 'icheckbox_minimal-red',
+                            radioClass: 'iradio_minimal-red'
+                        })
+                        //Flat red color scheme for iCheck
+                        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                            checkboxClass: 'icheckbox_flat-green',
+                            radioClass: 'iradio_flat-green'
+                        })
+
+                    </script>
+</body>
+
+</html>

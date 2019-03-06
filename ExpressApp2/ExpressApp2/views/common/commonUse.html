@@ -1,0 +1,46 @@
+<link rel="stylesheet" type="text/css" href="/css/ext/plugin/jquery_ui/jquery-ui-1.11.4.custom.min.css" />
+<link rel="stylesheet" type="text/css" href="/js/import/treeview/jquery.treeview.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/js/import/freejqgrid/css/ui.jqgrid.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/js/import/freejqgrid/css/jqGrid.bootstrap.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/js/import/ext/ax/AXJ.min.css" />
+<!-- <link rel="stylesheet" type="text/css" href="/css/common.css" /> -->
+<!-- <link rel="stylesheet" type="text/css" href="/css/sub.css" /> -->
+<link rel="stylesheet" type="text/css" href="/js/import/jqcloud/jqcloud.css" />
+<!-- <link rel="stylesheet" type="text/css" href="/css/header.css" /> -->
+
+<%
+function dateConverter(date){ //YYYYMMDDHHmmss
+    function pad(num) {
+        num = num + '';
+        return num.length < 2 ? '0' + num : num;
+    }
+    return date.getFullYear() + pad(date.getMonth()+1) + pad(date.getDate()) + pad(date.getHours()) + pad(date.getMinutes()) + pad(date.getSeconds());
+}
+%>
+
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script> -->
+<!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script> -->
+
+<script type="text/javascript" src="/js/import/jquery-2.2.4.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/js/import/jquery-ui-1.11.4.custom.min.js" charset="utf-8"></script>
+
+<script type="text/javascript" src="/js/import/ext/jquery.i18n.properties-1.0.9.js" charset="utf-8"></script>
+<script type="text/javascript" src="/js/import/ext/jquery.form.js" charset="utf-8"></script>
+<script type="text/javascript" src="/js/import/ext/jquery.maskedinput.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/js/import/ext/handlebars-v4.0.5.js" charset="utf-8"></script>
+<script type="text/javascript" src="/js/import/ext/jshashtable-2.1.js" charset="utf-8"></script>
+<script type="text/javascript" src="/js/import/ext/jquery.numberformatter-1.2.4.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/js/import/treeview/jquery.treeview.js" charset="utf-8"></script>
+
+<script type="text/javascript" src="/js/import/ticommon.js?t=<%=dateConverter(new Date())%>" charset="utf-8"></script>
+<script type="text/javascript" src="/js/import/jquery-ti-init.js" charset="utf-8"></script>
+<!-- <script type="text/javascript" src="/js/import/jqgrid-ti-grid2016.min.js" charset="utf-8"></script> -->
+<script type="text/javascript" src="/js/import/jquery-ti-common.js?t=<%=dateConverter(new Date())%>" charset="utf-8"></script>
+<script type="text/javascript" src="/js/import/jquery-ti-datepicker.js?t=<%=dateConverter(new Date())%>" charset="utf-8"></script>
+<script type="text/javascript" src="/js/import/jquery-ti-validate.min.js?t=<%=dateConverter(new Date())%>" charset="utf-8"></script>
+<script type="text/javascript" src="/js/import/jquery-ti-ajaxvalidate.min.js?t=<%=dateConverter(new Date())%>" charset="utf-8"></script>
+<script type="text/javascript" src="/js/import/jquery-ti-ajax.min.js?t=<%=dateConverter(new Date())%>" charset="utf-8"></script>
+
+<!-- script type="text/javascript" src="/js/import/common.ui.js"></script> -->
+<script type="text/javascript" src="/js/common/header.js"></script>

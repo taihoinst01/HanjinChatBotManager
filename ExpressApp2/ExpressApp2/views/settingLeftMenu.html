@@ -1,0 +1,20 @@
+
+    <div class="setting-left-menu">
+        <ul>
+            <input type="hidden"  id="selLeftMenu" value="<%= selLeftMenu %>"/>
+            <li><span><p>SETTING</p></span></li>
+            <!--
+            <li><span><a class="settingBtn" href="/users/codeMng" >공통코드관리</a></span></li>
+            <li><span><a class="settingBtn" href="/users/screenMng" >화면관리</a></span></li>
+            <li><span><a class="settingBtn" href="/users/menuMng" >메뉴관리</a></span></li>
+            <li><span><a class="settingBtn" href="/users/authGrpMng" >권한그룹관리</a></span></li>
+            <li><span><a class="settingBtn" href="/users/authDtlMng" >권한상세관리</a></span></li>
+            <li><span><a class="settingBtn" href="/users/userAppMng" >사용자앱매핑관리</a></span></li>
+            -->
+            <li><span><a class="settingBtn" href="/users/userMng" ><%= __('USER_MNG') %></a></span></li>
+            <li><span><a class="settingBtn" href="/users/userAuthMng" ><%= __('USER_AUTH_MNG') %></a></span></li>
+            <li><span><a class="settingBtn" href="/users/apiSetting" ><%= __('API_MNG') %></a></span></li>
+        </ul>
+    </div>
+
+    <script type="text/javascript" src="/js/common/settingLeftMenu.js"></script>

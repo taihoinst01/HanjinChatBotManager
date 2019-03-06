@@ -1,0 +1,240 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>
+        
+    </title>
+    <%include  ../common/commonLib.html%>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <link rel='stylesheet' href='/css/utterances.css' />
+    <link rel='stylesheet' href='/css/botchat.css' />
+    <!--[if lt IE 9]>
+    <script src="common/js/html5shiv.min.js"></script>
+    <script src="common/js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <script type="text/javascript" src="/js/common/luis/newUtterList.js"></script>
+    <style type="text/css">
+        .entityValDiv {
+            overflow-y: auto !important;
+            max-height: 150px !important;
+        }
+    </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+        <input type="hidden" name='searchStr' id="searchStr" value="" />
+        <input type="hidden" name='currentPage' id="currentPage" value="1" />
+        <input type="hidden" name='selectUtterAppId' id="selectUtterAppId" value="-1" />
+        <input type="hidden" name='selectUtterIntent' id="selectUtterIntent" value="-1" />
+        <input type="hidden" name='selectUtterSeq' id="selectUtterSeq" value="-1" />
+        <input type="hidden" name='selectUtterEntities' id="selectUtterEntities" value="-1" />
+        <!-- Header -->
+        <%include ../header.html%>
+        <!-- //Header -->
+        <!-- Left Menu Side -->
+        <%include ../leftSideBar.html%>
+        <!--// Left Menu Side -->
+        <!-- -->
+        <div class="content-wrapper">
+            <section class="content-header"><h1><%= __('QNA_CONNECT') %></h1>  </section>
+            <!-- Main content -->
+            <section class="content">
+                <div class="box  color-palette-box">
+                    <div class="box-body">
+                        <div class="form-group w50 fl" style="width: 250px;">
+                            <button id="searchDlgModalBtn" type="button" style="display:none;"  data-toggle="modal" data-target="#seasrchDlgModal"><%= __('CREAT') %></button>
+                        </div>
+                        <!--  -->
+                        <div class="form-group w50 fr ">
+                            <div class="input-group input-group-sm fr" style="width: 250px;">
+                                <input type="text" id="searchQnaText" spellcheck="false" autocomplete='off' class="form-control pull-right" placeholder="<%= __('Enter_search_word') %>">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default" id="searchBtn"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                            <!---->
+                            <div class="Tbl_wrap">
+                                <table class="Tbl" summary="�н� ��õ ���">
+                                    <colgroup><col width="30%" /><col width="15%" /><col width="25%" /><col width="15%" /><col width="15%"/><col width="0%"/></colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th style='text-align: left; padding-left:1%;'>문장</th>
+                                            <th >의도</th>
+                                            <th style='text-align: left; padding-left:1%;'>문장선택</th>
+                                            <th style='text-align: left; padding-left:1%;'>단어</th>
+                                            <th style='text-align: left; padding-left:1%;'>등록날짜</th>
+                                            <th style='text-align: left; padding-left:1%;'>  </th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="qnaListBody"></tbody>
+                                </table>
+                            </div>
+
+                            <!--  -->
+                            <div id="pagination" class="pagination_wrap">
+                                <ul class="pagination pagination-sm no-margin"></ul>
+                            </div>
+
+                    </div>
+                </div>
+            </section>
+            <!-- //Main content -->
+        </div>
+
+        <!--  Footer -->
+        <%include  ../footer.html%>
+        <!-- // Footer -->
+    </div>
+    <!--// Content Wrapper -->
+
+<!-- 팝업_대화상자 찾기 -->
+<div class="modal fade" id="seasrchDlgModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel"
+aria-hidden="true">
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header" style="clear:both">
+            <button type="button" class="close searchDialogClose" data-dismiss="modal">
+                <span aria-hidden="true">×</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel">
+                <%= __('SEARCH_DIALOG_BOX') %>
+            </h4>
+        </div>
+        <div class="modal-body">
+            <form name="searchForm" id="searchForm" onsubmit="return false">
+                <input type="hidden" name="context_entity" id="context_entity">
+                <div class="form-group fl" style="width:26%;">
+                    <label>
+                        <%= __('DIALOG_BOX_CONTENTS') %>
+                    </label>
+                    <input type="text" name="serachDlg" class="form-control" placeholder=" <%= __('Please_enter') %>" spellcheck="false" autocomplete='off'>
+                </div>
+
+
+                <div class="form-group fl ml10" style="width:20%;">
+                    <label>
+                        <%= __('INTENT') %>
+                    </label>
+                    <select class="form-control" name="searchIntentGroup" id="searchIntentGroup">
+                        <option value="">
+                            <%= __('SELECT') %>
+                        </option>
+                    </select>
+                </div>
+                
+                <!--
+                <div class="form-group fl ml10" style="width:20%;">
+                    <label>
+                        <%= __('Large_group') %>
+                    </label>
+                    <select class="form-control" name="searchLargeGroup" id="searchLargeGroup">
+                        <option value="">
+                            <%= __('SELECT') %>
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group fl ml10" style="width:20%;">
+                    <label>
+                        <%= __('Middle_group') %>
+                    </label>
+                    <select class="form-control" name="searchMediumGroup" id="searchMediumGroup">
+                        <option value="">
+                            <%= __('SELECT') %>
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group fl ml10" style="width:20%;">
+                    <label>
+                        <%= __('Small_group') %>
+                    </label>
+                    <select class="form-control" name="searchSmallGroup" id="searchSmallGroup">
+                        <option value="">
+                            <%= __('SELECT') %>
+                        </option>
+                    </select>
+                </div>
+                -->
+                <div class="form-group fr" style="width:10%; margin-top:45px">
+                    <button type="button" class="btn btn_01 fr" id="searchDialogBtn">
+                        <i class="fa fa-search"></i> <%= __('SEARCH') %>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <p class="dialog_result">[
+            <%= __('Search_Results') %> :
+                <%= __('Total') %>
+                    <strong> 0 </strong>
+                    <%= __('Case') %> ]</p>
+        <div class="dialog_box02">
+            <div class="chat_box_wrap" id="searchDlgResultDiv">
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="btn_wrap">
+                <button type="button" class="btn btn_01" onclick="selectDialog()">
+                    <i class="fa fa-check"></i> <%= __('SELECT') %>
+                </button>
+                <button type="button" class="btn btn-default searchDialogClose" data-dismiss="modal">
+                    <i class="fa fa-times"></i> <%= __('CANCEL') %>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- //팝업_대화상자 찾기 -->
+
+<!-- alert -->
+<div class="modal fade" id="alertBtnModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel"><span id="alertTitle"><%= __('ALERT') %></span></h4>
+            </div>
+            <div class="modal-body"><span id="alertMsg"></span></div>
+            <div class="modal-footer" >
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="alertCloseBtn"><i class="fa fa-check"> </i> <%= __('OK') %></button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- //alert -->
+
+
+
+<div class="modal fade" id="loadingBar" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel" aria-hidden="true" >
+    <img src="/image/ajax_loader.gif" style="width:50px; height:50px;" id="loadingImg">
+</div>
+
+    <script>
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass   : 'iradio_minimal-blue'
+        })
+        //Red color scheme for iCheck
+        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+            checkboxClass: 'icheckbox_minimal-red',
+            radioClass   : 'iradio_minimal-red'
+        })
+        //Flat red color scheme for iCheck
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass   : 'iradio_flat-green'
+        })
+
+    </script>
+</body>
+</html>

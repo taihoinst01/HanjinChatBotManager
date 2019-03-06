@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>
+        
+    </title>
+    <%include  ../common/commonLib.html%>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!--[if lt IE 9]>
+    <script src="common/js/html5shiv.min.js"></script>
+    <script src="common/js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <script type="text/javascript" src="/js/common/luis/intentList.js"></script>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+        <input type="hidden" name='searchStr' id="searchStr" value="" />
+        <input type="hidden" name='currentPage' id="currentPage" value="1" />
+        <input type="hidden" name='beforePageNum' id="beforePageNum" value="<%=pageNumber %>" />
+        
+        <input type="hidden" name='createQuery' id="createQuery" value="<%=createQuery %>" />
+        <input type="hidden" name='selectIntent' id="selectIntent" value="<%=selectIntent %>" />
+        <input type="hidden" name='appIndex' id="appIndex" value="<%=appIndex %>" />
+        <input type="hidden" name='hName' id="hName" value="" />
+        <input type="hidden" name='hId' id="hId" value="" />
+        <input type="hidden" name='chkAfterAlert' id="chkAfterAlert" value="NONE" />
+        <!-- Header -->
+        <%include ../header.html%>
+        <!-- //Header -->
+        <!-- Left Menu Side -->
+        <%include ../leftSideBar.html%>
+        <!--// Left Menu Side -->
+        <!-- -->
+        <div class="content-wrapper">
+            <section class="content-header"><h1><%= __('INTENT_LIST') %></h1>  </section>
+            <!-- Main content -->
+            <section class="content">
+                <div class="box  color-palette-box">
+                    <div class="box-body">
+                        <div class="form-group w50 fl" style="width: 250px;">
+                            <button id="createIntentBtn" type="button" class="btn btn-default"  ><i class="fa fa-edit"></i> <%= __('CREATE') %></button>
+                            <button id="createIntentHiddenBtn" type="button" style="display:none;"  data-toggle="modal" data-target="#create_intent"><%= __('CREATE') %></button>
+                        </div>
+                        <!--  -->
+                        <div class="form-group w50 fr ">
+                            <div class="input-group input-group-sm fr" style="width: 250px;">
+                                <input type="text" id="searchIntentText" spellcheck="false" autocomplete='off' class="form-control pull-right" placeholder="<%= __('Enter_search_word') %>">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default" id="searchBtn"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                            <!---->
+                            <div class="Tbl_wrap">
+                                <table class="Tbl" summary="�н� ��õ ���">
+                                    <colgroup><col width="60%" /><col width="30%" /><col width="10%" /></colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th style='text-align: left; padding-left:1%;'><%= __('Intent_name') %></th>
+                                            <th style='text-align: left; padding-left:1%;'><%= __('LABELED_UTTER') %></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="intentListBody"></tbody>
+                                </table>
+                            </div>
+
+                            <!--  -->
+                            <div id="pagination" class="pagination_wrap">
+                                <ul class="pagination pagination-sm no-margin"></ul>
+                            </div>
+
+                    </div>
+                </div>
+            </section>
+            <!-- //Main content -->
+        </div>
+
+        <!--  Footer -->
+        <%include  ../footer.html%>
+        <!-- // Footer -->
+    </div>
+    <!--// Content Wrapper -->
+
+
+<!-- 팝업_신규의도생성 -->
+<div class="modal fade" id="create_intent" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel" aria-hidden="true" >
+    <div class="modal-dialog">
+        <div class="modal-content" style="max-height: 380px;">
+            <div class="modal-header">
+                    <button type="button" class="close addIntentModalClose" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel"><%= __('CREATE_INTENT') %></h4>
+            </div>
+            <div class="modal-body" style="max-height: 350px;">
+                <div id="modalBodyMain">
+                    <div class="form-group" >
+                        <label><%= __('Intent_name') %><span class="nec_ico">*</span></label>
+                        <input name="intentName" id="intentName" type="text" class="form-control" tabindex="1" placeholder=" <%= __('Please_enter') %>">
+                    </div>
+                </div>
+            </div>                                                                  
+            <div class="modal-footer">
+                    <div class="btn_wrap">
+                        <button type="button" class="btn btn_01" id="btnCreateIntent" onclick="createIntent();"><%= __('CREAT') %></button>
+                        <button type="button" class="btn btn-default createIntentCancel"  data-dismiss="modal"><%= __('CANCEL') %></button>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>    
+<!-- //팝업_신규단어생성 -->
+
+<!-- confirm -->
+<div class="modal fade" id="confirmBtnModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="z-index: 1050;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel"><span id="confirmTitle"></span></h4>
+            </div>
+            <div class="modal-body"><span id="confirmMsg"></span></div>
+            <div class="modal-footer" id="delete_footer_button">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> <%= __('CLOSE') %></button>
+                <button type="button" class="btn btn-primary" id="confirmBtn"><i class="fa fa-trash"></i> <%= __('DELETE') %></button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- //confirm -->
+
+<!-- alert -->
+<div class="modal fade" id="alertBtnModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel"><span id="alertTitle"><%= __('ALERT') %></span></h4>
+            </div>
+            <div class="modal-body"><span id="alertMsg"></span></div>
+            <div class="modal-footer" >
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="alertCloseBtn"><%= __('OK') %></button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- //alert -->
+
+<div class="modal fade" id="loadingBar" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel" aria-hidden="true" >
+    <img src="/image/ajax_loader.gif" style="width:50px; height:50px;" id="loadingImg">
+</div>
+
+    <script>
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass   : 'iradio_minimal-blue'
+        })
+        //Red color scheme for iCheck
+        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+            checkboxClass: 'icheckbox_minimal-red',
+            radioClass   : 'iradio_minimal-red'
+        })
+        //Flat red color scheme for iCheck
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass   : 'iradio_flat-green'
+        })
+
+    </script>
+</body>
+</html>

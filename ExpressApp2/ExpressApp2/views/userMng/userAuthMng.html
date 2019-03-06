@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <%include  ../common/commonLib.html%>
+
+        <script src="/common/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/js/common/userAuthMng.js"></script>
+
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+
+        <!-- Header -->
+        <%include  ../header.html%>
+            <!-- //Header -->
+
+            <!-- Left Menu Side -->
+            <%include  ../leftSideBar_admin.html%>
+                <!--// Left Menu Side -->
+
+                <!-- Content Wrapper -->
+                <div class="content-wrapper">
+                    <section class="content-header">
+                        <h1><%= __('AUTHUSER_MSG') %></h1>
+                    </section>
+                    <input type="hidden" id="selectUserHiddenId" value="" />
+                    <!-- Main content -->
+                    <section class="content">
+                        <div class="box  color-palette-box">
+                            <div class="box-body">
+                                <div class="row search_op">
+                                    <div class="form-group col-lg-5">
+                                        <label class="fl mr10">
+                                            <%= __('USER_NAME') %>
+                                        </label>
+                                        <input type="text" class="form-control" name="searchName" id="searchName" autocomplete='off' spellcheck="false" placeholder="<%= __('Please_enter') %>"
+                                            style="width:80%">
+                                    </div>
+                                    <div class="form-group col-lg-5">
+                                        <label class="fl mr10">
+                                            <%= __('USER_ID') %>
+                                        </label>
+                                        <input type="text" class="form-control" name="searchId" id="searchId" autocomplete='off' spellcheck="false" placeholder="<%= __('Please_enter') %>"
+                                            style="width:80%">
+                                    </div>
+                                    <div class="form-group col-lg-2" style="text-align:right">
+                                        <button type="button" class="btn btn_01" id="searchBtn">
+                                            <%= __('SEARCH') %>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="mt20">
+                                    <div class="col-lg-12" style="padding-left:0px !important">
+                                        <h4 class=" col-lg-12">
+                                            <%= __('USER_LIST') %>
+                                        </h4>
+
+                                        <div class="Tbl_wrap">
+                                            <table class="Tbl" summary="사용자 권한관리">
+                                                <colgroup>
+                                                    <col width="3%" />
+                                                    <col width="10%" />
+                                                    <col width="10%" />
+                                                    <col width="15%" />
+                                                    <col width="10%" />
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th><%= __('USER_ID') %></th>
+                                                        <th><%= __('USER_NAME') %></th>
+                                                        <!--
+                                                        <th><%= __('EMAIL') %></th>
+                                                        <th><%= __('HPHONE') %></th>
+                                                        -->
+                                                        <th><%= __('USER_AUTH') %></th>
+                                                        <th>...</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="userTableBodyId">
+                                                    <tr>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="pagination_wrap" id="userTablePaging">
+                                            <ul class="pagination pagination-sm no-margin">
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- //Main content -->
+
+                </div>
+                <!--// Content Wrapper -->
+
+
+                <!--  Footer -->
+                <%include  ../footer.html%>
+                    <!-- // Footer -->
+                    <div class="modal fade" id="authUpdateFormModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel"><%= __('AUTHUSER_MSG') %></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="form-horizontal" name="userAuthForm" id="userAuthForm">
+                                        <input type="hidden" name="USER_ID" id="USER_ID">
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3 control-label"><%= __('AUTHUSER_MSG') %></label>
+                                            <div class="col-sm-9">
+                                                <p class="form-control-static" id="S_USER_ID"></p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3 control-label"><%= __('NOW_AUTH') %></label>
+                                            <div class="col-sm-9">
+                                                <p class="form-control-static" id="USER_AUTH"></p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3 control-label"><%= __('CHANGE_AUTH') %></label>
+                                            <div class="col-sm-9">
+                                                <select name="UPDATE_USER_AUTH" id="UPDATE_USER_AUTH" class="form-control">
+
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+                                    </form>
+                                </div>
+                                <div class="modal-footer" id="footer_button">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        //iCheck for checkbox and radio inputs
+                        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                            checkboxClass: 'icheckbox_minimal-blue',
+                            radioClass: 'iradio_minimal-blue'
+                        })
+                        //Red color scheme for iCheck
+                        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+                            checkboxClass: 'icheckbox_minimal-red',
+                            radioClass: 'iradio_minimal-red'
+                        })
+                        //Flat red color scheme for iCheck
+                        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                            checkboxClass: 'icheckbox_flat-green',
+                            radioClass: 'iradio_flat-green'
+                        })
+
+                    </script>
+</body>
+
+</html>

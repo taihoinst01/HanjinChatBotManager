@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <%include  ../common/commonLib.html%>
+        <script src="/common/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/js/common/menuMng.js"></script>
+        <script>
+            function show_menuForm() {
+                document.menuForm.reset();
+                getParentMenu();
+                $('#footer_button').html('<button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button><button type="button" class="btn btn-primary" id="addMenuBtn"><i class="fa fa-edit"></i> Save</button>');
+                $('#menuFormModal').modal('show');
+            }
+
+
+        </script>
+
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+
+        <!-- Header -->
+        <%include  ../header.html%>
+            <!-- //Header -->
+
+            <!-- Left Menu Side -->
+            <%include  ../leftSideBar_admin.html%>
+                <!--// Left Menu Side -->
+
+
+                <!-- Content Wrapper -->
+                <div class="content-wrapper">
+                    <section class="content-header">
+                        <h1>메뉴관리</h1>
+                    </section>
+
+                    <!-- Main content -->
+                    <section class="content">
+                        <div class="box  color-palette-box">
+                            <div class="box-body">
+                                <div class="row mt20">
+                                    <h4 class=" col-lg-6">메뉴 목록</h4>
+                                    <div class=" col-lg-6" style="text-align:right">
+                                        <!--<button type="button" class="btn btn-default" id="addBtn"><%= __('ADD') %></button>-->
+                                        <button type="button" class="btn btn-default" onClick="show_menuForm();">
+                                            <i class="fa fa-edit"></i>
+                                            <%= __('ADD') %>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- 테이블 -->
+                                <div class="Tbl_wrap">
+                                    <table class="Tbl" summary="메뉴목록">
+                                        <colgroup>
+                                            <col width="15%" />
+                                            <col width="15%" />
+                                            <col width="20%" />
+                                            <col width="5%" />
+                                            <col width="20%" />
+                                            <col width="10%" />
+                                            <col width="5%" />
+                                            <col width="10%" />
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th>메뉴명</th>
+                                                <th>상위메뉴명</th>
+                                                <th>메뉴경로</th>
+                                                <th>정렬순서</th>
+                                                <th>메뉴설명</th>
+                                                <th>메뉴접근권한</th>
+                                                <th>메뉴 Style</th>
+                                                <th>...</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="menuTbody">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- //Main content -->
+
+                </div>
+                <!--// Content Wrapper -->
+
+
+                <!--  Footer -->
+                <%include  ../footer.html%>
+                    <!-- // Footer -->
+                    <!-- Modal -->
+                    <div class="modal fade" id="menuFormModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel">메뉴관리</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="form-horizontal" name="menuForm" id="menuForm">
+                                        <input type="hidden" name="MENU_ID" id="MENU_ID">
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3 control-label">상위메뉴</label>
+                                            <div class="col-sm-9">
+                                                <select name="MENU_PARENT_ID" id="MENU_PARENT_ID" class="form-control">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3 control-label"><i class="fa fa-asterisk"></i> 메뉴명</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" id="MENU_NM" name="MENU_NM" placeholder="메뉴명">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3 control-label"><i class="fa fa-asterisk"></i> 메뉴URL</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" id="MENU_URL" name="MENU_URL" placeholder="메뉴URL">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3 control-label">메뉴설명</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" id="MENU_EXPL" name="MENU_EXPL" placeholder="메뉴설명">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3 control-label"><i class="fa fa-asterisk"></i> 정렬순서</label>
+                                            <div class="col-sm-9">
+                                                <input type="number" class="form-control" id="MENU_SEQ" name="MENU_SEQ" placeholder="정렬순서">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3 control-label">메뉴접근권한</label>
+                                            <div class="col-sm-9">
+                                                <select name="MENU_AUTH" id="MENU_AUTH" class="form-control">
+                                                    <option value="99">최고관리자</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3 control-label">메뉴스타일</label>
+                                            <div class="col-sm-9">
+                                                <select name="MENU_STYLE" id="MENU_STYLE" class="form-control">
+                                                    <option value="LINK">일반링크</option>
+                                                    <option value="BOX">BOX</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer" id="footer_button">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="menuDeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel">메뉴관리</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="form-horizontal" name="menuDeleteForm" id="menuDeleteForm">
+                                        <input type="hidden" name="DELETE_MENU_ID" id="DELETE_MENU_ID">
+                                    </form>
+                                   <p id="delete_content"></p>
+                                </div>
+                                <div class="modal-footer" id="delete_footer_button">
+                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        //iCheck for checkbox and radio inputs
+                        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                            checkboxClass: 'icheckbox_minimal-blue',
+                            radioClass: 'iradio_minimal-blue'
+                        })
+                        //Red color scheme for iCheck
+                        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+                            checkboxClass: 'icheckbox_minimal-red',
+                            radioClass: 'iradio_minimal-red'
+                        })
+                        //Flat red color scheme for iCheck
+                        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                            checkboxClass: 'icheckbox_flat-green',
+                            radioClass: 'iradio_flat-green'
+                        })
+
+                    </script>
+</body>
+
+</html>

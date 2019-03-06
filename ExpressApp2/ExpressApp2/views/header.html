@@ -1,0 +1,439 @@
+﻿<header class="main-header"   >
+
+    
+
+<!-- Left Menu Side -->
+<script type="text/javascript" src="/js/common/menuUserCheck.js"></script>
+
+    <input type="hidden" id="dupleMassage" value="<%= __('ALERT_OTHER_USER_LOGIN_WITH_SAME_ID') %>" />
+    <input type="hidden" id="signMassage" value="<%= __('SIGN_IN_REQUIRED') %>" />
+    <input type="hidden" id="timeoutLogOut" value="<%= __('ALERT_LOGOUT') %>" />
+
+    
+    
+    <%
+        if(sid == '___LOGIN_TIME_OUT_Y___') {
+    %>
+    <script>
+        alert($('#timeoutLogOut').val());
+        window.location.replace('/users/logout');
+    </script>
+    <%
+        }
+    %>
+
+    <%
+        if(sid == '___DUPLE_LOGIN_Y___') {
+    %>
+        <script>
+            alert($('#dupleMassage').val());
+            location.replace('/users/logout');
+            //location.href = '/users/logout';
+        </script>
+    <%
+        }
+    %>
+
+    <!-- Logo -->
+    <!--<a href="/list" class="logo">-->
+    <a href="#" onClick="goMainList(); return false;" class="logo">
+        <span class="logo-mini"></span>
+        <span class="logo-lg"></span>
+    </a>
+    
+
+    <nav class="navbar navbar-static-top">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button"><span class="sr-only">Toggle navigation</span> </a>
+
+        <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+        <li style="width:100px; padding-right: 10px;">
+            <select class="" id="selectLang" name="selectLang" style="width:90%; height: 25px; margin: 5px 10px 0 0; font-size: 1em; font-weight: bold;">
+                    <%
+                        if(languageNow == 'ko') {
+                    %>
+                        <option value="ko" selected="selected"><%= __('KOREAN') %></option>
+                        <option value="en"><%= __('ENGLISH') %></option>
+                    <%
+                        } else {
+                    %>
+                        <option value="ko"><%= __('KOREAN') %></option>
+                        <option value="en" selected="selected"><%= __('ENGLISH') %></option>
+                    <%
+                        }
+                    %>
+            </select>
+        </li>
+        <% 
+            if(sid) { 
+        %>
+            <li class="user_id"><a  href="#" class="small-box-footer" id="userLoginHistoryBtn" onclick="return false;" style="margin-left: 5px; color: #867f7f;"> <strong><%=sid%></strong> <%= __('SIR') %></a></li>
+            <%
+                if(sAuth>=99) {
+            %>
+            <li class="btn_set01"> <a href="/users/userMng" class="left_set"></a></li>
+            <%
+                }
+            %>
+            <li><a  href="/users/logout" class="btn_log_out" style="margin-left: 5px;"> <%= __('SIGN_OUT') %></a></li>
+        
+        <%                  
+            }
+        <!-- 비로그인 접근 시 로그인 화면으로 이동-->
+            else
+            {
+        %>
+                <script>
+                    alert($('#signMassage').val());
+                    location.href = '/';
+                </script>
+        <%
+            }
+        %>
+        </ul>
+        </div>
+    </nav>
+</header>
+<div class="modal fade" id="loadingModalMain" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="z-index: 9999;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" >
+                <h3 style="margin:0;">Loading...</h3>
+            </div>
+            <div class="modal-body">
+                <div class="progress progress-striped active" style="margin-bottom:0;">
+                    <div class="progress-bar" style="width: 100%"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <strong>TIIZ</strong> ChatBot Manager
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="noPermissionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static"
+    data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">TIIZ Manager</h4>
+            </div>
+            <div class="modal-body">
+                <%= __('NOACCESSAUTH') %>
+            </div>
+            <div class="modal-footer" id="delete_footer_button">
+                <button type="button" class="btn btn-primary" id="noPermission" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 유저 로그인 히스토리 -->
+<div class="modal fade" id="userHistoryModal" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="myModalLabel" aria-hidden="true" >
+    <div class="modal-dialog" style="width:80%;">
+        <div class="modal-content" style="max-height:650px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="similarQTitle"><%= __('LOGIN_HISTORY') %></h4>
+                <input type="hidden" name='userHistoryCurrentPage' id="userHistoryCurrentPage" value="1" />
+            </div>
+            <div class="modal-body">
+
+                <div class="Tbl_wrap"  style="overflow-y: auto !important;max-height: 470px !important;">
+                    <table class="Tbl">
+                        <!--
+                        <colgroup><col width="15%"/><col width="25%"/><col width="40%"/><col width="17%"/><col width="3%"/></colgroup>
+                        -->
+                        <colgroup> 
+                            <col width="8%"/><col width="17%"/><col width="25%"/><col width="25%"><col width="15%">
+                        </colgroup>
+                              <tr>
+                                    <th>
+                                        <select class="form-control" id="userHistorySelDate" name="userHistorySelDate">
+                                            <option value="All">
+                                                    <%= __('STATUS') %>
+                                            </option>
+                                            <option value="LOGIN">
+                                                <%= __('LOGIN_BTN') %>
+                                            </option>
+                                            <option value="LOGOUT">
+                                                <%= __('SIGN_OUT') %>
+                                            </option>
+                                        </select>
+                                    </th>
+                                    <th><%= __('USER_ID') %></th>
+                                    <th><%= __('LOGIN_IP') %></th>
+                                    <th><%= __('LOGIN_TIME') %></th>
+                                    <th><%= __('LOGOUT_TIME') %></th>
+                              </tr>
+                        <tbody id="userHistoryModalBody" >
+                            
+                        </tbody>
+                    </table>
+                </div> 
+            </div>        
+            <div class="modal-footer">
+                <div class="btn_wrap">
+                    <div class="pagination_wrap" id="userLoginHistoryTablePaging">
+                        <ul class="pagination pagination-sm no-margin"></ul>
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> <%= __('OK') %></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    
+<!-- //유저 로그인 히스토리  -->
+
+<script>
+    $(document).ready(function () {
+
+        $('#selectLang').change(function() {
+            location.href="/index/lang"
+        });
+
+        
+        $('#userLoginHistoryBtn').click(function() {
+            $('#userHistorySelDate option').eq(0).prop('selected',true);
+            $('#userHistoryCurrentPage').val(1);
+            makeUserHistoryTable(); 
+        });
+    });
+
+
+    $(document).on('click', '#userLoginHistoryTablePaging .li_paging', function (e) {
+        if (!$(this).hasClass('active')) {
+            var currPage = $(this).val();
+            $('#userHistoryCurrentPage').val(currPage);
+            makeUserHistoryTable();
+        }
+    });
+
+    $('#userHistorySelDate').change(function() {
+        makeUserHistoryTable();
+    });
+
+    function goMainList(){
+        $('#loadingModalMain').modal('show');
+        location.href = "/list";
+    }
+
+    function makeUserHistoryTable () {
+        var params = {
+                'currentPage': $('#userHistoryCurrentPage').val(),
+                'loginStatus': $('#userHistorySelDate :selected').val()
+            };
+
+            $.ajax({
+                type: 'POST',
+                timeout: 0,
+                beforeSend: function () {
+                    $('#loadingModalMain').modal('show');
+                },
+                complete: function () {
+                    $('#loadingModalMain').modal('hide'); 
+                },
+                data: params,
+                url: '/users/selectUserHistoryList',
+                success: function(data) {
+                    if (data.loginStatus == '___LOGIN_TIME_OUT_Y___') {
+                        alert($('#timeoutLogOut').val());
+                        location.href = '/users/logout';
+                    }
+                    if (data.loginStatus == '___DUPLE_LOGIN_Y___') {
+                        alert($('#timeoutLogOut').val());
+                        location.href = '/users/logout';
+                    }
+                    if (data.loginStatus == 'DUPLE_LOGIN') { 
+                        alert($('#dupleMassage').val());
+                        location.href = '/users/logout';
+                    }
+                    
+                    var saveTableHtml = '';
+                    if(data.error)
+                    {
+                        alert(data.message);
+                    }
+                    else 
+                    {   
+                        $('#userHistoryModal').modal('show'); 
+                        var userList = data.userHistoryList;
+                        if (userList.length == 0) {
+                            saveTableHtml = '<tr><td colspan="5" class="text-center">No Data</td></tr>';
+                            
+                            $('#userHistoryModalBody').html(saveTableHtml);
+                            $('#userLoginHistoryTablePaging').html('');
+                        } else {
+                            for (var i = 0; i < userList.length; i++) { 
+                                saveTableHtml += '<tr>';
+                                saveTableHtml += '<td>' + userList[i].LOGIN_STATUS + '</td>';
+                                saveTableHtml += '<td>' + userList[i].USERID + '</td>';
+                                saveTableHtml += '<td>' + userList[i].USERIP + '</td>';
+                                saveTableHtml += '<td>' + userList[i].LOGIN_TIME + '</td>';
+                                saveTableHtml += '<td>' + (userList[i].LOGOUT_TIME==null?' NONE ':userList[i].LOGOUT_TIME) + '</td>';
+                                saveTableHtml += '</tr>';
+                            }
+                            $('#userHistoryModalBody').html(saveTableHtml);
+                            $('#userLoginHistoryTablePaging').html('').append(data.pageList);
+                        }
+                         
+                    }
+                }
+            });
+    }
+
+    $(document).ready(function(){
+        //오른쪽 클릭 방지
+        $(document).bind("contextmenu", function(e) {
+        return false;
+        });
+        //f12 방지
+        $(document).bind('keydown',function(e){
+            if ( e.keyCode == 123 /* F12 */) {
+                e.preventDefault();
+                e.returnValue = false;
+            }
+        });
+    });
+    //드래그방지 주석
+    //$(document).bind('selectstart',function() {return false;}); 
+    //$(document).bind('dragstart',function(){return false;}); 
+ 
+
+    var spcKey = false;
+    var hover = true;
+    var contextMenu = false;
+
+    //out start
+    var timoutNow = 60000*15;//3600000; // Timeout in 10 mins would be 600000. 60 mins - 3600000
+    var logoutUrl = '/users/logout'; // URL to logout page.
+    
+    var servTimeOut = false;
+    var serTimeLimit = timoutNow - 30000
+    var servTimer;
+
+
+    servTimer = setInterval("resetTimeOut()", serTimeLimit);
+
+    var timeoutTimer;
+
+    // Start timers.
+    function StartTimers() {
+        timeoutTimer = setTimeout("IdleTimeout()", timoutNow);
+    }
+
+    // Reset timers.
+    function ResetTimers() {
+        servTimeOut = true;
+        clearTimeout(timeoutTimer);
+        StartTimers();
+    }
+    
+    // Logout the user.
+    function IdleTimeout() {
+        alert($('#timeoutLogOut').val());
+        window.location = logoutUrl;
+    }
+
+    function resetTimeOut() {
+        if (servTimeOut) {
+            $.ajax({
+                type: 'POST',
+                timeout: 0,
+                beforeSend: function () {
+                },
+                complete: function () { 
+                    servTimeOut = false;   
+                },
+                url: '/users/resetTimeOut',
+                success: function(data) {
+                }
+            });
+        }
+    }
+    //out end ALERT_LOGOUT timeoutLogOut
+
+    window.onload = function () {
+        StartTimers();
+        document.body.onclick = function (e) {
+            ResetTimers();
+        };
+        document.body.onkeydown = function (e) {
+            ResetTimers();
+        };
+    };
+    
+
+
+    function spc(e) {
+        return ((e.altKey || e.ctrlKey || e.keyCode == 91 || e.keyCode == 87) && e.keyCode != 82 && e.keyCode != 116);
+    }
+
+    $(document).hover(function () {
+        hover = true;
+        contextMenu = false;
+        spcKey = false;
+    }, function () {
+        hover = false;
+    }).keydown(function (e) {
+        if (spc(e) == false) {
+            hover = true;
+            spcKey = false;
+        }
+        else {
+            spcKey = true;
+        }
+    }).keyup(function (e) {
+        if (spc(e)) {
+            spcKey = false;
+        }
+    }).contextmenu(function (e) {
+        contextMenu = true;
+    }).click(function () {
+        hover = true;
+        contextMenu = false;
+    });
+
+    window.addEventListener('focus', function () {
+        spcKey = false;
+    });
+    window.addEventListener('blur', function () {
+        hover = false;
+    });
+
+    //뒤로가기 제어
+    history.pushState(null, null, location.href);
+    window.onpopstate = function (event) {
+        contextMenu = true;
+        location.href = document.referrer;
+        //history.back();
+    };
+
+    //백스페이스 제어
+    $(document).keydown(function (e) {
+        if (e.target.nodeName != "INPUT" && e.target.nodeName != "TEXTAREA") {
+            if (e.keyCode === 8) {
+                contextMenu = true;
+            }
+        }
+    });
+/*
+    window.onbeforeunload = function (e) {
+        return false;
+        if ((hover == false || spcKey == true) && contextMenu == false) {
+            //location.href('/users/logout');
+            //$('.btn_log_out').trigger('click');
+            //console.log('a00');
+        }
+        return false;
+    };
+    */
+
+
+
+
+</script>

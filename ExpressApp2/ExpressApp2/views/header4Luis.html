@@ -1,0 +1,170 @@
+﻿<script>
+    
+
+$(document).ready(function(){
+    var obj = $("#wrap4Luis").offset();
+    $("#toggleDiv").css("top", obj.top);
+    $("#learningTest").css("top", obj.top);
+    $("#batchTestPanel").css("top", obj.top);
+
+    $("#toggleTest").click(function() {
+        $("#toggleDiv").toggle('slow');
+        var chatbotItem = '<iframe id="testChatBot" class="w100per h100per" src="https://webchat.botframework.com/embed/smartsend?s=dEQAGijPT-s.cwA.0LA.mnfoxhvCCjOo4YE894AS9nJpoKFTn58Lh3DljcOicdU"></iframe>';
+        
+        if($('#iframChatbot').children().length == 0) {
+
+            $('#iframChatbot').append(chatbotItem);
+        }
+        if($("#toggleTest_Text").text() == "← Test"){
+            $("#toggleTest_Text").text('→ Test');
+        }
+        else{
+            $("#toggleTest_Text").text('← Test');
+        }
+    });
+
+    $("a[name=batchTest]").click(function() {
+
+        if ($("#learningTest").css('display') != 'none') {
+            $("#learningTest").hide();
+            $("#batchTestPanel").show();
+            $("#toggleDiv").toggleClass('open' );
+            
+            //$("#toggleDiv").css('right', '0px');
+        } else {
+            
+            $("#batchTestPanel").hide();
+            $("#learningTest").show();
+            $("#toggleDiv").toggleClass('open');
+            //$("#toggleDiv").css('right', '-900px');
+        }
+    });
+
+    //test 챗봇 새로고침
+    $('#startOver').click(function(){
+        $('#testChatBot').removeAttr('src');
+        $('#testChatBot').attr('src','https://webchat.botframework.com/embed/smartsend?s=dEQAGijPT-s.cwA.0LA.mnfoxhvCCjOo4YE894AS9nJpoKFTn58Lh3DljcOicdU');
+        return false;
+    });
+
+});
+
+</script>
+
+<div id="header_wrap03">
+    <div id="header">
+      <!-- <a class="logo" href="/"><span class="hc">챗봇_학습관리포털</span></a> -->
+        <div class="gnb_wrap_for_Luis">
+            <ul class="headerMenu_for_Luis">
+                <li class="headerLi_for_Luis_left">
+                    <a class="gnbm" href="#" id="selMenus"> <%=appName %></a>
+                </li>
+                <li class="headerLi_for_Luis_right"> 
+                  <button class="m-button-primary-sm" id="toggleTest" onclick="">
+                      <span id="toggleTest_Text">← Test</span>
+                  </button>
+                </li>
+                <li class="headerLi_for_Luis_right">
+                        <button class="m-button-container" onclick="">
+                                <span class="testbtn"></span>
+                                <span>Train</span>
+                            </button>
+                    </li>
+                
+             
+                <%
+                    if(selMenus == 'ms1'){
+                %>
+                        <li class="headerLi_for_Luis_right">
+                            <a class="gnbm gnbm2" href="/learning/entities" id="selMenus">ENTITIES</a>
+                        </li>
+                        <li class="headerLi_for_Luis_right">
+                            <a class="gnbm gnbm2" href="/learning/dialog" id="selMenus">DIALOG</a>
+                        </li>
+                        <li class="headerLi_for_Luis_right">
+                            <a class="gnbm gnbm2" href="/learning/utterances" id="selMenus">UTTERANCES</a>
+                        </li>
+                        <li class="headerLi_for_Luis_right currentSelMenus">
+                            <a class="gnbm gnbm2" href="/learning/recommend" id="selMenus">RECOMMEND</a>
+                        </li>
+                <%  
+                    } else if(selMenus == 'ms2') {
+                %>
+                        <li class="headerLi_for_Luis_right">
+                            <a class="gnbm gnbm2" href="/learning/entities" id="selMenus">ENTITIES</a>
+                        </li>
+                        <li class="headerLi_for_Luis_right">
+                            <a class="gnbm gnbm2" href="/learning/dialog" id="selMenus">DIALOG</a>
+                        </li>
+                        <li class="headerLi_for_Luis_right currentSelMenus">
+                            <a class="gnbm gnbm2" href="/learning/utterances" id="selMenus">UTTERANCES</a>
+                        </li>
+                        <li class="headerLi_for_Luis_right">
+                            <a class="gnbm gnbm2" href="/learning/recommend" id="selMenus">RECOMMEND</a>
+                        </li>
+                <%  
+                    } else if(selMenus == 'ms3') {
+                %>
+                        <li class="headerLi_for_Luis_right">
+                            <a class="gnbm gnbm2" href="/learning/entities" id="selMenus">ENTITIES</a>
+                        </li>
+                        <li class="headerLi_for_Luis_right currentSelMenus">
+                            <a class="gnbm gnbm2" href="/learning/dialog" id="selMenus">DIALOG</a>
+                        </li>
+                        <li class="headerLi_for_Luis_right">
+                            <a class="gnbm gnbm2" href="/learning/utterances" id="selMenus">UTTERANCES</a>
+                        </li>
+                        <li class="headerLi_for_Luis_right">
+                            <a class="gnbm gnbm2" href="/learning/recommend" id="selMenus">RECOMMEND</a>
+                        </li>
+                <%  
+                    } else if(selMenus == 'ms4') {
+                %>
+                        <li class="headerLi_for_Luis_right currentSelMenus">
+                            <a class="gnbm gnbm2" href="/learning/entities" id="selMenus">ENTITIES</a>
+                        </li>
+                        <li class="headerLi_for_Luis_right">
+                            <a class="gnbm gnbm2" href="/learning/dialog" id="selMenus">DIALOG</a>
+                        </li>
+                        <li class="headerLi_for_Luis_right">
+                            <a class="gnbm gnbm2" href="/learning/utterances" id="selMenus">UTTERANCES</a>
+                        </li>
+                        <li class="headerLi_for_Luis_right ">
+                            <a class="gnbm gnbm2" href="/learning/recommend" id="selMenus">RECOMMEND</a>
+                        </li>
+                <%  
+                    } else {
+                %>
+                    <li class="headerLi_for_Luis_right">
+                        <a class="gnbm gnbm2" href="/learning/entities" id="selMenus">ENTITIES</a>
+                    </li>
+                    <li class="headerLi_for_Luis_right">
+                        <a class="gnbm gnbm2" href="/learning/dialog" id="selMenus">DIALOG</a>
+                    </li>
+                    <li class="headerLi_for_Luis_right">
+                        <a class="gnbm gnbm2" href="/learning/utterances" id="selMenus">UTTERANCES</a>
+                    </li>
+                    <li class="headerLi_for_Luis_right">
+                        <a class="gnbm gnbm2" href="/learning/recommend" id="selMenus">RECOMMEND</a>
+                    </li>
+                <%
+                    }
+                %>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="toggleDiv">
+    <div id="learningTest"> 
+        <div class="learningTestContents">
+            <div class="learningTest-top-layer">
+                <span class="learningTest-Title">Test</span>
+                <a id="startOver" class="b" href="#">Start over</a>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="h100per w100per" id="iframChatbot">
+            </div>
+        </div>
+    </div>
+</div>

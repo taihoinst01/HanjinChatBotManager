@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel='stylesheet' href='/stylesheets/style.css' />
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>
+		<%= title %> 부트스트랩 101 템플릿</title>
+
+	<!-- 부트스트랩 -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+</head>
+
+<body>
+	hello
+	<%
+		if(list){
+	%> list length : <%= list.length %> <br>
+		<table>
+	<%
+			for(var i=0; i<list.length; i++) {			
+	%>	
+		<tr>
+			<td><%= list[i].title %></td>
+			<td><%= list[i].writer %></td>
+			<td><%= list[i].date %></td>
+		</tr>
+	<%
+			}
+	%>
+		</table>
+	<%
+		} else {
+	%>
+		list no
+	<%
+		}
+	%>
+	<!-- /container -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

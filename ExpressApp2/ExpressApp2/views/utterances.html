@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>
+        TIIS Manager
+    </title>
+    <%include  ./common/commonLib.html%>
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+        <link rel='stylesheet' href='/css/utterances.css' />
+        <link rel='stylesheet' href='/css/botchat.css' />
+        <!--[if lt IE 9]>
+    <script src="common/js/html5shiv.min.js"></script>
+    <script src="common/js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+        <script type="text/javascript" src="/js/common/utterances.js"></script>
+        <style type="text/css">
+            .entityValDiv {
+                overflow-y: auto !important;
+                max-height: 150px !important;
+            }
+        </style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <input type="hidden" name="utterence" id="utterence" value='<%=utterance%>' />
+    <div class="wrapper">
+        <!-- Header -->
+        <%include ./header.html%>
+            <!-- //Header -->
+
+            <!-- Left Menu Side -->
+            <%include ./leftSideBar.html%>
+                <!--// Left Menu Side -->
+
+                <!-- Content Wrapper -->
+                <div class="content-wrapper">
+                    <section class="content-header">
+                        <h1>
+                            <%= __('UTTERANCE_SETTING') %>
+                        </h1>
+                        <div class="btn_wrap02 fr" style="width:50%">
+                            <button type="button" class="btn btn_01" id="entities" data-toggle="modal" data-target="#addEntityModal">
+                                <%= __('ADD_NEW_WORD') %>
+                            </button>
+                            <button type="button" class="btn btn-default" id="utterLearn">
+                                <%= __('SENTENCE_DIALOG_BOX_LINKED_LEARNING') %>
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- Main content -->
+                    <section class="content">
+
+                        <!-- Left col -->
+                        <div class="row">
+
+                            <!-- 문장입력 -->
+                            <div class="col-md-7">
+                                <div class="box  color-palette-box" style="height:550px">
+                                    <div class="box-body02">
+                                        <div class="box-header with-border">
+                                            <h3 class="box-title">
+                                                <%= __('Sentence_input') %>
+                                            </h3>
+                                        </div>
+                                        <!-- 검색창 -->
+                                        <div class="form-group">
+                                            <input type="text" name="iptUtterance" class="form-control" placeholder="<%= __('Please_enter_a_sentence') %>" spellcheck="false"
+                                                autocomplete='off'>
+                                        </div>
+                                        <!-- 학습 추천 테이블 -->
+                                        <div class="Tbl_wrap">
+                                            <table class="Tbl recommendTbl" summary="학습 추천 결과">
+                                                <form action="" id="dlgSetRows">
+                                                    <input type="hidden" name="dlgRowPerPage" value="6">
+                                                </form>
+                                                <colgroup>
+                                                    <col width="6%" />
+                                                    <col width="84%" />
+                                                    <col width="10%" />
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            <input type="checkbox" class="flat-red" name="tableAllChk">
+                                                        </th>
+                                                        <th>
+                                                            <%= __('CONTENTS') %>
+                                                        </th>
+                                                        <th>
+                                                            <%= __('FUNCTION') %>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="utterTableBody">
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- 페이징 -->
+                                        <div class="pagination_wrap">
+                                            <ul class="pagination pagination-sm no-margin ">
+
+                                            </ul>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- //문장입력 -->
+
+                            <!-- 의도예측 추가 20180323-->
+                            <div class="col-md-5">
+                                <div class="box  color-palette-box" style="height:100x">
+                                    <div class="box-body02">
+                                        <div class="box-header with-border">
+                                            <h3 class="box-title">
+                                                <%= __('Predict_Intent') %>
+                                            </h3>
+                                            <div class="btn_wrap03 fr" style="width:70%">
+                                                <select id="predictIntent" name="predictIntent" class="form-control">
+                                                    <option value="all">
+                                                        <%= __('ALL') %>
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- 대화상자 -->
+                            <div class="col-md-5">
+                                <div class="box  color-palette-box" style="height:440px">
+                                    <div class="box-body02">
+                                        <div class="box-header with-border">
+                                            <h3 class="box-title">
+                                                <%= __('Dialog_box') %>
+                                            </h3>
+                                            <div class="btn_wrap03 fr" style="width:50%">
+                                                <button type="button" class="btn btn_01" data-toggle="modal" data-target="#myModal1" onclick="openModalBox('#search_dlg','')">
+                                                    <%= __('SEARCH') %>
+                                                </button>
+                                                <button type="button" class="btn btn-default" id="create_dlg" data-toggle="modal" data-target="#myModal2" onclick="openModalBox('#create_dlg','')">
+                                                    <%= __('CREAT') %>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="dialog_wrap">
+                                            <div class="dialog_l">
+                                                <input type="checkbox" name="dlgBoxChk" class="flat-red">
+                                            </div>
+                                            <div class="dialog_r">
+                                                <div class="dialog_box" id="dlgViewDiv">
+                                                    <!-- 챗팅창 -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- //대화상자 -->
+                        </div>
+                        <!--// Left col -->
+                        <!-- context function add start 2018.05.19 -->
+                        <div class="row">
+                            <!-- context content-->
+                            <div class="col-md-4">
+                                <div class="box  color-palette-box">
+                                    <div class="box-body02">
+                                        <div class="box-header with-border">
+                                            <h3 class="box-title">Context Input</h3>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" name="contextInputData" class="form-control" placeholder="Context entity data" spellcheck="false" autocomplete='off'>
+                                        </div>
+                                        <div class="Tbl_wrap">
+                                                <table class="Tbl contextDataList" summary="Context data List" id="contextListTable">
+                                                    <colgroup>
+                                                        <col width="10%" />
+                                                        <col width="70%" />
+                                                        <col width="20%" />
+                                                    </colgroup>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>&nbsp;</th>
+                                                            <th>Context Data</th>
+                                                            <th>...</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="contextDataListBody">
+                                                        <tr><td colspan=3>No Context Data</td></tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="box  color-palette-box">
+                                    <div class="box-body02">
+                                        <div class="box-header with-border">
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <h3 class="box-title">Context Dialog</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="contextDetailHtmlDiv">Please Select ContextData</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- context dialogue -->
+
+                        </div>
+                        <!-- context function add end -->
+                        <!-- 추천문장 -->
+                        <!--
+                <div class="box  color-palette-box">
+                <div class="box-body02">
+                        <div class="box-header with-border"><h3 class="box-title"><%= __('A_recommendation') %></h3></div>
+                </div> 
+                </div>
+                -->
+                        <!-- //추천문장 -->
+
+                    </section>
+                    <!-- //Main content -->
+
+                </div>
+                <!--// Content Wrapper -->
+
+                <!--  Footer -->
+                <%include  ./footer.html%>
+                    <!-- // Footer -->
+    </div>
+
+
+
+    <!-- 팝업_신규단어생성 -->
+    <div class="modal fade" id="addEntityModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="min-height: 450px; max-height: 550px;">
+                <div class="modal-header">
+                    <button type="button" class="close addEntityModalClose" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        <%= __('Create_new_Entity_Set') %>
+                    </h4>
+                </div>
+                <form name="appInsertForm" id="appEntityInsertForm" method="post">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>
+                                <%= __('Entity definition') %>
+                                    <span class="nec_ico">*</span>
+                            </label>
+                            <input name="entityDefine" id="entityDefine" type="text" tabindex="1" class="form-control" placeholder=" <%= __('Please_enter') %>"
+                                onkeyup="dialogValidation();" spellcheck="false" autocomplete='off'>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <%= __('Entity value') %>
+                                    <span class="nec_ico">*</span>
+                            </label>
+                            <button type="button" class="btn btn_01" id="addEntityValBtn">
+                                <%= __('ADD') %>
+                            </button>
+                            <div class="entityValDiv">
+                                <div style="margin-top:4px;">
+                                    <input name="entityValue" id="entityValue" type="text" tabindex="2" class="form-control" style=" float: left; width:80%;"
+                                        placeholder=" <%= __('Please_enter') %>" onkeyup="entityValidation();" spellcheck="false"
+                                        autocomplete='off'>
+                                    <a href="#" name="delEntityBtn" class="entity_delete" style="display:inline-block; margin:7px 0 0 7px; ">
+                                        <span class="fa fa-trash" style="font-size: 25px;"></span>
+                                    </a>
+                                    <!--<button type="button" class="btn btn_03" style=" margin: 4px 0 0 4px;" name="delEntityBtn" ><%= __('DELETE') %></button>-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>API_GROUP
+                                <span class="nec_ico">*</span>
+                            </label>
+                            <select id="apiGroup" name="apiGroup" class="form-control">
+                                <!--<option value="COMMON">COMMON</option>-->
+                            </select>
+                        </div>
+                        <div class="nec fr">
+                            <span class="nec_ico">*</span>
+                            <%= __('IS_REQUIRED') %>
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <div class="btn_wrap">
+                        <button type="button" class="btn btn_01" id="btnAddDlg" onclick="insertEntity()">
+                            <%= __('CREAT') %>
+                        </button>
+                        <button type="button" class="btn btn-default addDialogCancel" data-dismiss="modal">
+                            <%= __('CANCEL') %>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- //팝업_신규단어생성 -->
+
+    <!-- 팝업_대화상자 찾기 -->
+    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="clear:both">
+                    <button type="button" class="close searchDialogClose" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        <%= __('SEARCH_DIALOG_BOX') %>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form name="searchForm" id="searchForm" method="post" onsubmit="return false">
+                        <input type="hidden" name="context_entity" id="context_entity">
+                        <div class="form-group fl" style="width:26%;">
+                            <label>
+                                <%= __('GROUP_INFORMATION') %>
+                            </label>
+                            <input type="text" name="serachDlg" class="form-control" placeholder=" <%= __('Please_enter') %>" spellcheck="false" autocomplete='off'>
+                        </div>
+                        <div class="form-group fl ml10" style="width:20%;">
+                            <label>
+                                <%= __('Large_group') %>
+                            </label>
+                            <select class="form-control" name="searchLargeGroup" id="searchLargeGroup">
+                                <option value="">
+                                    <%= __('SELECT') %>
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group fl ml10" style="width:20%;">
+                            <label>
+                                <%= __('Middle_group') %>
+                            </label>
+                            <select class="form-control" name="searchMediumGroup" id="searchMediumGroup">
+                                <option value="">
+                                    <%= __('SELECT') %>
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group fl ml10" style="width:20%;">
+                            <label>
+                                <%= __('Small_group') %>
+                            </label>
+                            <select class="form-control" name="searchSmallGroup" id="searchSmallGroup">
+                                <option value="">
+                                    <%= __('SELECT') %>
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group fr" style="width:10%; margin-top:45px">
+                            <button type="button" class="btn btn_01 fr" id="searchDialogBtn">
+                                <%= __('SEARCH') %>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <p class="dialog_result">[
+                    <%= __('Search_Results') %> :
+                        <%= __('Total') %>
+                            <strong> 0 </strong>
+                            <%= __('Case') %> ]</p>
+                <div class="dialog_box02">
+                    <div class="chat_box_wrap" id="searchDlgResultDiv">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn_wrap">
+                        <button type="button" class="btn btn_01" onclick="selectDialog()">
+                            <%= __('SELECT') %>
+                        </button>
+                        <button type="button" class="btn btn-default searchDialogClose" data-dismiss="modal">
+                            <%= __('CANCEL') %>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- //팝업_대화상자 찾기 -->
+
+    <!-- 신규 대화상자 생성 -->
+    <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg02">
+            <div class="modal-content">
+
+                <div class="modal-header" style="clear:both">
+                    <button type="button" class="close createDlgModalClose" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        <%= __('CREATE_DIALOG_BOX') %>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="modal_con">
+                        <!-- 그룹 정보 -->
+                        <div class="col-md-6" style="padding:0">
+                            <form name="appInsertForm" id="appInsertForm">
+                                <input type="hidden" name="middleGroup" id="middleGroup">
+                                <h5>
+                                    <span class="col01 fa fa-chevron-right"></span>
+                                    <%= __('GROUP_INFORMATION') %>
+                                </h5>
+                                <div class="form-group">
+                                    <label>
+                                        <%= __('Large_group') %>
+                                            <span class="nec_ico">*</span>
+                                    </label>
+                                    <select class="form-control" id="largeGroup" name="largeGroup">
+                                        <option value="">선택</option>
+                                    </select>
+                                </div>
+                                <div class="clear-both"></div>
+                                <div class="form-group">
+                                    <label>Intent
+                                        <span class="nec_ico">*</span>(Maximum length 50 characters)</label>
+                                    <div id="createIntent"></div>
+                                </div>
+                                <div class="clear-both"></div>
+                                <div class="form-group">
+                                    <label>
+                                        <%= __('explanation') %>
+                                    </label>
+                                    <textarea class="form-control" name="description" id="description" rows="3" placeholder="<%= __('Please_enter') %>" spellcheck="false"
+                                        autocomplete='off'></textarea>
+                                </div>
+                            </form>
+                            <div id="commonLayout" class="dialog_w">
+                                <div class="insertForm">
+                                    <div class="form-group">
+                                        <form name="dialogLayout" id="dialogLayout">
+
+                                            <label>
+                                                <%= __('DIALOG_BOX_TYPE') %>
+                                                    <span class="nec_ico">*</span>
+                                            </label>
+                                            <select class="form-control" name="dlgType">
+                                                <option value="2">
+                                                    <%= __('TEXT_TYPE') %>
+                                                </option>
+                                                <option value="3">
+                                                    <%= __('CARD_TYPE') %>
+                                                </option>
+                                                <option value="4">
+                                                    <%= __('MEDIA_TYPE') %>
+                                                </option>
+                                            </select>
+                                            <div class="clear-both"></div>
+
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <!-- 다이얼로그 삭제 버튼 -->
+                                <div class="btn_wrap deleteInsertFormDiv" style="clear:both; display:none;">
+                                    <button type="button" class="btn btn-default deleteInsertForm">
+                                        <%= __('DELETE_DIALOG') %>
+                                    </button>
+                                </div>
+
+                                <!-- 텍스트 타입 -->
+                                <div class="textLayout" style="display: none;">
+                                    <div class="form-group">
+                                        <label>
+                                            <%= __('DIALOG_BOX_TITLE') %>
+                                        </label>
+                                        <input type="text" name="dialogTitle" class="form-control" onkeyup="writeDialogTitle(this);" placeholder="<%= __('Please_enter') %>"
+                                            spellcheck="false" autocomplete='off'>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>
+                                            <%= __('DIALOG_BOX_CONTENTS') %>
+                                                <span class="nec_ico">*</span>
+                                        </label>
+                                        <input type="text" name="dialogText" class="form-control" onkeyup="writeDialog(this);" placeholder="<%= __('Please_enter') %>"
+                                            spellcheck="false" autocomplete='off'>
+                                    </div>
+                                </div>
+                                <!--카드 타입 -->
+                                <div class="carouselLayout" style="display:none;">
+                                    <div class="form-group">
+                                        <label>
+                                            <%= __('IMAGE_URL') %>
+                                        </label>
+                                        <input type="text" name="imgUrl" class="form-control" onkeyup="writeCarouselImg(this);" placeholder="<%= __('Please_enter') %>"
+                                            spellcheck="false" autocomplete='off'>
+                                    </div>
+                                    <div class="modal_con btnInsertDiv">
+
+
+                                    </div>
+                                    <div class="clear-both"></div>
+                                    <div class="btn_wrap" style="clear:both">
+                                        <button type="button" class="btn btn-default deleteCard">
+                                            <%= __('DELETE_CARD') %>
+                                        </button>
+                                    </div>
+                                    <div class="btn_wrap" style="clear:both">
+                                        <button type="button" class="btn btn-default carouseBtn">
+                                            <%= __('INSERT_MORE_BUTTON') %>
+                                        </button>
+                                    </div>
+                                    <div class="btn_wrap" style="clear:both">
+                                        <button type="button" class="btn btn-default addCarouselBtn">
+                                            <%= __('INSERT_MORE_CARDS') %>
+                                        </button>
+                                    </div>
+                                    <div class="clear-both"></div>
+                                </div>
+
+                                <div id="cardBtnCopyDiv" style="display:none;">
+                                    <div class="cardBtnCopyDiv">
+                                        <div>
+                                            <label>
+                                                <%= __("BUTTON") %>
+                                            </label>
+                                        </div>
+
+                                        <div class="form-group col-md-13" style="padding-left:0; margin-top: 0px;">
+                                            <table class="cardCopyTbl" style="width:100%">
+                                                <col width="21%">
+                                                <col width="1%">
+                                                <col width="35%">
+                                                <col width="1%">
+                                                <col width="35%">
+                                                <col width="1%">
+                                                <col width="6%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            <%= __("Type") %>
+                                                        </th>
+                                                        <th></th>
+                                                        <th>
+                                                            <%= __("NAME") %>
+                                                        </th>
+                                                        <th></th>
+                                                        <th>
+                                                            <%= __("CONTENTS") %>
+                                                        </th>
+                                                        <th></th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <select class="form-control" name="btnType">
+                                                                <option value="imBack" selected>imBack</option>
+                                                                <option value="openURL">openURL</option>
+                                                            </select>
+                                                        </td>
+                                                        <td></td>
+                                                        <td>
+                                                            <input type="text" name="cButtonName" class="form-control" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off'>
+                                                        </td>
+                                                        <td></td>
+                                                        <td>
+                                                            <input type="text" name="cButtonContent" class="form-control" placeholder="<%= __('Please_enter') %>" spellcheck="false"
+                                                                autocomplete='off'>
+                                                        </td>
+                                                        <td></td>
+                                                        <td>
+                                                            <a href="#" class="btn_delete" style="margin:0px;">
+                                                                <span class="fa fa-trash"></span>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="mediaBtnCopyDiv" style="display:none;">
+                                    <div class="mediaBtnCopyDiv">
+                                        <div>
+                                            <label>
+                                                <%= __("BUTTON") %>
+                                            </label>
+                                        </div>
+
+                                        <div class="form-group col-md-13" style="padding-left:0; margin-top: 0px;">
+                                            <table class="mediaCopyTbl" style="width:100%">
+                                                <col width="21%">
+                                                <col width="1%">
+                                                <col width="35%">
+                                                <col width="1%">
+                                                <col width="35%">
+                                                <col width="1%">
+                                                <col width="6%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            <%= __("Type") %>
+                                                        </th>
+                                                        <th></th>
+                                                        <th>
+                                                            <%= __("NAME") %>
+                                                        </th>
+                                                        <th></th>
+                                                        <th>
+                                                            <%= __("CONTENTS") %>
+                                                        </th>
+                                                        <th></th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <select class="form-control" name="btnType">
+                                                                <option value="imBack" selected>imBack</option>
+                                                                <option value="openURL">openURL</option>
+                                                            </select>
+                                                        </td>
+                                                        <td></td>
+                                                        <td>
+                                                            <input type="text" name="mButtonName" class="form-control" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off'>
+                                                        </td>
+                                                        <td></td>
+                                                        <td>
+                                                            <input type="text" name="mButtonContent" class="form-control" placeholder="<%= __('Please_enter') %>" spellcheck="false"
+                                                                autocomplete='off'>
+                                                        </td>
+                                                        <td></td>
+                                                        <td>
+                                                            <a href="#" class="btn_delete" style="margin:0px;">
+                                                                <span class="fa fa-trash"></span>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 미디어 타입 -->
+                                <div class="mediaLayout" style="display:none;" id="dialog3">
+                                    <div class="form-group">
+                                        <label>
+                                            <%= __('IMAGE_URL') %>
+                                                <span class="nec_ico">*</span>
+                                        </label>
+                                        <input type="text" name="mediaImgUrl" class="form-control" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off'>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>
+                                            <%= __('MEDIA_URL') %>
+                                        </label>
+                                        <input type="text" name="mediaUrl" class="form-control" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off'>
+                                    </div>
+                                    <div class="modal_con btnInsertDiv">
+
+                                    </div>
+                                    <div class="btn_wrap" style="clear:both">
+                                        <button type="button" class="btn btn-default addMediaBtn">
+                                            <%= __('INSERT_MORE_BUTTON') %>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- carousal 일 경우 card 순서 input box 추가 layout -->
+                                <div id="cardLayout" style="display:none;">
+                                    <p class="texcon03">Card Order
+                                        <span>(required) </span>
+                                    </p>
+                                    <p>
+                                        <select name="cardOrderNo" class="inbox02" id="cardOrderNo" style="width:100%">
+                                            <option value="1" selected>1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                        </select>
+                                    </p>
+                                </div>
+
+                                <!-- media , carousal 일 경우 input box 추가 layout -->
+                                <div id="mediaCarouselLayout" style="display:none;">
+                                    <div class="layout-float-left">
+                                        <p class="texcon03">Button Name
+                                            <span>(optional) </span>
+                                        </p>
+                                        <p>
+                                            <input name="buttonName1" type="text" class="inbox02 btnBox" id="buttonName1" placeholder="Input name.." spellcheck="false"
+                                                autocomplete='off' />
+                                            <input name="buttonName2" type="text" class="inbox02 btnBox" id="buttonName2" placeholder="Input name.." spellcheck="false"
+                                                autocomplete='off' />
+                                            <input name="buttonName3" type="text" class="inbox02 btnBox" id="buttonName3" placeholder="Input name.." spellcheck="false"
+                                                autocomplete='off' />
+                                            <input name="buttonName4" type="text" class="inbox02 btnBox" id="buttonName4" placeholder="Input name.." spellcheck="false"
+                                                autocomplete='off' />
+                                        </p>
+                                    </div>
+                                    <div class="layout-float-left-last">
+                                        <p class="texcon03">Button Content
+                                            <span>(optional) </span>
+                                        </p>
+                                        <p>
+                                            <input name="buttonContent1" type="text" class="inbox02 btnBox" id="buttonContent1" placeholder="Input contents.." spellcheck="false"
+                                                autocomplete='off' />
+                                            <input name="buttonContent2" type="text" class="inbox02 btnBox" id="buttonContent2" placeholder="Input contents.." spellcheck="false"
+                                                autocomplete='off' />
+                                            <input name="buttonContent3" type="text" class="inbox02 btnBox" id="buttonContent3" placeholder="Input contents.." spellcheck="false"
+                                                autocomplete='off' />
+                                            <input name="buttonContent4" type="text" class="inbox02 btnBox" id="buttonContent4" placeholder="Input contents.." spellcheck="false"
+                                                autocomplete='off' />
+                                        </p>
+                                    </div>
+                                    <div class="clear-both"></div>
+
+                                    <p class="texcon03">Image Url
+                                        <span>(optional) </span>
+                                    </p>
+                                    <p>
+                                        <input name="imgUrl" type="text" class="inbox02" id="imgUrl" style="width:100%" placeholder="Input image url.."
+                                            spellcheck="false" autocomplete='off' />
+                                    </p>
+                                </div>
+                                <!--// media , carousal 일 경우 input box 추가 layout -->
+
+                                <div class="btn_wrap boline">
+                                    <button type="button" class="btn btn_01" id="addDialogBtn">
+                                        <%= __('INSERT_ADDITIONAL_DIALOG') %>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- source type이 API일 경우 -->
+                            <div id="apiLayout" style="display:none;">
+                                <div class="form-group">
+                                    <label>API Name
+                                        <span class="nec_ico">*</span>
+                                    </label>
+                                    <input type="text" name="apiName" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>API Url
+                                        <span class="nec_ico">*</span>
+                                    </label>
+                                    <input type="text" name="apiUrl" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 대화상자 미리보기 -->
+                        <div class="col-md-6" style="padding-right:0">
+                            <h5>
+                                <span class="col01 fa fa-chevron-right"></span>
+                                <%= __('PREVIEW_DIALOG_BOX') %>
+                            </h5>
+                            <!-- 대화상자  -->
+                            <div class="dialog_box03" id="dialogViewWrap">
+                                <div class="dialogView">
+                                    <div class="wc-message wc-message-from-bot" style="width:80%;">
+                                        <div class="wc-message-content">
+                                            <svg class="wc-message-callout"></svg>
+                                            <div>
+                                                <div class="format-markdown textTypeView">
+                                                    <div class="textMent">
+                                                        <h1 class="textTitle">
+                                                            <%= __('Please_enter_a_title') %>
+                                                        </h1>
+                                                        <p>
+                                                            <%= __('Please_enter_your_content') %>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <div class="nec02">
+                        <span class="nec_ico">*</span>
+                        <%= __('IS_REQUIRED') %>
+                    </div>
+                    <div class="btn_wrap">
+                        <button type="button" class="btn btn_01" onclick="createDialog();">
+                            <%= __('CREAT') %>
+                        </button>
+                        <button type="button" class="btn btn-default createDlgModalClose" data-dismiss="modal">
+                            <%= __('CANCEL') %>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- // 신규 대화상자 생성 -->
+
+
+    <script>
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        })
+        //Red color scheme for iCheck
+        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+            checkboxClass: 'icheckbox_minimal-red',
+            radioClass: 'iradio_minimal-red'
+        })
+        //Flat red color scheme for iCheck
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass: 'iradio_flat-green'
+        })
+
+    </script>
+
+</body>
+
+</html>
+
+
+<!--- 깃 테스트 --->

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel='stylesheet' href='/stylesheets/style.css' />
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>
+        TIIS Manager
+    </title>
+
+	<!-- 
+        <link rel="stylesheet" href="./common/css/css_common.html" />
+        -->
+    
+
+    <%include  ./common/commonUse.html%>
+    <!-- Google Chart 시작 -->
+    <script type="text/javascript" src="/js/import/charts/loader.js"></script>
+    <!-- Google Chart 끝 -->
+    <script type="text/javascript" src="/js/common/board.js"></script>
+    
+    
+    <style type="text/css">
+        .goTop {
+            position: fixed;
+            right: 0.5%;
+            bottom: 60px;
+            display: none;
+            z-index: 999;
+            font-size: large;
+        }
+    </style>
+    
+
+    
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"> test-->
+</head>
+
+<body class="main">
+    <button type="button" id="MOVE_TOP_BTN" class="goTop" onclick="$('html, body').stop().animate( { scrollTop : '0' }, 1000, 'easeOutBack' );return false;">[TOP]</button>
+    <input type="hidden" name="subKey" id="subKey" value='<%=subKey%>'/>
+    <input type="hidden" name="appId" id="appId" value='<%=appId%>'/>
+    <input type="hidden" name="appId" id="appId" value='<%=appName%>'/>
+    <!--<link rel="import" href="./header.html">    -->
+    <%include  ./header.html%>
+
+    <div id="wrap">
+        <div id="container" class="main">
+
+            <div id="sub_cont03">
+                <!-- 서브 타이틀 App State-->
+                <div class="subt_wrap">
+                         <h2 class="subtit01" id="appNameTag"><%= appName %></h2>
+                        <p class="subt_01" style="display: none;"><a href="#" class="more" id="helpV">+more</a></p>
+                </div>
+                
+
+                <div  class="mt20">
+
+                        <!-- 학습 현황
+                        <div class="dashboard_cont01">
+                            <p class="d_tit01">App State</p>
+                            <p class="d_tit02">
+                                <span><strong>Last Train</strong> <span id="spanLastTrainDateTime"> Loading.. </span></span>
+                                <span><strong>Last publish</strong> <span id="spanLastPublishDateTime"> Loading.. </span></span>
+                            </p>
+                        </div>
+                         -->
+                        <!--// 학습 현황 -->
+
+                        <!-- 의도수/개체수/개체수리스트/문장수 -->
+                         <div class="dashboard_cont01" >
+                            <form action="" id="filterForm">
+
+                            <div style="float: left; width: 30%; margin-left: 5%">
+                                <p class="d_tit01"><%= __('viewsperiods') %></p>
+
+
+                                <input type="text" name="startDate" id="startDate" style="width: 47%;">~<input type="text" name="endDate" id="endDate" style="width: 47%;">
+                                <div align="center" name="slider" id="slider" style="width: 94%; margin: 20px 0 0 9px;"></div>
+
+                            </div>
+
+                            <div style="float: left; width: 20%; margin-left: 5%">
+                                <p class="d_tit01"><%= __('datetype') %></p>
+                                <select class="inbox02" id="selDate" name="selDate" style="width: 200px">
+                                    <option value="allDay"><%= __('allDates') %></option>
+                                    <option value="today"><%= __('day') %></option>
+                                </select>
+                            </div>
+                            <div style="float: left;  width: 20%; margin-left: 5%">
+                                <p class="d_tit01"><%= __('channel') %></p>
+                                <select class="inbox02" id="selChannel" name="selChannel" style="width: 200px">
+                                    <option value="all"><%= __('allDates') %></option>
+                                    <% if (channelList) { %>
+                                    <%      for (var i=0; i <channelList.length; i++) { %>
+                                                <option value="<%=channelList[i].CHANNEL%>"><%=channelList[i].CHANNEL%></option>
+                                    <%      } 
+                                       } else { %>
+                                        
+                                    <% } %>
+                                </select> 
+                            </div>
+                            <div style="float: left; margin: 28px 0 28px 5% !important; width: 10%;">
+                                <p class="d_tit01">
+                                    <a href="#" class="btn " id="selectBtn"><%= __('lookup') %></a>
+                                </p>
+                            </div>
+                            </form>
+                         </div>
+
+                        <div class="dashboard_cont04" style="margin-right: 1%;" >
+                            <p class="d_tit01">INTENT SCORE <%= __('average') %>/<%= __('minimum') %>/<%= __('maximum') %></p>
+                            <div id="score" style="margin: 5px; height: 90%;"></div>
+                        </div>
+
+                        <div class="dashboard_cont03" style="margin-bottom: 1%;">
+                            <p class="d_tit01"><%= __('Answers to Frequently Asked Questions') %></p>
+                            <div id="oftQuestion" style="margin: 5px;"></div>
+                        </div>
+
+                        <div class="dashboard_cont04" style="width: 50%; background-color: white; padding: 0%">
+                                <div class="dashboard_cont02 pane01">
+                                        <p class="d_tit01"><%= __('Cumulative counselor count') %></p>
+                                        <p class="d_tit03 panel" id="allCustomer"></p>
+                                </div>
+    
+                                <div class="dashboard_cont02 pane01">
+                                        <p class="d_tit01"><%= __('Average response speed') %></p>
+                                        <p class="d_tit03 panel" id="avgReplySpeed"></p>
+                                </div>
+    
+                                <div class="dashboard_cont02 pane01">
+                                        <p class="d_tit01"><%= __('Average number of customer questions') %></p>
+                                        <p class="d_tit03 panel" id="avgQueryCnt"></p>
+                                </div>
+    
+                                <div class="dashboard_cont02 pane01">
+                                        <p class="d_tit01"><%= __('Average normal response rate') %></p>
+                                        <p class="d_tit03 panel" id="avgCorrectAnswer"></p>
+                                </div>
+        
+                                <div class="dashboard_cont02 pane01">
+                                        <p class="d_tit01"><%= __('Search response rate') %></p>
+                                        <p class="d_tit03 panel" id="avgReply"></p>
+                                </div>
+        
+                                <div class="dashboard_cont02 pane01">
+                                        <p class="d_tit01"><%= __('Maximum Number of Customer Questions') %></p>
+                                        <p class="d_tit03 panel" id="maxQueryCnt"></p>
+                                </div>
+                            
+                            </div>
+                            <div class="dashboard_cont04" style="width: 47%;" >
+                                <p class="d_tit01"><%= __('Response') %>(<%= __('average') %>/<%= __('maximum') %>/<%= __('minimum') %>)/<%= __('Mean-stay-time') %></p>
+                                <div id="resonseScoreDiv">
+                                    <p class="d_tit03" style="line-height: 8;"><span> Loading.. </span></p>
+                                </div>
+                        </div>
+
+                        <div class="dashboard_cont06">
+                            <p class="d_tit01"><%= __('Question count per time zone') %></p>
+                            <div id="timeOfDay_div">
+                                <p class="d_tit03" style="line-height: 8;"><span> Loading.. </span></p>
+                            </div>
+                        </div>
+                       
+                       <!-- //Intent Breakdown/Entity Breakdown -->
+                       
+                        <div class="dashboard_cont06">
+                           <p class="d_tit01"><%= __('Unanswered questions') %></p>
+                           <div id="noneQueryDiv">
+                               <p class="d_tit03" style="line-height: 8;"><span> Loading.. </span></p>
+                           </div>
+                        </div>
+                        <div class="dashboard_cont06">
+                            <div style="width:100%;"><p class="d_tit01"><%= __('Customer_First_Questions') %></p></div>
+                            <div class="dashboard_cont04" id="top_x_div" style="float: left;">
+                                <p class="d_tit03" style="line-height: 8;"><span> Loading.. </span></p>
+                            </div>
+
+                            <div class="dashboard_cont03" id="table_div" style="float: left; margin: 0 0 15px 10px; ">
+                                <p class="d_tit03" style="line-height: 10;"><span> Loading.. </span></p>
+                            </div>
+                        </div>
+
+                        
+
+                  </div>
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+        <hr>
+        <footer>
+            <p>&copy; Company 2014</p>
+        </footer>
+	<!-- /container -->
+    
+</body>
+
+    
+    
+</html>

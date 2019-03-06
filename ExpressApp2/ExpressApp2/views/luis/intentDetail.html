@@ -1,0 +1,237 @@
+﻿<!DOCTYPE html>
+<html>
+
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>
+        
+    </title>
+    <%include  ../common/commonLib.html%>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!--[if lt IE 9]>
+    <script src="common/js/html5shiv.min.js"></script>
+    <script src="common/js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="/js/common/luis/intentDetail.js"></script>
+    <style type="text/css">
+
+        .span_color_0 {
+            background-color: #E5A896;
+        }
+        .span_color_1 {
+            background-color: #C4E6BD;
+        }
+        .span_color_2 {
+            background-color: #FFFF00;
+        }
+        .span_color_3 {
+            background-color: #CE8EC0;
+        }
+        .span_color_4 {
+            background-color: #B7C3C5;
+        }
+
+        a[name=delUtterBtn] {
+            display:inline-block; 
+            margin:5px 0 0 1%; 
+        }
+        tr[name=utterMainTr] {
+            background-color: aliceblue;
+        }
+        div[name=labelInfoDiv] {
+            float: left;
+            width: 90%;
+            display: block;
+        }
+        .barClass {
+            padding:0.3% 0.2%;
+            margin:1px; 
+            font-size:1.4em; 
+            color:red; 
+        }
+        span[name=utterText] {
+            padding:0.3% 0;
+            margin:1px; 
+            font-size:1.4em; 
+        }
+        span[name=alertSpan] {
+            padding:0.3% 0;
+            margin:1px; 
+            font-size:1.1em; 
+            color:red; 
+        }
+        div[name=indentDiv] {
+            float: left;
+            max-width: 10%;
+            padding: 0.5em 0.5em 0 0;
+        }
+        input[name=matchUtterText] {
+            width: 10%;
+            padding: 0.5% 0; 
+            margin: 0 0 0.5% 0;
+        }
+        select[name=entityTypeForLabel] {
+            width:15%; 
+            display:inline; 
+            margin:0 1% 0 0;
+        }
+        select[name=entitySelBox] {
+            width:20%; 
+            display:inline; 
+            margin:0 1% 0 0;
+        }
+        select[name=entityChildSelBox] {
+            width:10%; 
+            display:none; 
+            margin:0 1% 0 0;
+        }
+        select[name=multiMatchUtterSel] {
+            width:15%; 
+            display:inline; 
+            margin:0 0 0 1%;
+        }
+        a[name=delLabelBtn] {
+            margin:0.2% 0 0 0.3%;
+        }
+        tr[name=utterSubTr] {
+            display : none;
+        }
+    </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+        <input type="hidden" name='hiddenMenuTitle' id="hiddenMenuTitle" value="<%= __('INTENT_LIST') %>" />
+        <input type="hidden" name='currentPage' id="currentPage" value="1" />
+        <input type="hidden" name='hiddenIntentName' id="hiddenIntentName" value="<%= intentName %>" />
+        <input type="hidden" name='hiddenIntentId' id="hiddenIntentId" value="<%= intentId %>" />
+        <input type="hidden" name='hiddenlebelCnt' id="hiddenlebelCnt" value="<%= labelCnt %>" />
+        <input type="hidden" name='hiddenListPageNum' id="hiddenListPageNum" value="<%= pageNum %>" />
+        
+        <input type="hidden" name='createQuery' id="createQuery" value="<%=createQuery %>" />
+        <input type="hidden" name='appIndex' id="appIndex" value="<%=appIndex %>" />
+        <!-- Header -->
+        <%include ../header.html%>
+        <!-- //Header -->
+        <!-- Left Menu Side -->
+        <%include ../leftSideBar.html%>
+        <!--// Left Menu Side -->
+        <!-- -->
+        <div class="content-wrapper">
+            <section class="content-header">
+                <div class="form-group fr mr10 mb05" >
+                    <button id="backToList" type="button" class="btn btn-default"  ><i class="fa fa-list"></i> <%= __('INTENT_LIST') %></button>
+                    <button id="insertUtterBtn" type="button" class="btn btn-default"  ><i class="fa fa-edit"></i> <%= __('SAVE') %></button>
+                    <button id="deleteIntentBtn" type="button" class="btn btn-default"  ><i class="fa fa-trash"></i> <%= __('DELETE') %></button>
+                </div>
+                <span id="intentNameTitle" style = "margin:1px; font-size:1.8em;  color:#000000;" ><!--<%= intentName %>--></span> 
+                <a href='#' id='updateIntentName' name='updateIntentName' style='display:inline-block; margin:7px 0 0 7px; ' onclick="return false;"><span class='fa fa-pencil' style='font-size: 25px;'></span></a>
+                
+            </section>
+            <!-- Main content -->
+            <section class="content">
+                <div class="box  color-palette-box">
+                    <div class="box-body">
+                        <div class="row">
+                            <input name="utterInputText" id="utterInputText" type="text" class="form-control" style='width:98%; margin: 0 0 0.5% 1%;' tabindex="1" placeholder="<%= __('Please_enter') %>">
+                        </div>
+                        
+                        <div class="Tbl_wrap">
+                            <table class="Tbl" summary="table">
+                                <colgroup><col width="2%" /><col width="75%" /><col width="20%" /><col width="3%" /></colgroup>
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th style='text-align: left; padding-left:1%;'>
+                                            <%= __('UTTERANCE') %>
+                                            <!--두연 라벨링제거
+                                            <a href='#' id='scrollUpDownBtn' name='scrollUpDownBtn' onclick='return false;' style='display:inline-block; margin:7px 0 0 7px; '><span class='fa fa-arrow-up' style='font-size: 25px;'></span></a>
+                                            -->
+                                        </th>
+                                        <th style='text-align: left; padding-left:2%;'><%= __('Intent_score') %></th>
+                                        <th style='text-align: right; padding-right:1%;'></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="utteranceTblBody"></tbody>
+                    
+                            </table>
+                        </div>
+                        <div id="pagination" class="pagination_wrap">
+                        
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- //Main content -->
+        </div>
+
+        <!--  Footer -->
+        <%include  ../footer.html%>
+        <!-- // Footer -->
+    </div>
+    <!--// Content Wrapper -->
+
+<!-- confirm -->
+<div class="modal fade" id="confirmBtnModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" name="confirmCancelBtn" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel"><span id="confirmTitle"></span></h4>
+            </div>
+            <div class="modal-body"><span id="confirmMsg"></span></div>
+            <div class="modal-footer" id="delete_footer_button">
+                <button type="button" class="btn btn-default" name="confirmCancelBtn" data-dismiss="modal" style="display: none;"><i class="fa fa-times"></i> <%= __('CLOSE') %></button>
+                <button type="button" class="btn btn-primary" id="confirmBtn"><i class="fa fa-trash"></i> <%= __('OK') %></button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- //confirm -->
+
+<!-- alert -->
+<div class="modal fade" id="alertBtnModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel"><span id="alertTitle"><%= __('ALERT') %></span></h4>
+            </div>
+            <div class="modal-body"><span id="alertMsg"></span></div>
+            <div class="modal-footer" >
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="alertCloseBtn"><%= __('OK') %></button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- //alert -->
+
+    <div class="modal fade" id="loadingBar" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel" aria-hidden="true" >
+        <img src="/image/ajax_loader.gif" style="width:50px; height:50px;" id="loadingImg">
+    </div>
+
+
+    <script>
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass   : 'iradio_minimal-blue'
+        })
+        //Red color scheme for iCheck
+        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+            checkboxClass: 'icheckbox_minimal-red',
+            radioClass   : 'iradio_minimal-red'
+        })
+        //Flat red color scheme for iCheck
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass   : 'iradio_flat-green'
+        })
+
+    </script>
+</body>
+</html>

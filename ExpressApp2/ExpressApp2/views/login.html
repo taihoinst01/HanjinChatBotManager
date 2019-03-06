@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <%include  ./common/commonLib.html%>
+    
+    <script type="text/javascript" src="/js/common/login.js"></script>
+</head>
+    
+
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo"><span class="hc">로그인로고</span></div>
+        <div class="login-box-body">
+            <form onsubmit="return false;" method="post" id="loginfrm">
+                <div class="form-group has-feedback">
+                <span class="fa fa-user form-control-feedback"></span>
+                    <input type="text" class="form-control" id="mLoginId" name="mLoginId" spellcheck="false" placeholder="<%= __('ID') %>">
+                    
+                </div>
+                <div class="form-group has-feedback" >
+                    <input type="password" class="form-control" id="mLoginPass" name="mLoginPass" placeholder="<%= __('PASSWOARD') %>" onkeypress="caps_lock(event)" />
+                    <span class="fa fa-lock form-control-feedback"></span>
+                    
+                </div>
+                <div class="row">
+                        <div class="col-xs-5">
+                        <input type="checkbox" class="flat-red" checked> <%= __('CHECK_ID') %>
+                        </div>
+                        
+                        <div class="col-xs-5">
+                            <p id="capslock" style="position:relative; width:300px; bottom:0px; display:none; margin:0;"> 
+                                    &nbsp;<b>CapsLock</b> 키가 눌려있습니다.&nbsp;
+                            </p>
+                        </div>
+                
+                </div>
+
+            </form>
+
+        <div class="social-auth-links text-center"><button type="submit" class="btn btn_login" id="sendLoginBtn"><%= __('LOGIN_BTN') %></button></div>
+    
+        <div class="social-auth-links text-right"><a href="#" onclick="return false;" id="changePwBtn"><%= __('PASSWOARD_CHNG') %></a></div>
+    
+
+        <p class="login_footer ">COPYRIGHTS <strong> ©TAIHOINST </strong> ALL RIGHTS RESERVED.</p>
+    </div>
+  </div>
+
+  <div class="modal fade" id="loadingLoginModalMain" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="margin:0;">Log In...</h3>
+            </div>
+            <div class="modal-body">
+                <div class="progress progress-striped active" style="margin-bottom:0;">
+                    <div class="progress-bar" style="width: 100%"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <strong>TIIZ</strong> ChatBot Manager
+            </div>
+        </div>
+    </div>
+</div>
+  <script>
+        //iCheck for checkbox and radio inputs
+          $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass   : 'iradio_minimal-blue'
+          })
+          //Red color scheme for iCheck
+          $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+            checkboxClass: 'icheckbox_minimal-red',
+            radioClass   : 'iradio_minimal-red'
+          })            
+          //Flat red color scheme for iCheck
+          $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass   : 'iradio_flat-green'
+          }) 
+    </script>
+
+</body>
+</html>
+

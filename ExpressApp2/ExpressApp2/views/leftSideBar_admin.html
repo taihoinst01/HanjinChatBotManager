@@ -1,0 +1,104 @@
+<aside class="main-sidebar">
+    <section class="sidebar">
+        <div class="sidebar-form">ChatBot</div>
+        <!-- chat bot list -->
+        <div class="sidebar-form se02">
+                      
+                      <ul class="dropdown">
+                          <li class="dropdown tasks-menu" >
+                            <a class="admin_mtit"><%= __('ADMIN_SETTING') %></a>
+                          </li>
+                      </ul>
+      </div> 
+      <!-- //chat bot list -->  
+
+      <!-- left Menu -->
+      <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">Menu</li>
+            <li class="treeview" id="userMngClick"> <a href="/users/userMng"><i class="fa fa-user"></i> <span><%= __('USER_MNG') %></span></a> </li>
+            <!--<li class="treeview" id="userAugthClick"> <a href="/users/userAuthMng"><i class="fa fa-lock"></i> <span><%= __('USER_AUTH_MNG') %></span></a> </li>-->
+            <!--<li class="treeview" id="chatAugthClick"> <a href="/users/chatBotMng"><i class="fa fa-lock"></i> <span><%= __('CHATBOT_MNG') %></span></a> </li>-->
+            <li class=" treeview"><!--<li class="active treeview">-->  
+                <a href="#">
+                  <i class="fa fa-desktop"></i> <span><%= __('CHATBOT_MNG') %></span>
+                  <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                  </span>
+                </a>
+                <ul class="treeview-menu" >
+                  <li><a href="/users/chatBotMng"><i class="fa  fa-circle-o"></i> <%= __('CHATBOT_APP_MSG') %></a></li>
+                  <li><a href="/addChatbot"><i class="fa  fa-circle-o"></i> <%= __('ADD_CHAT') %></a></li>
+                  <li><a href="/menu/chatBotMenu"><i class="fa  fa-circle-o"></i> <%= __('CHATBOTMENU_MAPPING_MSG') %></a></li>
+                  <!--<li><a href="#"><i class="fa fa-circle-o"></i> <%= __('CHATBOT_STATUS_MSG') %></a></li>-->
+                </ul>
+              </li>
+            <!-- 추후 사용 예정 -->
+            <!-- <li class="treeview" id="apiMngClick"> <a href="/users/apiSetting"><i class="fa  fa-file-text-o"></i> <span><%= __('API_MNG') %></span></a> </li> -->
+            <li class=" treeview"><!--<li class="active treeview">-->  
+                <a href="#">
+                  <i class="fa fa-dashboard"></i> <span><%= __('DASHBOARD_MSG') %></span>
+                  <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                  </span>
+                </a>
+                <ul class="treeview-menu" >
+                  <li><a href="/boardMng/boardMng"><i class="fa  fa-circle-o"></i><%= __('DASHBOARD_ITEM_MSG') %></a></li>
+                  <li><a href="/boardMng/boardUserMng"><i class="fa fa-circle-o"></i><%= __('DASHBOARD_USER_LINK') %></a></li>
+                </ul>
+              </li>
+              <li class=" treeview"><!--<li class="active treeview">-->  
+                <a href="#">
+                  <i class="fa fa-cogs"></i> <span><%= __('COMMON_MSG') %></span>
+                  <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                  </span>
+                </a>
+                <ul class="treeview-menu" >
+                  <!--<li><a href="/code/codeMasterMng"><i class="fa  fa-circle-o"></i><%= __('COMMON_CODE_MSG') %></a></li>-->
+                  <li><a href="/menu/menuMng"><i class="fa fa-circle-o"></i> <%= __('MENU_MSG') %></a></li>
+                  <li><a href="/auth/authMasterMng"><i class="fa fa-circle-o"></i> <%= __('AUTHGROUP_MSG') %></a></li>
+                  <li><a href="/user/userAuthMng"><i class="fa fa-circle-o"></i> <%= __('AUTHUSER_MSG') %></a></li>
+                  <li><a href="/user/userAppMappingMng"><i class="fa fa-circle-o"></i> <%= __('USERAPP_MAPPING_MSG') %></a></li>
+                </ul>
+              </li>
+      </ul>
+      <!-- // left Menu -->
+                              
+    </section>
+</aside>
+
+<script>
+    $(window).on('load', function() {
+
+        $('.treeview').find('i').each(function() {
+            var menuName = $.trim( $(this).parent().text() ).replace(/ /gi, ""); 
+            var pageTitle = $.trim( $('.content-header').text() ).replace(/ /gi, ""); 
+            if (menuName === pageTitle) {
+                $(this).parents('li').addClass('active');
+            }
+        });
+    });
+
+    $(document).ready(function(){
+
+        $('#userMngClick').click(function() {
+            var url = "/users/userMng"; 
+            $(location).attr('href',url);
+        });
+
+        $('#userAugthClick').click(function() {
+            var url = "/users/userAuthMng"; 
+            $(location).attr('href',url);
+        });
+        
+        $('#chatAugthClick').click(function() {
+            var url = "/users/chatBotMng"; 
+            $(location).attr('href',url);
+        });
+
+        $('#apiMngClick').click(function() {
+            var url = "/users/apiSetting"; 
+            $(location).attr('href',url);
+        });
+    });
+  </script>

@@ -1,0 +1,11 @@
+@font-face {
+	font-family: 'FontCJ';
+	src: url('/font/CJONLYONENEWbodyRegular_2350.eot');
+	src: url('/font/CJONLYONENEWbodyRegular_2350.eot') format('embedded-opentype'), url('/font/CJONLYONENEWbodyRegular_2350.woff2') format('woff2'), url('/font/CJONLYONENEWbodyRegular_2350.woff') format('woff'), url('/font/CJONLYONENEWbodyRegular_2350.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal
+}
+.cj-font {
+    font: normal normal normal 14px/1 FontCJ;
+    line-height: 1.5em;
+}

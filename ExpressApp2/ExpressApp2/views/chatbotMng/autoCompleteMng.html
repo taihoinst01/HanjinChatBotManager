@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <%include  ../common/commonLib.html%>
+        <script src="/common/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/js/common/autoCompleteMng.js"></script>
+        <script>
+
+        </script>
+
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+
+        <!-- Header -->
+        <%include  ../header.html%>
+            <!-- //Header -->
+
+            <!-- Left Menu Side -->
+            <%include  ../leftSideBar.html%>
+                <!--// Left Menu Side -->
+
+
+                <!-- Content Wrapper -->
+                <div class="content-wrapper">
+                    <section class="content-header">
+                        <h1>자동완성 관리</h1>
+                    </section>
+
+                    <!-- Main content -->
+                    <section class="content">
+                        <div class="box  color-palette-box">
+                            <div class="box-body">
+                                <div class="mt20">
+                                    <div class="col-lg-12" style="padding-left:0px !important">
+                                        <h4 class=" col-lg-12">
+                                            AutoComplete Form
+                                        </h4>
+
+                                        <div class="Tbl_wrap">
+                                            <p>
+                                                <div class="panel panel-default">
+                                                    <div class="panel-body">
+                                                        <form class="form-horizontal" name="autoCompleteForm" id="autoCompleteForm">
+                                                            <div class="form-group">
+                                                                <label for="inputEmail3" class="col-sm-2 control-label">
+                                                                    <i class="fa fa-asterisk"></i> Content</label>
+                                                                <div class="col-sm-10">
+                                                                    <input type="text" class="form-control" id="CONTENT" name="CONTENT" placeholder="CONTENT">
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                    <div class="panel-footer text-right">
+                                                        <button type="button" class="btn btn-default" id="addAutoCompleteBtn">
+                                                            <i class="fa fa-edit"></i> Save</button>
+                                                    </div>
+                                                </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12" style="padding:0px !important">
+                                        <h4 class=" col-lg-6">AutoComplete List</h4>
+                                        <div class=" col-lg-6" style="text-align:right; padding:0px !important">
+                                            <button type="button" class="btn btn-default" id="deleteAutoCompleteBtnModal">
+                                                <i class="fa fa-trash"></i> Delete
+                                            </button>
+                                        </div>
+                                        <div class="Tbl_wrap">
+                                            <table class="Tbl" summary="banned word list">
+                                                <colgroup>
+                                                    <col width="5%" />
+                                                    <col width="5%" />
+                                                    <col width="70%" />
+                                                    <col width="10%" />
+                                                    <col width="10%" />
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>
+                                                            <input type="checkbox" class="flat-red" id="check-all">
+                                                        </th>
+                                                        <th>AutoComplete Content</th>
+                                                        <th>Use</th>
+                                                        <th>...</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="autoCompleteTableBodyId">
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="pagination_wrap" id="autoCompleteTablePaging">
+                                            <ul class="pagination pagination-sm no-margin">
+
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- //Main content -->
+
+                </div>
+                <!--// Content Wrapper -->
+
+
+                <!--  Footer -->
+                <%include  ../footer.html%>
+                    <!-- // Footer -->
+                    <!-- Modal -->
+                    <div class="modal fade" id="autoCompleteFormModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel">권한그룹</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="form-horizontal" name="autoCompleteUpdateForm" id="autoCompleteUpdateForm">
+                                        <input type="hidden" name="UPDATE_SEQ" id="UPDATE_SEQ">
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3 control-label"><i class="fa fa-asterisk"></i>
+                                                Content</label>
+                                            <div class="col-sm-9">
+                                                <textarea class="form-control" name="UPDATE_CONTENT" id="UPDATE_CONTENT" rows="5"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3 control-label"><i class="fa fa-asterisk"></i>
+                                                Content</label>
+                                            <div class="col-sm-9">
+                                                <select name="UPDATE_USE_YN" id="UPDATE_USE_YN" class="form-control">
+                                                    <option value="Y">사용</option>
+                                                    <option value="N">미사용</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer" id="footer_button">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i>
+                                        Close</button>
+                                    <button type="button" class="btn btn-primary" id="updateAutoCompleteBtn"><i class="fa fa-edit"></i>
+                                        Update</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="autoCompleteDeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel">AutoComplete</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p id="del_content"></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <p id="delete_autocomplete_btn"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        //iCheck for checkbox and radio inputs
+                        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                            checkboxClass: 'icheckbox_minimal-blue',
+                            radioClass: 'iradio_minimal-blue'
+                        })
+                        //Red color scheme for iCheck
+                        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+                            checkboxClass: 'icheckbox_minimal-red',
+                            radioClass: 'iradio_minimal-red'
+                        })
+                        //Flat red color scheme for iCheck
+                        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                            checkboxClass: 'icheckbox_flat-green',
+                            radioClass: 'iradio_flat-green'
+                        })
+
+                    </script>
+</body>
+
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <%include  ../common/commonLib.html%>
+        <script src="/common/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/js/common/codeMng.js"></script>
+        <script>
+            $(document).ready(function () {
+                makeCodeDeatilTable();
+            });
+
+            function show_codeDetailForm() {
+                document.codeDetailForm.reset();
+                $('#footer_button').html('<button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button><button type="button" class="btn btn-primary addDetailBtn" id="addDetailBtn"><i class="fa fa-edit"></i> Save</button>');
+                $('#codeDetailFormModal').modal('show');
+            }
+
+            function del_codeDetail() {
+                procCodeMaster('DEL');
+            }
+
+            function go_codeMasterList() {
+                var form = document.goDetailForm;
+
+                form.target = "_self";
+                form.action = "codeMasterMng";
+                form.submit();
+            }
+        </script>
+
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <input type="hidden" name="CDM_ID" id="CDM_ID" value='<%=CDM_ID%>' />
+    <div class="wrapper">
+
+        <!-- Header -->
+        <%include  ../header.html%>
+            <!-- //Header -->
+
+            <!-- Left Menu Side -->
+            <%include  ../leftSideBar_admin.html%>
+                <!--// Left Menu Side -->
+
+
+                <!-- Content Wrapper -->
+                <div class="content-wrapper">
+                    <section class="content-header">
+                        <h1><%= __('COMMON_CODE_MSG') %></h1>
+                    </section>
+
+                    <!-- Main content -->
+                    <section class="content">
+                        <div class="box  color-palette-box">
+                            <div class="box-body">
+
+                                <div class="row mt20">
+                                    <h4 class=" col-lg-6" id="detailCode_Title"></h4>
+                                    <div class=" col-lg-6" style="text-align:right">
+                                        <button type="button" class="btn btn-default" onClick="go_codeMasterList();">
+                                            <i class="fa fa-list"></i> <%= __('CODESET_MASTER_LIST') %>
+                                        </button>
+                                        <button type="button" class="btn btn-default" onClick="show_codeDetailForm();">
+                                            <i class="fa fa-plus"></i> <%= __('ADD') %>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- 공통코드 마스터 테이블 -->
+                                <div class="Tbl_wrap">
+                                    <table class="Tbl" summary="공통코드디테일목록">
+                                        <colgroup>
+                                            <col width="5%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="15%" />
+                                            <col width="5%" />
+                                            <col width="5%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th><%= __('NUM') %></th>
+                                                <th><%= __('CODESET_ID') %></th>
+                                                <th><%= __('CODE_') %></th>
+                                                <th><%= __('CODE_NAME') %></th>
+                                                <th><%= __('DESCRIPTION') %></th>
+                                                <th><%= __('CODESET_ORDER') %></th>
+                                                <th><%= __('USE_YN') %></th>
+                                                <th><%= __('CODESET_STRING1') %></th>
+                                                <th><%= __('CODESET_STRING2') %></th>
+                                                <th><%= __('CODESET_STRING3') %></th>
+                                                <th>...</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="codeDetailTbody">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </section>
+                    <!-- //Main content -->
+
+                </div>
+                <!--// Content Wrapper -->
+
+
+                <!--  Footer -->
+                <%include  ../footer.html%>
+                    <!-- // Footer -->
+                    <!-- Modal -->
+                    <div class="modal fade" id="codeDetailFormModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel">
+                                        <%=CDM_ID%> <%= __('CODE_DETAIL') %></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="form-horizontal" name="codeDetailForm" id="codeDetailForm">
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-2 control-label"><%= __('CODE_ID') %></label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="CDM_ID" name="CDM_ID" placeholder="<%= __('CODE_ID') %>" value="<%=CDM_ID%>"
+                                                    readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-2 control-label"><%= __('CODE_') %></label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="CD" name="CD" placeholder="<%= __('CODE_') %>">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                                <label for="inputEmail3" class="col-sm-2 control-label"><%= __('CODE_LANGUAGE') %></label>
+                                                <div class="col-sm-10">
+                                                    <select name="LANG" id="LANG" class="form-control">
+                                                        <option value="EN" selected>영어</option>
+                                                        <option value="KO">한국어</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-2 control-label"><%= __('CODE_NAME') %></label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="CD_NM" name="CD_NM" placeholder="<%= __('CODE_NAME') %>">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-2 control-label"><%= __('DESCRIPTION') %></label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="CD_EXPL" name="CD_EXPL" placeholder="<%= __('DESCRIPTION') %>">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-2 control-label"><%= __('CODESET_ORDER') %></label>
+                                            <div class="col-sm-10">
+                                                <input type="number" class="form-control" id="CD_SEQ" name="CD_SEQ" placeholder="<%= __('CODESET_ORDER') %>">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-2 control-label"><%= __('CODESET_STRING1') %></label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="STR_1" name="STR_1" placeholder="<%= __('CODESET_STRING1') %>">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-2 control-label"><%= __('CODESET_STRING2') %></label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="STR_2" name="STR_2" placeholder="<%= __('CODESET_STRING2') %>">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-2 control-label"><%= __('CODESET_STRING3') %></label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="STR_3" name="STR_3" placeholder="<%= __('CODESET_STRING3') %>">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer" id="footer_button">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        //iCheck for checkbox and radio inputs
+                        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                            checkboxClass: 'icheckbox_minimal-blue',
+                            radioClass: 'iradio_minimal-blue'
+                        })
+                        //Red color scheme for iCheck
+                        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+                            checkboxClass: 'icheckbox_minimal-red',
+                            radioClass: 'iradio_minimal-red'
+                        })
+                        //Flat red color scheme for iCheck
+                        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                            checkboxClass: 'icheckbox_flat-green',
+                            radioClass: 'iradio_flat-green'
+                        })
+
+                    </script>
+
+                    <form name="goDetailForm" id="goDetailForm">
+                        <input type="hidden" name="code_id" id="code_id">
+                    </form>
+</body>
+
+</html>

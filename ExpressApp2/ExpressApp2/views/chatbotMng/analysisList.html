@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <%include  ../common/commonLib.html%>
+        <!--<script src="/common/js/bootstrap.min.js"></script>-->
+        <script type="text/javascript" src="/js/common/analysisMng.js"></script>
+        <script>
+           
+        </script>
+
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+
+        <!-- Header -->
+        <%include  ../header.html%>
+            <!-- //Header -->
+
+            <!-- Left Menu Side -->
+            <%include  ../leftSideBar.html%>
+                <!--// Left Menu Side -->
+
+
+                <!-- Content Wrapper -->
+                <div class="content-wrapper">
+                    <section class="content-header">
+                        <h1>Analysis Log 관리</h1>
+                    </section>
+
+                    <!-- Main content -->
+                    <section class="content">
+                        <input type="hidden" name='currentPage' id="currentPage" value="1" />
+                        <input type="hidden" id="searchQuestionHidden" name="searchQuestionHidden" value="">
+                        <div class="box  color-palette-box">
+                            <div class="box-body">
+                                  <div class="modal-body search_op">
+                                        <div class="form-group col-lg-6"  style=" padding-left:0px !important" >
+                                            <input type="text" name="searchQuestion" id="searchQuestion" class="form-control" placeholder="<%= __('Please_enter_a_question') %>">
+                                        </div>
+                                        <div class="form-group col-lg-3"  style=" padding-left:0px !important" >
+                                            <select class="form-control" id="selResult" name="selResult">
+                                                <option value="all"><%= __('All') %></option>
+                                                <option value="H"><%= __('ANSWER_OK') %></option>
+                                                <option value="D"><%= __('ANSWER_NO') %></option>
+                                                <option value="NONE_DLG">None_DLG</option>
+                                            </select>
+                                        </div>    
+                                                    
+                                        <div class="form-group col-lg-3 fr"  style=" margin-top:20px;text-align:right; padding-right:0px;">
+                                            <button type="button" id="searchDlgBtn" class="btn btn_01 "><i class="fa fa-search"></i> <%= __('SEARCH') %></button> 
+                                            <button type="button" class="btn btn-default" id="deleteAnalysisBtnModal"><i class="fa fa-trash"></i> <%= __('DELETE') %></button>
+                                            <button type="button" class="btn btn-default" id="noneDlgisBtnModal"><i class="fa fa-trash"></i> None Dlg처리</button>
+                                        </div>
+                                     </div>
+                                     
+
+                                    <!-- 학습 추천 테이블 --> 
+                                    <div class="Tbl_wrap">
+                                        <table class="Tbl" summary="analysis 관리">
+                                            <colgroup><col width="5%"/><col width="5%"/><col width="40%"/><col width="20%"><col width="20%"><col width="20%"></colgroup>
+                                                  <tr>
+                                                      <th><%= __('NUM') %></th>
+                                                      <th>&nbsp;</th>
+                                                      <th>Query</th>
+                                                      <th>LUIS Intent</th>
+                                                      <th>Result</th>
+                                                      <th>UPD DT</th>
+                                                  </tr>
+                                                <tbody id="analysistbody">
+                                                    
+                                                </tbody>
+                                        </table>
+                                    </div> 
+                                    <!-- 페이징 --> 
+                                    <div class="pagination_wrap" id="analysisTablePaging">
+                                            <ul class="pagination pagination-sm no-margin">
+
+                                            </ul>
+                                        </div>
+                            </div>
+                    </div>
+            </section>
+                    <!-- //Main content -->
+
+                </div>
+                <!--// Content Wrapper -->
+
+
+                <!--  Footer -->
+                <%include  ../footer.html%>
+                    <!-- // Footer -->
+                    <!-- Modal -->
+                    
+                    <div class="modal fade" id="procAnalysis" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel">Analysis Log 관리</h4>
+                                </div>
+                                <div class="modal-body"><p id="proc_content"></p></div>
+                                <div class="modal-footer" id="footer_button">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        //iCheck for checkbox and radio inputs
+                        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                            checkboxClass: 'icheckbox_minimal-blue',
+                            radioClass: 'iradio_minimal-blue'
+                        })
+                        //Red color scheme for iCheck
+                        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+                            checkboxClass: 'icheckbox_minimal-red',
+                            radioClass: 'iradio_minimal-red'
+                        })
+                        //Flat red color scheme for iCheck
+                        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                            checkboxClass: 'icheckbox_flat-green',
+                            radioClass: 'iradio_flat-green'
+                        })
+
+                    </script>
+</body>
+
+</html>

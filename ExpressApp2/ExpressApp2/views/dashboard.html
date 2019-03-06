@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel='stylesheet' href='/stylesheets/style.css' />
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>
+        <!--<%= title %>title-->
+        TIIS Manager
+    </title>
+
+	<!-- 
+        <link rel="stylesheet" href="./common/css/css_common.html" />
+        -->
+    
+
+    <%include  ./common/commonUse.html%>
+    <script type="text/javascript" src="/js/common/dashboard.js"></script>
+    
+    <!--    
+    <style type="text/css">
+        .appLayout { position:absolute; display:none; background-color:#ffffff; border:solid 2px gray; width:150px; height:120px; padding:10px; } 
+
+    </style>
+    -->
+
+    
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"> test-->
+</head>
+
+<body class="main">
+	<input type="hidden" name="subKey" id="subKey" value='<%=subKey%>'/>
+    <!--<link rel="import" href="./header.html">    -->
+    <%include  ./header.html%>
+
+    <div id="wrap">
+        <div id="container" class="main">
+
+            <div id="sub_cont03">
+                <!-- 서브 타이틀 App State-->
+                <div class="subt_wrap">
+                         <h2 class="subtit01" id="appNameTag"><%= appName %></h2>
+                        <p class="subt_01" style="display: none;">학습 의도 목록을 표시합니다. 학습 의도를 새롭게 생성하거나 편집 할 수 있습니다. <a href="#" class="more" id="helpV">+more</a></p>
+                </div>
+                
+
+                <div  class="mt20">
+
+                        <!-- 학습 현황
+                        <div class="dashboard_cont01">
+                            <p class="d_tit01">App State</p>
+                            <p class="d_tit02">
+                                <span><strong>Last Train</strong> <span id="spanLastTrainDateTime"> Loading.. </span></span>
+                                <span><strong>Last publish</strong> <span id="spanLastPublishDateTime"> Loading.. </span></span>
+                            </p>
+                        </div>
+                         -->
+                        <!--// 학습 현황 -->
+
+                        <!-- 의도수/개체수/개체수리스트/문장수 -->
+                       <div class="dashboard_cont02">
+                            <p class="d_tit01">Intents<!-- 의도수 --></p>
+                            <p class="d_tit03"><span id="spanIntentsCount"> Loading.. </span></p>
+                       </div>
+                       <div class="dashboard_cont02">
+                            <p class="d_tit01">Entities<!-- 개체수 --></p>
+                            <p class="d_tit03"><span id="spanEntitiesCount"> Loading..</span></p>
+                       </div>
+                       <div class="dashboard_cont02">
+                            <p class="d_tit01">Labeled Utterances<!-- 문장수 --> </p>
+                            <p class="d_tit03"><span id="spanUtteranceCount"> Loading.. </span></p>
+                       </div>
+                       <!-- //의도수/개체수/개체수리스트/문장수 -->
+
+                       <!-- Endpoint Hits per period / Total Endpoint Hits-->
+                       <div class="dashboard_cont03" id='chart_div'>
+                         <p class="d_tit03" style="line-height: 8;"><span> Loading.. </span></p>
+                            <!-- <p class="d_tit01">Endpoint Hits per period  <span>PER DAY (LAST WEEK)</span> <a href="#" class="btn_setting" id="sett" ></a> </p>
+                            <div class="chart_w" ><div id='chart_div' style='width: 900px; height: 500px;'></div></div> -->
+                       </div>
+                       <div class="dashboard_cont03_sett" >
+                            <p class="d_tit04"><a href="#" class="btn_sett_back"  id="sett_back" ></a> </p>
+                            <p class="d_tit04">Endpoint Hits Per Period  </p>
+                            <p class="mt30"> Select Period:
+                               <select name="" class="inbox02" style="width:98%;">
+                                  <option>Last Week</option>
+                               </select>
+                            </p>
+                       </div>
+
+                       <div class="dashboard_cont04">
+                            <p class="d_tit01">Total Endpoint Hits <span>SINCE APP CREATION</span></p>
+                            <p class="d_tit03"><span id="spanEndpointCount"> Loading.. </span></p>
+                       </div>
+<!--                               <div class="dashboard_cont04">
+                            <p class="d_tit01">Key Usage </p>
+                            <p class="d_tit03"><span> </span></p>
+                       </div> -->
+                       <!-- //Endpoint Hits per period / Total Endpoint Hits -->
+
+                       <!-- Intent Breakdown/Entity Breakdown -->
+                       <div class="dashboard_cont05" id="piechart">
+                         <p class="d_tit03" style="line-height: 8;"><span> Loading.. </span></p>
+<!--                                    <p class="d_tit01">Intent Breakdown  <span>ON LABELED UTTERANCES</span> <a href="#" class="btn_setting"  id="sett02" ></a> </p> -->
+<!--                                    <div class="chart_w"><div id="piechart" style="width: 900px; height: 500px;"></div></div> -->
+                       </div>
+
+                       <div class="dashboard_cont05_sett">
+                            <p class="d_tit04"><a href="#" class="btn_sett_back"  id="sett_back02"  ></a> </p>
+                            <p class="d_tit04">Intent Breakdown</p>
+                            <p class="mt30"> Breakdown based on:
+                               <select name="" class="inbox02" style="width:98%;">
+                                  <option>Last Week</option>
+                               </select>
+                            </p>
+                       </div>
+
+                       <div class="dashboard_cont06" id="columnchart_values">
+                         <p class="d_tit03" style="line-height: 8;"><span> Loading.. </span></p>
+<!--                                    <p class="d_tit01">Entity Breakdown  <span>ON LABELED UTTERANCES</span> <a href="#" class="btn_setting" id="sett03" ></a> </p> -->
+<!--                                    <div class="chart_w"><div id="columnchart_values" style="width: 900px; height: 300px;"></div></div> -->
+                       </div>
+
+                       <div class="dashboard_cont06_sett">
+                            <p class="d_tit04"><a href="#" class="btn_sett_back"  id="sett_back03"  ></a> </p>
+                            <p class="d_tit04">Entity Breakdown</p>
+                            <p class="mt30"> Breakdown based on:
+                               <select name="" class="inbox02" style="width:98%;">
+                                  <option>Last Week</option>
+                               </select>
+                            </p>
+                       </div>
+
+                       <!-- //Intent Breakdown/Entity Breakdown -->
+                  </div>
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+        <hr>
+        <footer>
+            <p>&copy; Company 2014</p>
+        </footer>
+	<!-- /container -->
+    
+</body>
+
+    
+    
+</html>

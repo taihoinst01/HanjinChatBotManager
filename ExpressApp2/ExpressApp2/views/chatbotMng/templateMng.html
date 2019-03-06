@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <%include  ../common/commonLib.html%>
+        
+        <script type="text/javascript" src="/js/common/templateMng.js"></script>
+        <script src="/js/import/colorpicker/bootstrap-colorpicker.js"></script>
+        <link href="/css/colorpicker/bootstrap-colorpicker.min.css" rel="stylesheet">
+        <link rel='stylesheet' href='/css/botchat.css' />
+        <style>
+        /* chat TOP */
+.chatTitle{height:16px;width:16px; display: inline-block;top: 12px; position: absolute; }
+.chatTitleText{font-size:13px;color:#FFF;top: 10px;left:30px; position: absolute;}
+
+        </style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+
+        <!-- Header -->
+        <%include  ../header.html%>
+            <!-- //Header -->
+
+            <!-- Left Menu Side -->
+            <%include  ../leftSideBar.html%>
+                <!--// Left Menu Side -->
+
+
+                <!-- Content Wrapper -->
+                <div class="content-wrapper">
+                    <section class="content-header">
+                        <h1><%= __('TEMPLATE_TITLE') %></h1>
+                    </section>
+
+                    <!-- Main content -->
+                    <section class="content">
+                        <div class="box  color-palette-box">
+                            <div class="box-body">
+                                <div class="mt20">
+                                    <div class="col-lg-12" style="padding-left:0px !important">
+                                        <h4 class="col-lg-12">
+                                            Template Form
+                                        </h4>
+
+                                        <div class="Tbl_wrap">
+                                            <p>
+                                                <div class="panel panel-default">
+                                                    <div class="panel-body">
+                                                        <form name="templateForm" id="templateForm">
+                                                            <input type="hidden" name="template_id" id="template_id">
+                                                            <input type="hidden" name="chatbotName" id="chatbotName" value="<%=appName%>">
+                                                            <div class="form-group col-lg-3">
+                                                                <label for="exampleInputEmail3"><%= __('HEADER_COLOR') %></label>
+                                                                <div id="headerColor" class="input-group colorpicker-component">
+                                                                    <input type="text" class="form-control" id="header_color" name="header_color" placeholder="<%= __('HEADER_COLOR') %>" value="#302f35">
+                                                                    <span class="input-group-addon"><i></i></span>
+                                                                </div>
+                                                                <script>
+                                                                    $(function () {
+                                                                        $('#headerColor').colorpicker();
+                                                                    });
+                                                                </script>
+                                                            </div>
+                                                            <div class="form-group col-lg-3">
+                                                                <label for="exampleInputEmail3"><%= __('BODY_COLOR') %></label>
+                                                                <div id="bodyColor" class="input-group colorpicker-component">
+                                                                    <input type="text" class="form-control" id="body_color" name="body_color" placeholder="><%= __('BODY_COLOR') %>" value="#F2F3F7">
+                                                                    <span class="input-group-addon"><i></i></span>
+                                                                </div>
+                                                                <script>
+                                                                    $(function () {
+                                                                        $('#bodyColor').colorpicker();
+                                                                    });
+                                                                </script>
+                                                            </div>
+                                                            <div class="form-group col-lg-3">
+                                                                <label for="exampleInputEmail3"><%= __('POPHEADER_COLOR') %></label>
+                                                                <div id="popheaderColor" class="input-group colorpicker-component">
+                                                                    <input type="text" class="form-control" id="popheader_color" name="popheader_color" placeholder="<%= __('POPHEADER_COLOR') %>" value="#4b4f57">
+                                                                    <span class="input-group-addon"><i></i></span>
+                                                                </div>
+                                                                <script>
+                                                                    $(function () {
+                                                                        $('#popheaderColor').colorpicker();
+                                                                    });
+                                                                </script>
+                                                            </div>
+                                                            <div class="form-group col-lg-3">
+                                                                <label for="exampleInputEmail3"><%= __('BOT_COLOR') %></label>
+                                                                <div id="botColor" class="input-group colorpicker-component">
+                                                                    <input type="text" class="form-control" id="bot_color" name="bot_color" placeholder="<%= __('BOT_COLOR') %>" value="#ffffff">
+                                                                    <span class="input-group-addon"><i></i></span>
+                                                                </div>
+                                                                <script>
+                                                                    $(function () {
+                                                                        $('#botColor').colorpicker();
+                                                                    });
+                                                                </script>
+                                                            </div>
+                                                            <div class="form-group col-lg-3">
+                                                                <label for="exampleInputEmail3"><%= __('USER_COLOR') %></label>
+                                                                <div id="userColor" class="input-group colorpicker-component">
+                                                                    <input type="text" class="form-control" id="user_color" name="user_color" placeholder="<%= __('USER_COLOR') %>" value="#00aad2">
+                                                                    <span class="input-group-addon"><i></i></span>
+                                                                </div>
+                                                                <script>
+                                                                    $(function () {
+                                                                        $('#userColor').colorpicker();
+                                                                    });
+                                                                </script>
+                                                            </div>
+                                                            <div class="form-group col-lg-4">
+                                                                <label for="exampleInputEmail3"><%= __('BOTICON_IMG') %></label>
+                                                                <input type="text" class="form-control" id="icon_img" name="icon_img" placeholder="Icon Image" value="https://bottest.hyundai.com/assets/images/alice_profile_icn_35.png">
+                                                                <small id="backgrondHelpText" class="form-text text-muted">
+                                                                    require Full URL
+                                                                </small>
+                                                            </div>
+                                                            <div class="form-group col-lg-4">
+                                                                <label for="exampleInputEmail3"><%= __('BACKGROUND_IMG') %></label>
+                                                                <input type="text" class="form-control" id="background_img" name="background_img" placeholder="BackGround Image">
+                                                                <small id="backgrondHelpText" class="form-text text-muted">
+                                                                    require Full URL
+                                                                </small>
+                                                            </div>
+                                                        
+                                                        </form>
+                                                    </div>
+                                                    <div class="panel-footer">
+                                                        <div class="row">
+                                                            <div class="col-lg-8">
+                                                                    <i class="fa fa-info-circle"></i> <%= __('TEMPLATE_INFO') %>
+                                                            </div>
+                                                            <div class="col-lg-4 text-right">
+                                                                <button type="button" class="btn btn-default" id="addTemplateBtn"><i class="fa fa-edit"></i> Save</button>
+                                                            </div> 
+                                                        </div>                                                       
+                                                    </div>
+                                                </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12" style="padding:0px !important">
+                                        <h4 class=" col-lg-6">Template List</h4>
+                                        <div class=" col-lg-6" style="text-align:right; padding:0px !important">
+                                            <button type="button" class="btn btn-default" id="deleteTemplateBtnModal">
+                                                <i class="fa fa-trash"></i> <%= __('DELETE') %>
+                                            </button>
+                                        </div>
+                                        <div class="Tbl_wrap">
+                                            <table class="Tbl" summary="banned word list">
+                                                <colgroup>
+                                                    <col width="5%" />
+                                                    <col width="5%" />
+                                                    <col width="7%" />
+                                                    <col width="7%" />
+                                                    <col width="7%" />
+                                                    <col width="7%" />
+                                                    <col width="7%" />
+                                                    <col width="20%" />
+                                                    <col width="20%" />
+                                                    <col width="5%" />
+                                                    <col width="10%" />
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th><input type="checkbox" class="flat-red" id="check-all"></th>
+                                                        <th><%= __('HEADER_COLOR') %></th>
+                                                        <th><%= __('BODY_COLOR') %></th>
+                                                        <th><%= __('POPHEADER_COLOR') %></th>
+                                                        <th><%= __('BOT_COLOR') %></th>
+                                                        <th><%= __('USER_COLOR') %></th>
+                                                        <th><%= __('BOTICON_IMG') %></th>
+                                                        <th><%= __('BACKGROUND_IMG') %></th>
+                                                        <th><%= __('USE_YN') %></th>
+                                                        <th>...</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="templateTableBodyId">
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="pagination_wrap" id="templateTablePaging">
+                                            <ul class="pagination pagination-sm no-margin">
+
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- //Main content -->
+
+                </div>
+                <!--// Content Wrapper -->
+
+
+                <!--  Footer -->
+                <%include  ../footer.html%>
+                    <!-- // Footer -->
+                    <!-- Modal -->
+                    <div class="modal fade" id="templateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel"><%= __('TEMPLATE_TITLE') %></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p id="proc_content"></p>
+                                </div>
+                                <div class="modal-footer" id="delete_footer_button">
+                                    <p id="footer_button"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 대화상자 미리보기 -->
+                    <div class="modal fade" id="templatePreviewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel"><%= __('TEMPLATE_PREVIEW') %></h4>
+                                </div>
+                                <div class="modal-body">
+                                    
+                                    <div class ="dialog_box03" id="dialogViewWrap" style="background-color: #f2f3f7;background-image: url('')">
+                                        <div class="dialogView" >
+                                            <div class="wc-header" id="headerColorId" style="background-color: #302f35;">
+                                                <span class='chatTitle'></span>
+                                                <span class='chatTitleText'><%= __('TEMPLATE_PREVIEW_HEADER') %></span>
+                                            </div>
+                                            <p></p>
+                                            <div class="wc-message wc-message-from-bot" style="width:80%;">
+                                                <div class="wc-message-content">
+                                                    <svg class="wc-message-callout" id="botIconImageId" style="background-image: url('https://bottest.hyundai.com/assets/images/alice_profile_icn_35.png')"></svg>
+                                                    <div id="botColorId" style="background-color: #ffffff;">
+                                                        <div class="format-markdown">
+                                                            <div class="textMent">
+                                                                <h1 class="textTitle"><%= __('TEMPLATE_PREVIEW_BOT') %></h1>
+                                                                <p><%= __('TEMPLATE_PREVIEW_BOT_DESC') %></p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="wc-message wc-message-from-bot" style="width:80%;margin-left:20%;">
+                                                <div class="wc-message-content">
+                                                    <div id="userColorId" style="background-color: #00aad2;">
+                                                        <div class="format-markdown">
+                                                            <div class="textMent">
+                                                                <h1 class="textTitle"><%= __('TEMPLATE_PREVIEW_USER') %></h1>
+                                                                <p><%= __('TEMPLATE_PREVIEW_USER_DESC') %></p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer" id="delete_footer_button">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> <%= __('CLOSE') %><</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        //iCheck for checkbox and radio inputs
+                        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                            checkboxClass: 'icheckbox_minimal-blue',
+                            radioClass: 'iradio_minimal-blue'
+                        })
+                        //Red color scheme for iCheck
+                        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+                            checkboxClass: 'icheckbox_minimal-red',
+                            radioClass: 'iradio_minimal-red'
+                        })
+                        //Flat red color scheme for iCheck
+                        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                            checkboxClass: 'icheckbox_flat-green',
+                            radioClass: 'iradio_flat-green'
+                        })
+
+                    </script>
+</body>
+
+</html>

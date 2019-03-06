@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <%include  ../common/commonLib.html%>
+        <!--<script src="/common/js/bootstrap.min.js"></script>-->
+        <script type="text/javascript" src="/js/common/bannedWordMng.js"></script>
+        <script>
+           
+        </script>
+
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+
+        <!-- Header -->
+        <%include  ../header.html%>
+            <!-- //Header -->
+
+            <!-- Left Menu Side -->
+            <%include  ../leftSideBar.html%>
+                <!--// Left Menu Side -->
+
+
+                <!-- Content Wrapper -->
+                <div class="content-wrapper">
+                    <section class="content-header">
+                        <h1><%= __('BANDEDWORD_TITLE') %></h1>
+                    </section>
+
+                    <!-- Main content -->
+                    <section class="content">
+                        <div class="box  color-palette-box">
+                            <div class="box-body">
+                                <div class="mt20">
+                                    <div class="col-lg-6" style="padding-left:0px !important">
+                                        <h4 class=" col-lg-6">
+                                            Banned Word Form
+                                        </h4>
+
+                                        <div class="Tbl_wrap">
+                                            <p>
+                                                <div class="panel panel-default">
+                                                    <div class="panel-body">
+                                                        <form class="form-horizontal" name="authMasterForm" id="authMasterForm">
+                                                            <input type="hidden" name="AUTHGRP_M_ID" id="AUTHGRP_M_ID">
+                                                            <div class="form-group">
+                                                                <label for="inputEmail3" class="col-sm-3 control-label">
+                                                                    <i class="fa fa-asterisk"></i> <%= __('BANDED_WORD') %></label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="BANNED_WORD" name="BANNED_WORD" placeholder="<%= __('BANDED_WORD') %>">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="inputEmail3" class="col-sm-3 control-label">
+                                                                    <i class="fa fa-asterisk"></i> <%= __('BANDEDWORD_TYPE') %></label>
+                                                                <div class="col-sm-9">
+                                                                    <select name="BANNED_WORD_TYPE" id="BANNED_WORD_TYPE" class="form-control">
+                                                                        <option value="3" selected><%= __('BANDEDWORD_TYPE1') %></option>
+                                                                        <option value="4"><%= __('BANDEDWORD_TYPE2') %></option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                    <div class="panel-footer text-right">
+                                                        <button type="button" class="btn btn-default" id="addBannedWordBtn">
+                                                            <i class="fa fa-edit"></i> <%= __('SAVE') %></button>
+                                                    </div>
+                                                </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6" style="padding:0px !important">
+                                        <h4 class=" col-lg-6">Banned Word List</h4>
+                                        <div class=" col-lg-6" style="text-align:right; padding:0px !important">
+                                            <button type="button" class="btn btn-default" id="deleteBannedWordBtnModal">
+                                                <i class="fa fa-trash"></i> <%= __('DELETE') %>
+                                            </button>
+                                        </div>
+                                        <div class="Tbl_wrap">
+                                            <table class="Tbl" summary="banned word list">
+                                                <colgroup>
+                                                    <col width="10%" />
+                                                    <col width="5%" />
+                                                    <col width="30%" />
+                                                    <col width="30%" />
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th><%= __('NUM') %></th>
+                                                        <th>
+                                                            <input type="checkbox" class="flat-red" id="check-all">
+                                                        </th>
+                                                        <th><%= __('BANDED_WORD') %></th>
+                                                        <th><%= __('BANDEDWORD_TYPE') %></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="bannedWordTableBodyId">
+                                                   
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="pagination_wrap" id="bannedWordTablePaging">
+                                            <ul class="pagination pagination-sm no-margin">
+
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- //Main content -->
+
+                </div>
+                <!--// Content Wrapper -->
+
+
+                <!--  Footer -->
+                <%include  ../footer.html%>
+                    <!-- // Footer -->
+                    <!-- Modal -->
+                    
+                    <div class="modal fade" id="bannedWordDeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel"><%= __('BANDED_WORD') %></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p id="del_content"></p>
+                                </div>
+                                <div class="modal-footer" id="delete_footer_button">
+                                    <p id="footer_button"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        //iCheck for checkbox and radio inputs
+                        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                            checkboxClass: 'icheckbox_minimal-blue',
+                            radioClass: 'iradio_minimal-blue'
+                        })
+                        //Red color scheme for iCheck
+                        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+                            checkboxClass: 'icheckbox_minimal-red',
+                            radioClass: 'iradio_minimal-red'
+                        })
+                        //Flat red color scheme for iCheck
+                        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                            checkboxClass: 'icheckbox_flat-green',
+                            radioClass: 'iradio_flat-green'
+                        })
+
+                    </script>
+</body>
+
+</html>

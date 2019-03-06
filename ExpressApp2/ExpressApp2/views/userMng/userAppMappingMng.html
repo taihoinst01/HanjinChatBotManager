@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <%include  ../common/commonLib.html%>
+
+        <script src="/common/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/js/common/userAppMappingMng.js"></script>
+
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+
+        <!-- Header -->
+        <%include  ../header.html%>
+            <!-- //Header -->
+
+            <!-- Left Menu Side -->
+            <%include  ../leftSideBar_admin.html%>
+                <!--// Left Menu Side -->
+
+                <!-- Content Wrapper -->
+                <div class="content-wrapper">
+                    <section class="content-header">
+                        <h1><%= __('USERAPP_MAPPING_MSG') %></h1>
+                    </section>
+                    <input type="hidden" id="selectUserHiddenId" value="" />
+                    <!-- Main content -->
+                    <section class="content">
+                        <div class="box  color-palette-box">
+                            <div class="box-body">
+                                <div class="row search_op">
+                                    <div class="form-group col-lg-5">
+                                        <label class="fl mr10">
+                                            <%= __('USER_NAME') %>
+                                        </label>
+                                        <input type="text" class="form-control" name="searchName" id="searchName" autocomplete='off' spellcheck="false" placeholder="<%= __('Please_enter') %>"
+                                            style="width:80%">
+                                    </div>
+                                    <div class="form-group col-lg-5">
+                                        <label class="fl mr10">
+                                            <%= __('USER_ID') %>
+                                        </label>
+                                        <input type="text" class="form-control" name="searchId" id="searchId" autocomplete='off' spellcheck="false" placeholder="<%= __('Please_enter') %>"
+                                            style="width:80%">
+                                    </div>
+                                    <div class="form-group col-lg-2" style="text-align:right">
+                                        <button type="button" class="btn btn_01" id="searchBtn">
+                                            <i class="fa fa-search"></i> <%= __('SEARCH') %>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="mt20">
+                                    <div class="col-lg-6" style="padding-left:0px !important">
+                                        <h4 class=" col-lg-6">
+                                            <%= __('USER_LIST') %>
+                                        </h4>
+
+                                        <div class="Tbl_wrap">
+                                            <table class="Tbl" summary="사용자 권한관리">
+                                                <colgroup>
+                                                    <col width="3%" />
+                                                    <col width="10%" />
+                                                    <!--<col width="10%" />-->
+                                                    <!--<col width="15%" />-->
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th><%= __('USER_ID') %></th>
+                                                        <th><%= __('USER_NAME') %></th>
+                                                        <!--<th><%= __('HPHONE') %></th>-->
+                                                        <!--<th><%= __('EMAIL') %></th>-->
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="userTableBodyId">
+                                                    <tr>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="pagination_wrap" id="userTablePaging">
+                                            <ul class="pagination pagination-sm no-margin">
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6" style="padding:0px !important">
+                                        <h4 class=" col-lg-6">Mapping ChatBot</h4>
+                                        <div class=" col-lg-6" style="text-align:right; padding:0px !important">
+                                            <button type="button" class="btn btn-default" id="saveBtn">
+                                                <i class="fa fa-edit"></i> <%= __('SAVE') %>
+                                            </button>
+                                            <button type="button" class="btn btn-default" id="initBtn">
+                                                <i class="fa fa-refresh"></i> <%= __('INIT') %>
+                                            </button>
+                                        </div>
+                                        <div class="Tbl_wrap">
+                                            <table class="Tbl" summary="사용자 권한관리">
+                                                <colgroup>
+                                                    <col width="3%" />
+                                                    <col width="2%" />
+                                                    <col width="20%" />
+                                                    <col width="25%" />
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>
+                                                            <input type="checkbox" class="flat-red" id="check-all">
+                                                        </th>
+                                                        <th>
+                                                            <%= __('CHATBOT') %>
+                                                        </th>
+                                                        <th>
+                                                            <%= __('CHATBOT_ID') %>
+                                                        </th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="appTableBodyId">
+                                                    <tr>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="pagination_wrap" id="appTablePaging">
+                                            <ul class="pagination pagination-sm no-margin">
+
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- //Main content -->
+
+                </div>
+                <!--// Content Wrapper -->
+
+
+                <!--  Footer -->
+                <%include  ../footer.html%>
+                    <!-- // Footer -->
+
+                    <script>
+                        //iCheck for checkbox and radio inputs
+                        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                            checkboxClass: 'icheckbox_minimal-blue',
+                            radioClass: 'iradio_minimal-blue'
+                        })
+                        //Red color scheme for iCheck
+                        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+                            checkboxClass: 'icheckbox_minimal-red',
+                            radioClass: 'iradio_minimal-red'
+                        })
+                        //Flat red color scheme for iCheck
+                        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                            checkboxClass: 'icheckbox_flat-green',
+                            radioClass: 'iradio_flat-green'
+                        })
+
+                    </script>
+</body>
+
+</html>

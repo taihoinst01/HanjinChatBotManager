@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <%include  ./common/commonLib.html%>
+
+    <link rel="stylesheet" href="/common/css/daterangepicker.css">
+    <link rel="stylesheet" href="/common/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="/common/css/morris.css">
+    <link rel="stylesheet" href="/common/css/slider.css">
+    <!--[if lt IE 9]>
+<script src="common/js/html5shiv.min.js"></script>
+<script src="common/js/1.4.2/respond.min.js"></script>
+<![endif]-->
+    
+    <script src="/common/js/select2.full.min.js"></script>
+    <script src="/common/js/jquery.inputmask.js"></script>
+    <script src="/common/js/jquery.inputmask.date.extensions.js"></script>
+    <script src="/common/js/jquery.inputmask.extensions.js"></script>
+    <script src="/common/js/moment.min.js"></script>
+    <script src="/common/js/daterangepicker.js"></script>
+    <script src="/common/js/bootstrap-datepicker.min.js"></script>
+    <script src="/common/js/raphael.min.js"></script>
+    <script src="/common/js/morris.min.js"></script>    
+    <script src="/common/js/bootstrap-slider.js"></script>
+
+    <script type="text/javascript" src="/js/common/board_new.js"></script>
+    <script>
+        $(function () {
+            /* BOOTSTRAP SLIDER */
+            $('.slider').slider()
+        })
+    </script>
+    <style type="text/css">
+        
+        #divInfo {
+            position:absolute;
+            display:none;
+            background-color:#ffffff;
+            border:solid 2px #d0d0d0;
+            max-width:300px;
+            max-height:100px;
+            min-width: 5%;
+            height:fit-content;
+            padding:10px;
+            border-radius: 10px;
+            z-index: 1025;
+        }
+        #divInfo th {
+            padding:0.5em;
+        }
+        .col-narrower {
+            width: 14.2% !important;
+        }
+
+        .datepicker.dropdown-menu {
+            background-color: #ccc;
+
+        }
+
+    </style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+
+        <!-- Header -->
+        <%include  ./header.html%>
+        <!-- //Header -->
+
+        <!-- Left Menu Side -->
+        <%include  ./leftSideBar.html%>
+        <!--// Left Menu Side -->
+
+        <!-- Content Wrapper -->
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>
+                    <%= __('DASHBOARD') %>
+                </h1>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+
+                <!-- content 01 -->
+                <div class="box  color-palette-box">
+                    <div class="box-body">
+                        <div class="col-lg-3 form-group ">
+                            <label>
+                                <%= __('viewsperiods') %>
+                            </label>
+                            <!--
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="reservation">
+                            </div>
+                            -->
+                            <div class="input-group">
+                                <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                                <input type="text" class="form-control pull-right" id="startDate">
+                                <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                                <input type="text" class="form-control pull-right" id="endDate">
+                            </div>
+                            
+                        </div>
+                        <div class="col-lg-3 form-group ">
+                            <label>
+                                <%= __('datetype') %>
+                            </label>
+                            <select class="form-control" id="selDate" name="selDate">
+                                <option value="allDay">
+                                    <%= __('allDates') %>
+                                </option>
+                                <option value="today">
+                                    <%= __('day') %>
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-lg-3 form-group ">
+                            <label>
+                                <%= __('channel') %>
+                            </label>
+                            <select class="form-control" id="selChannel" name="selChannel">
+                                <option value="all">
+                                    <%= __('All') %>
+                                </option>
+                                <% if (sid) {
+                                                                if (channelList) { 
+                                                                    for (var i=0; i <channelList.length; i++) { %>
+                                <option value="<%=channelList[i].CHANNEL%>">
+                                    <%=channelList[i].CHANNEL%>
+                                </option>
+                                <%      } 
+                                                                } else { %>
+
+                                <% }  } %>
+                            </select>
+                        </div>
+                        <div class="col-lg-3 form-group fr mt50 txt_right ">
+                            <button type="button" class="btn btn_01 " id="searchBoardBtn">
+                                <i class="fa fa-search"></i>
+                                <%= __('lookup') %>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- content 02 -->
+                <section class="col-lg-12" style=" padding: 0;">
+                    
+                    <div class="box">
+                        
+                        <div class="box-body">
+                                <!--<div class="box-header with-border dashb"><h3 class="box-title02">일반통계</h3></div>-->
+                                <div class="col-lg-2">
+                                    <div class="small-box color_01">
+                                        <div class="inner">
+                                            <h3 id="allCustomer">Loading..</h3>
+                                        </div>
+                                        <a href="#" class="small-box-footer" onclick="return false;">
+                                            <%= __('Cumulative_counselor_count') %>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="small-box color_02">
+                                        <div class="inner">
+                                            <h3 id="avgReplySpeed">Loading..</h3>
+                                        </div>
+                                        <a href="#" class="small-box-footer" onclick="return false;">
+                                            <%= __('Average_response_speed') %>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="small-box color_03">
+                                        <div class="inner">
+                                            <h3 id="avgQueryCnt">Loading..</h3>
+                                        </div>
+                                        <a href="#" class="small-box-footer" onclick="return false;">
+                                            <%= __('Average_number_of_customer_questions') %>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="small-box color_04">
+                                        <div class="inner">
+                                            <h3 id="avgCorrectAnswer">Loading..</h3>
+                                        </div>
+                                        <a href="#" class="small-box-footer" onclick="return false;">
+                                            <%= __('Average_normal_response_rate') %>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="small-box color_06">
+                                        <div class="inner">
+                                            <h3 id="maxQueryCnt">Loading..</h3>
+                                        </div>
+                                        <a href="#" class="small-box-footer" onclick="return false;">
+                                            <%= __('Maximum_Number_of_Customer_Questions') %>
+                                        </a>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+
+                    <div class="box">
+                        
+                            <div class="box-body">
+                                    <!--<div class="box-header with-border dashb"><h3 class="box-title02">Log 통계</h3></div>-->
+                                    <div class="col-lg-2">
+                                        <div class="small-box color_01">
+                                            <div class="inner">
+                                                <h3 id="totalCount">Loading..</h3>
+                                            </div>
+                                            <a href="#" class="small-box-footer" onclick="return false;"><%= __('TOTAL_SAP') %></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="small-box color_02">
+                                            <div class="inner">
+                                                <h3 id="successCount">Loading..</h3>
+                                            </div>
+                                            <a href="#" class="small-box-footer" onclick="return false;"><%= __('Response') %></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="small-box color_03">
+                                            <div class="inner">
+                                                <h3 id="failCount">Loading..</h3>
+                                            </div>
+                                            <a href="#" class="small-box-footer" onclick="return false;"><%= __('NO_REPLY') %></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="small-box color_04">
+                                            <div class="inner">
+                                                <h3 id="errorCount">Loading..</h3>
+                                            </div>
+                                            <a href="#" class="small-box-footer" onclick="return false;"><%= __('ERROR_SAP') %></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="small-box color_05">
+                                            <div class="inner">
+                                                <h3 id="sapWord">Loading..</h3>
+                                            </div>
+                                            <a href="#" class="small-box-footer" onclick="return false;"><%= __('SAP_WORD') %></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="small-box color_06">
+                                            <div class="inner">
+                                                <h3 id="sapPasswordInit">Loading..</h3>
+                                            </div>
+                                            <a href="#" class="small-box-footer" onclick="return false;"><%= __('SAP_PASSWORDINIT') %></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="small-box color_04">
+                                            <div class="inner">
+                                                <h3 id="suggestCount">Loading..</h3>
+                                            </div>
+                                            <a href="#" class="small-box-footer" onclick="return false;"><%= __('ANSWER_SUGGEST') %></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                            <div class="small-box color_03">
+                                            <div class="inner">
+                                                <h3 id="smallTalkCount">Loading..</h3>
+                                            </div>
+                                            <a href="#" class="small-box-footer" onclick="return false;">SmallTalk</a>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                </section>
+<!--
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="small-box color_01">
+                            <div class="inner">
+                                <h3 id="allCustomer">Loading..</h3>
+                            </div>
+                            <a href="#" class="small-box-footer">
+                                <%= __('Cumulative_counselor_count') %>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="small-box color_02">
+                            <div class="inner">
+                                <h3 id="avgReplySpeed">Loading..</h3>
+                            </div>
+                            <a href="#" class="small-box-footer">
+                                <%= __('Average_response_speed') %>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="small-box color_03">
+                            <div class="inner">
+                                <h3 id="avgQueryCnt">Loading..</h3>
+                            </div>
+                            <a href="#" class="small-box-footer">
+                                <%= __('Average_number_of_customer_questions') %>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="small-box color_04">
+                            <div class="inner">
+                                <h3 id="avgCorrectAnswer">Loading..</h3>
+                            </div>
+                            <a href="#" class="small-box-footer">
+                                <%= __('Average_normal_response_rate') %>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="small-box color_06">
+                            <div class="inner">
+                                <h3 id="maxQueryCnt">Loading..</h3>
+                            </div>
+                            <a href="#" class="small-box-footer">
+                                <%= __('Maximum_Number_of_Customer_Questions') %>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            -->
+                <!-- content 03 -->
+                <div class="row">
+                    <p id="drawScoreListHtml"></p>
+                    <p id="getOftQuestionHtml"></p>
+                </div>
+                <!-- content 04 -->
+                <p id="getResponseTimeHtml"></p>
+                <!-- content 05 -->
+                <p id="getQueryByEachTimeHtml"></p>
+                <!-- content 06 -->
+                <p id="drawNoneQuerytableHtml"></p>
+                <!-- content 07 -->
+                <div class="row">
+                    <p id="drawFirstQueryHtml"></p>
+                    <p id="drawfirstQuerytableHtml"></p>
+                </div>
+
+
+
+            </section>
+            <!-- //Main content -->
+
+        </div>
+        <!-- // Content Wrapper -->
+
+
+        <!--  Footer -->
+        <%include  ./footer.html%>
+        <!-- // Footer -->
+
+        <script>
+            //iCheck for checkbox and radio inputs
+            $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                checkboxClass: 'icheckbox_minimal-blue',
+                radioClass: 'iradio_minimal-blue'
+            })
+            //Red color scheme for iCheck
+            $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+                checkboxClass: 'icheckbox_minimal-red',
+                radioClass: 'iradio_minimal-red'
+            })
+            //Flat red color scheme for iCheck
+            $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+
+        </script>
+
+        <div class="modal fade" id="loadingModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+            aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 style="margin:0;">Loading...</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="progress progress-striped active" style="margin-bottom:0;">
+                            <div class="progress-bar" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <strong>TIIZ</strong> ChatBot Manager
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+    <div id="divInfo">
+        <table>
+            <col width="20%">
+            <col width="80%">
+            <tr style="border-bottom:1pt solid black; padding-bottom: 0.1em;">
+                <th><%= __("ALERT_RELOAD_CHART") %></th>
+            </tr>
+        </table>
+    </div>
+</body>
+
+</html>

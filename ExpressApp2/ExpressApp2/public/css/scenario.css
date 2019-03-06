@@ -1,0 +1,26 @@
+.highlight{background-color: aqua;}
+
+.off-screen {
+	display: none;
+}
+td.clickUtter {
+    cursor: pointer;
+}
+
+.scenario-form-group{
+    margin:10px 0
+}
+.scenario-btn_wrap{
+    width:50%;text-align:center;margin:10px 0 5px;display:inline-block
+}
+
+.dpN{display:none !important}
+.dpB{display:block !important}
+.w100{width:100%}
+
+.inputArea{}
+#divScenarioDialogs{width:1500px}
+.dialogView{width:100%; max-width:350px;display:inline-block;cursor:pointer}
+.scenario_box{ width:98%; height:450px; background-color:#e6e9ec; border-radius:5px; display:inline-block; padding:1%; overflow:auto }
+
+#draggable { width: 150px; height: 150px; padding: 0.5em; border:1px solid black}

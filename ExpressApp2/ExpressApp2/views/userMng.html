@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title></title>
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+<%include  ./common/commonLib.html%>
+
+<script type="text/javascript" src="/js/common/userMng.js"></script>
+
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <input type="hidden" name='currentPage' id="currentPage" value="1" />
+
+    <!-- Header -->
+    <%include  ./header.html%>
+    <!-- //Header -->
+
+    <!-- Left Menu Side -->
+    <%include  ./leftSideBar_admin.html%>
+    <!--// Left Menu Side -->
+
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+                        <section class="content-header"><h1><%= __('USER_MNG') %></h1>  </section>
+    
+                        <!-- Main content -->
+                        <section class="content">
+                                <div class="box  color-palette-box">
+                                        <div class="box-body">
+                                                <div class="row search_op">
+                                                    <div class="form-group col-lg-5"  >
+                                                        <label class="fl mr10"><%= __('USER_NAME') %></label>
+                                                        <input type="text" class="form-control" name="searchName" id="searchName" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off' style="width:80%">
+                                                    </div>  
+                                                    <div class="form-group col-lg-5"  >
+                                                        <label  class="fl mr10"><%= __('USER_ID') %></label>
+                                                        <input type="text" class="form-control" name="searchId" id="searchId" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off'  style="width:80%">
+                                                    </div> 
+                                                    <div class="form-group col-lg-2" style="text-align:right"  >
+                                                        <button type="button" class="btn btn_01" id="searchBtn"><i class="fa fa-search"></i> <%= __('SEARCH') %></button>
+                                                    </div>                                                     
+                                                </div>
+                                                <div class="row mt20">
+                                                     <h4 class=" col-lg-6"><%= __('USER_LIST') %></h4>
+                                                     <div class=" col-lg-6" style="text-align:right"> 
+                                                             <button type="button" class="btn btn-default" id="addBtn"><i class="fa fa-plus"></i> <%= __('ADD') %></button>
+                                                             <button type="button" class="btn btn-default" id="deleteBtn"><i class="fa fa-trash"></i> <%= __('DELETE') %></button>
+                                                             <button type="button" class="btn btn-default" id="useYNBtn"><i class="fa fa-refresh"></i> <%= __('USE_YN') %></button>
+                                                             <button type="button" class="btn btn-default" id="saveBtn"><i class="fa fa-edit"></i> <%= __('SAVE') %></button>
+                                                             <button type="button" class="btn btn-default" id="initBtn"><i class="fa fa-list"></i> <%= __('LIST_INIT') %></button>
+                                                     </div>
+                                                </div>
+                                                
+                                                <!-- 사용자관리 테이블 --> 
+                                                <div class="Tbl_wrap">
+                                                    <table class="Tbl" summary="사용자관리">
+                                                        <colgroup><col width="2%"/><col width="3%"/><col width="8%"/><col width="7%"/> 
+                                                            <!--
+                                                                <col width="10%"/>
+                                                                <col width="8%"/>
+                                                            -->
+                                                                  <col width="10%"/><col width="8%"/><col width="10%"/><col width="10%"/><col width="8%"/><col width="8%"/>
+                                                        </colgroup>
+                                                        <thead><tr>
+                                                                <th></th>
+                                                                <th><input type="checkbox" class="flat-red" id="check-all"></th>
+                                                                <th><%= __('USER_ID') %></th>
+                                                                <th><%= __('USER_NAME') %></th>
+                                                                <!--
+                                                                <th><%= __('HPHONE') %></th>
+                                                                <th><%= __('EMAIL') %></th>
+                                                                -->
+                                                                <th><%= __('PASSWOARD') %></th>
+                                                                <th><%= __('USE_YN') %></th>
+                                                                <!--
+                                                                <th><%= __('REGIST_DATE') %></th>
+                                                                <th><%= __('REGIST_ID') %></th>
+                                                                <th><%= __('MODIFIED_DATE') %></th>
+                                                                -->                                                                
+                                                                <th><%= __('LAST_LOGIN_DATE') %></th>
+                                                                <th><%= __('LOGIN_FAIL_CNT') %></th>   
+                                                                <th><%= __('ACCOUNT_DISTRICTION') %></th>   
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tableBodyId">
+                                                              
+                                                        </tbody>
+                                                    </table>
+                                                </div> 
+                                        </div>
+                                        <!-- 페이징 --> 
+                                    <div class="pagination_wrap" id="userTablePaging">
+                                        <ul class="pagination pagination-sm no-margin">
+            
+                                        </ul>
+                                    </div>
+                                </div>
+                        </section>
+                        <!-- //Main content -->
+        
+    </div>
+    <!--// Content Wrapper -->
+    
+              
+    <!--  Footer -->
+    <%include  ./footer.html%>
+    <!-- // Footer -->
+    
+<div class="modal fade" id="loadingBar" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel" aria-hidden="true" >
+    <img src="/image/ajax_loader.gif" style="width:50px; height:50px;" id="loadingImg">
+</div>
+
+<div class="modal fade" id="procDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel"><%= __("USER_MNG") %></h4>
+            </div>
+            <div class="modal-body"><p id="proc_content"></p></div>
+            <div class="modal-footer" id="footer_button">
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  //iCheck for checkbox and radio inputs
+    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+      checkboxClass: 'icheckbox_minimal-blue',
+      radioClass   : 'iradio_minimal-blue'
+    })
+    //Red color scheme for iCheck
+    $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+      checkboxClass: 'icheckbox_minimal-red',
+      radioClass   : 'iradio_minimal-red'
+    })
+    //Flat red color scheme for iCheck
+    $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+      checkboxClass: 'icheckbox_flat-green',
+      radioClass   : 'iradio_flat-green'
+    })
+
+</script>
+</body>
+</html>

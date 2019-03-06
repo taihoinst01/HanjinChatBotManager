@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <%include  ../common/commonLib.html%>
+        <!--<script src="/common/js/bootstrap.min.js"></script>-->
+        <link rel="stylesheet" href="/common/css/bootstrap-datepicker.min.css">
+        <script type="text/javascript" src="/js/common/summaryMngIntent.js"></script>
+        
+        <script src="/common/js/bootstrap-datepicker.min.js"></script>
+        <script src="/common/js/excel/exceljs.js"></script>
+        <script src="/common/js/excel/FileSaver.js"></script>
+        <style>
+            .dropdown-menu
+            {
+                background-color: #cccccc;
+            }
+        </style>
+
+        
+
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+
+        <!-- Header -->
+        <%include  ../header.html%>
+            <!-- //Header -->
+
+            <!-- Left Menu Side -->
+            <%include  ../leftSideBar.html%>
+                <!--// Left Menu Side -->
+
+
+                <!-- Content Wrapper -->
+                <div class="content-wrapper">
+                    <section class="content-header">
+                        <h1>일일통계(Intent분류별)</h1>
+                    </section>
+
+                    <!-- Main content -->
+                    <section class="content">
+                        <div class="box  color-palette-box">
+                            <div class="box-body">
+                                  <div class="modal-body search_op">
+                                        <div class="form-group col-lg-8 form-inline"  style=" padding-left:0px !important" >
+                                            <label for="inputEmail3" class="control-label">검색일&nbsp;&nbsp;</label>
+                                            <input type="text" name="searchDate" id="searchDate" class="form-control" data-date-format='yyyymmdd' placeholder="<%= __('SELECT_DATE') %>">
+                                            <script>
+                                                $(function() {
+                                                  $( "#searchDate" ).datepicker({
+                                                    dateFormat: "yy-mm-dd"
+                                                  });
+                                                });
+                                            </script>
+                                        </div>
+                                        
+                                                    
+                                        <div class="form-group col-lg-2">
+                                            Total Count : <span id="totCnt">0</span>
+                                        </div>
+
+                                        <div class="form-group col-lg-2 fr"  style=" margin-top:20px;text-align:right; padding-right:0px;">
+                                            <button type="button" id="searchDlgBtn" class="btn btn_01"><i class="fa fa-search"></i> <%= __('SEARCH') %></button> 
+                                            <button type="button" id="excelDownload" class="btn btn_01"><i class="fa fa-file-excel-o"></i> <%= __('Excel Download') %></button>
+                                        </div>
+                                     </div>
+                                     
+
+                                    <!-- 학습 추천 테이블 --> 
+                                    <div class="Tbl_wrap">
+                                        <table class="Tbl" summary="analysis 관리">
+                                            <!--<colgroup><col width="40%"/><col width="20%"/><col width="10%"/><col width="10%"><col width="20%"></colgroup>-->
+                                                  <tr>
+                                                      <th>REG DATE</th>
+                                                      <th>총무_총합</th>
+                                                      <th>총무_P</th>
+                                                      <th>총무_M</th>
+                                                      <th>인사_총합</th>
+                                                      <th>인사_P</th>
+                                                      <th>인사_M</th>
+                                                      <th>재무_총합</th>
+                                                      <th>재무_P</th>
+                                                      <th>재무_M</th>
+                                                      <th>IT_총합</th>
+                                                      <th>IT_P</th>
+                                                      <th>IT_M</th>
+                                                      <th>법무_총합</th>
+                                                      <th>법무_P</th>
+                                                      <th>법무_M</th>
+                                                      <th>CSV_총합</th>
+                                                      <th>CSV_P</th>
+                                                      <th>CSV_M</th>
+                                                      <th>블로썸파크_총합</th>
+                                                      <th>블로썸파크_P</th>
+                                                      <th>블로썸파크_M</th>
+                                                      <th>총합</th>
+                                                      <th>총합_P</th>
+                                                      <th>총합_M</th>
+                                                  </tr>
+                                                <tbody id="summarytbody">
+                                                    <tr><td colspan="25" class="text-center">NO DATA</td></tr>
+                                                </tbody>
+                                        </table>
+                                    </div> 
+                            </div>
+                    </div>
+            </section>
+                    <!-- //Main content -->
+
+                </div>
+                <!--// Content Wrapper -->
+
+
+                <!--  Footer -->
+                <%include  ../footer.html%>
+                    <!-- // Footer -->
+                    <!-- Modal -->
+                    
+                    <div class="modal fade" id="procAnalysis" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel">Analysis Log 관리</h4>
+                                </div>
+                                <div class="modal-body"><p id="proc_content"></p></div>
+                                <div class="modal-footer" id="footer_button">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        //iCheck for checkbox and radio inputs
+                        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                            checkboxClass: 'icheckbox_minimal-blue',
+                            radioClass: 'iradio_minimal-blue'
+                        })
+                        //Red color scheme for iCheck
+                        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+                            checkboxClass: 'icheckbox_minimal-red',
+                            radioClass: 'iradio_minimal-red'
+                        })
+                        //Flat red color scheme for iCheck
+                        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                            checkboxClass: 'icheckbox_flat-green',
+                            radioClass: 'iradio_flat-green'
+                        })
+
+                    </script>
+</body>
+
+</html>

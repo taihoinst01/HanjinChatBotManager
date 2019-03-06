@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <%include  ../common/commonLib.html%>
+        
+        <script type="text/javascript" src="/js/common/newQnaMng.js"></script>
+        <script type="text/javascript" src="/js/common/dialogCommon.js"></script>
+        <link rel='stylesheet' href='/css/botchat.css' />
+        <link rel="stylesheet" type="text/css" href="/css/dialog.css" />
+        <style type="text/css">
+            .dlgCardMordal a:link, .dlgCardMordal a:visited, .dlgCardMordal a:hover, .dlgCardMordal a:active, .dlgCardMordal a:focus { 
+                font-weight: bold !important;
+                color: #6d6161 !important;
+            } 
+    
+            .dropdown-menu {
+                left: 0px !important; top: 60% !important;
+            }
+    
+            #divInfo {
+                position:absolute;
+                display:none;
+                background-color:#ffffff;
+                border:solid 2px #d0d0d0;
+                max-width:400px;
+                max-height:300px;
+                min-width: 10%;
+                height:fit-content;
+                padding:10px;
+                border-radius: 10px;
+                z-index: 1025;
+            }
+            #divInfo th {
+                padding:0.5em;
+            }
+            #typeOrderTh {
+                cursor: pointer;
+            }
+    
+        </style>
+
+<script>
+    /*
+        $(window).bind("beforeunload", function(e) {
+            location.href = '/users/logout';
+        });
+    */
+    </script>
+
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+
+        <!-- Header -->
+        <%include  ../header.html%>
+            <!-- //Header -->
+
+            <!-- Left Menu Side -->
+            <%include  ../leftSideBar.html%>
+                <!--// Left Menu Side -->
+
+
+                <!-- Content Wrapper -->
+                <div class="content-wrapper">
+                    <section class="content-header">
+                        <h1>신규질문답변 등록</h1>
+                    </section>
+
+                    <!-- Main content -->
+                    <section class="content">
+                        
+
+                        <div class="box  color-palette-box">
+                            <div class="box-body">
+                                    <div class="col-md-6" style="padding:0">  
+                                            <form name="appInsertForm" id="appInsertForm">
+                                                <input type="hidden" name="middleGroup" id="middleGroup">
+                                                <input type="hidden" name="dlgGroup" id="dlgGroup" value="2">
+                                                <input type="hidden" name="dlgOrderNo" id="dlgOrderNo" value="1000">
+                                                <input type="hidden" name="title" id="title" value="">
+                                                <h5><span class="col01 fa fa-chevron-right"></span> <%= __('GROUP_INFORMATION') %></h5>          
+                                                <span class="nec_ico">*</span> 등록하고자 하는 Intent 가 사전에 등록되어 있어야 합니다.
+                                            
+                                                <div class="clear-both"></div>
+                                                <div class="form-group" >
+                                                    <label>대표질문</label><span class="nec_ico">*</span>
+                                                    <!--<textarea class="form-control" name="description" id="description" rows="3" placeholder="<%= __('Please_enter') %>"></textarea>-->
+                                                    <input type="text" name="description" id="description" class="form-control" placeholder="<%= __('Please_enter') %>">
+                                                </div> 
+                                                <div class="clear-both"></div>
+                                                <div class="form-group" >
+                                                    <label>Intent</label><span class="nec_ico">*</span>
+                                                    <select id="intentListSelect" class="form-control"> 
+                                                            
+                                                        </select>
+                                                </div>
+                                            </form>
+                                            <div id="commonLayout" class="dialog_w">
+                                                <div class="insertForm">  
+                                                    <div class="form-group" >                                  
+                                                        <form name="dialogLayout" id="dialogLayout">
+                                                                                            
+                                                            <label><%= __('DIALOG_BOX_TYPE') %><span class="nec_ico">*</span> </label>
+                                                            <select class="form-control" name="dlgType"> 
+                                                                <option value="2"><%= __('TEXT_TYPE') %></option>
+                                                                <option value="3"><%= __('CARD_TYPE') %></option>
+                                                                <option value="4"><%= __('MEDIA_TYPE') %></option>
+                                                            </select>  
+                                                            <div class="clear-both"></div>  
+                                                                                                                                         
+                                                        </form>                  
+                                                    </div>  
+                                                </div>   
+                
+                                                <!-- 다이얼로그 삭제 버튼 -->
+                                                <div class="btn_wrap deleteInsertFormDiv" style="clear:both; display:none;" >
+                                                    <button type="button" class="btn btn-default deleteInsertForm"><i class="fa fa-trash"></i> <%= __('DELETE_DIALOG') %></button> 
+                                                </div> 
+                
+                                                <!-- 텍스트 타입 -->
+                                                <div class="textLayout" style="display: none;">                                                         
+                                                    <div class="form-group">
+                                                        <label><%= __('DIALOG_BOX_TITLE') %></label>
+                                                        <input type="text" name="dialogTitle" class="form-control" onkeyup="writeDialogTitle(this);" placeholder="<%= __('Please_enter') %>">
+                                                    </div>                                                                                        
+                                                    <div class="form-group">
+                                                        <label><%= __('DIALOG_BOX_CONTENTS') %><span class="nec_ico">*</span></label>
+                                                        <!--<input type="text" name="dialogText" class="form-control" onkeyup="writeDialog(this);" placeholder="<%= __('Please_enter') %>">-->
+                                                        <textarea id="dialogText" name="dialogText" class="form-control" onkeyup="writeDialog(this);" placeholder="<%= __('Please_enter') %>" rows="5"></textarea>
+                                                    </div>                                     
+                                                </div>
+                                                <!--카드 타입 -->
+                                                <div class="carouselLayout" style="display:none;">                                                               
+                                                    <div class="form-group">
+                                                        <label><%= __('IMAGE_URL') %></label>
+                                                        <input type="text" name="imgUrl" class="form-control" onkeyup="writeCarouselImg(this);" placeholder="<%= __('Please_enter') %>">
+                                                    </div>
+                                                    <div class="form-group form-inline">
+                                                        <label><%= __('CARD_MOBILE') %></label>
+                                                        &nbsp;&nbsp;<select class="form-control" name="cardValue" id="cardValue"><option value=""><%= __('CARDMOBIBLE_NO') %></option><option value="m^^"><%= __('CARDMOBIBLE_OK') %></option></select>
+                                                    </div>
+                                                    <div class="modal_con btnInsertDiv">
+                                                        
+                                                        
+                                                    </div>
+                                                    <div class="clear-both"></div>
+                                                    <div class="btn_wrap" style="clear:both" >
+                                                        <button type="button" class="btn btn-default deleteCard"><i class="fa fa-trash"></i> <%= __('DELETE_CARD') %></button> 
+                                                    </div> 
+                                                    <div class="btn_wrap" style="clear:both" >
+                                                        <button type="button" class="btn btn-default carouseBtn"><i class="fa fa-plus"></i> <%= __('INSERT_MORE_BUTTON') %></button> 
+                                                    </div>  
+                                                    <div class="btn_wrap" style="clear:both" >
+                                                        <button type="button" class="btn btn-default addCarouselBtn"><i class="fa fa-plus"></i> <%= __('INSERT_MORE_CARDS') %></button>
+                                                    </div>                       
+                                                    <div class="clear-both"></div>                                                               
+                                                </div>
+                                                
+                                                <div id="cardBtnCopyDiv" style="display:none;">
+                                                    <div class="cardBtnCopyDiv" >
+                                                        <div>
+                                                            <label><%= __("BUTTON") %></label>
+                                                        </div>
+                
+                                                        <div class="form-group col-md-13"  style="padding-left:0; margin-top: 0px;">
+                                                            <table class="cardCopyTbl" style="width:100%">
+                                                                <col width="21%">
+                                                                <col width="1%">
+                                                                <col width="35%">
+                                                                <col width="1%">
+                                                                <col width="35%">
+                                                                <col width="1%">
+                                                                <col width="6%">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th><%= __("Type") %></th>
+                                                                        <th></th>
+                                                                        <th><%= __("NAME") %></th>
+                                                                        <th></th>
+                                                                        <th><%= __("CONTENTS") %></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <select class="form-control" name="btnType"> 
+                                                                                <option value="imBack" selected>imBack</option>
+                                                                                <option value="openURL">openURL</option>
+                                                                            </select>
+                                                                        </td>
+                                                                        <td></td>
+                                                                        <td>
+                                                                            <input type="text" name="cButtonName" class="form-control" placeholder="<%= __('Please_enter') %>">
+                                                                        </td>
+                                                                        <td></td>
+                                                                        <td>
+                                                                            <input type="text" name="cButtonContent" class="form-control" placeholder="<%= __('Please_enter') %>">
+                                                                        </td>
+                                                                        <td></td>
+                                                                        <td>
+                                                                            <a href="#" class="btn_delete" style="margin:0px;"><span class="fa fa-trash"></span></a>
+                                                                        </td>
+                                                                    </tr>                                                  
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- 미디어 타입 -->
+                                                <div class="mediaLayout" style="display:none;" id="dialog3">                                                                
+                                                    <div class="form-group">
+                                                        <label><%= __('IMAGE_URL') %><span class="nec_ico">*</span></label>
+                                                        <input type="text" class="form-control" placeholder="<%= __('Please_enter') %>">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label><%= __('MEDIA_URL') %></label>
+                                                        <input type="text" class="form-control" placeholder="<%= __('Please_enter') %>">
+                                                    </div>    
+                                                    <div class="modal_con">
+                                                        <div class="form-group col-md-5" style="padding-left:0">
+                                                            <label><%= __('BUTTON_NAME') %> </label>
+                                                            <input type="text" class="form-control mediaBtnName" name="mButtonName1" placeholder="<%= __('Please_enter') %>">
+                                                            <input type="text" class="form-control mediaBtnName" name="mButtonName2" style="display:none;" placeholder="<%= __('Please_enter') %>" disabled>
+                                                            <input type="text" class="form-control mediaBtnName" name="mButtonName3" style="display:none;" placeholder="<%= __('Please_enter') %>" disabled>
+                                                            <input type="text" class="form-control mediaBtnName" name="mButtonName4" style="display:none;" placeholder="<%= __('Please_enter') %>" disabled>
+                                                        </div>
+                                                        <div class="form-group col-md-6" style="padding:0">
+                                                            <label><%= __('BUTTON_CONTENTS') %> </label>
+                                                            <input type="text" class="form-control mediaBtnContent" name="mButtonContent1" placeholder="<%= __('Please_enter') %>">
+                                                            <input type="text" class="form-control mediaBtnContent" name="mButtonContent2" style="display:none;" placeholder="<%= __('Please_enter') %>" disabled>
+                                                            <input type="text" class="form-control mediaBtnContent" name="mButtonContent3" style="display:none;" placeholder="<%= __('Please_enter') %>" disabled>
+                                                            <input type="text" class="form-control mediaBtnContent" name="mButtonContent4" style="display:none;" placeholder="<%= __('Please_enter') %>" disabled>
+                                                        </div>
+                                                        <a href="#"  class="btn_delete" ><span class="fa fa-trash"></span></a>
+                                                    </div>
+                                                    <div class="btn_wrap" style="clear:both" >
+                                                        <button type="button" class="btn btn-default deleteCard"><i class="fa fa-trash"></i> <%= __('DELETE_CARD') %></button> 
+                                                    </div> 
+                                                    <div class="btn_wrap" style="clear:both" >
+                                                        <button type="button" class="btn btn-default addMediaBtn" ><i class="fa fa-plus"></i> <%= __('INSERT_MORE_BUTTON') %></button> 
+                                                    </div>                                                                                                                                                        
+                                                </div>
+                                                
+                                                <!-- carousal 일 경우 card 순서 input box 추가 layout -->
+                                                <div id="cardLayout" style="display:none;">
+                                                    <p class="texcon03">Card Order <span>(required) </span></p>
+                                                    <p><select name="cardOrderNo" class="inbox02" id="cardOrderNo" style="width:100%" >
+                                                        <option value="1" selected>1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
+                                                        <option value="4">4</option>
+                                                        <option value="5">5</option>
+                                                        <option value="6">6</option>
+                                                        <option value="7">7</option>
+                                                    </select></p>
+                                                </div>
+                
+                                                <!-- media , carousal 일 경우 input box 추가 layout -->
+                                                <div id="mediaCarouselLayout" style="display:none;">
+                                                    <div class="layout-float-left">
+                                                        <p class="texcon03">Button Name <span>(optional) </span></p>
+                                                        <p>
+                                                            <input name="buttonName1" type="text" class="inbox02 btnBox" id="buttonName1" placeholder="Input name.." />
+                                                            <input name="buttonName2" type="text" class="inbox02 btnBox" id="buttonName2" placeholder="Input name.." />
+                                                            <input name="buttonName3" type="text" class="inbox02 btnBox" id="buttonName3" placeholder="Input name.." />
+                                                            <input name="buttonName4" type="text" class="inbox02 btnBox" id="buttonName4" placeholder="Input name.." />
+                                                        </p>
+                                                    </div>
+                                                    <div class="layout-float-left-last">
+                                                        <p class="texcon03">Button Content <span>(optional) </span></p>
+                                                        <p>
+                                                            <input name="buttonContent1" type="text" class="inbox02 btnBox" id="buttonContent1" placeholder="Input contents.." />
+                                                            <input name="buttonContent2" type="text" class="inbox02 btnBox" id="buttonContent2" placeholder="Input contents.." />
+                                                            <input name="buttonContent3" type="text" class="inbox02 btnBox" id="buttonContent3" placeholder="Input contents.." />
+                                                            <input name="buttonContent4" type="text" class="inbox02 btnBox" id="buttonContent4" placeholder="Input contents.." />
+                                                        </p>
+                                                    </div>
+                                                    <div class="clear-both"></div>
+                            
+                                                    <p class="texcon03">Image Url <span>(optional) </span></p>
+                                                    <p><input name="imgUrl" type="text" class="inbox02" id="imgUrl" style="width:100%" placeholder="Input image url.." /></p>
+                                                </div>
+                                                <!--// media , carousal 일 경우 input box 추가 layout -->
+                                                    
+                                                <!--<div class="btn_wrap boline" style='display:none;'> 작업중두연20181210-->
+                                                <div class="btn_wrap boline" >
+                                                    <button type="button" class="btn btn_01" id="addDialogBtn"><i class="fa fa-plus"></i> <%= __('INSERT_ADDITIONAL_DIALOG') %></button>
+                                                </div>  
+                                                                               
+                                            </div>  
+                                            <!-- source type이 API일 경우 -->
+                                            <div id="apiLayout" style="display:none;">
+                                                <div class="form-group">
+                                                    <label>API Name<span class="nec_ico">*</span></label>
+                                                    <input type="text" name="apiName" class="form-control">
+                                                </div>  
+                                                <div class="form-group">
+                                                    <label>API Url<span class="nec_ico">*</span></label>
+                                                    <input type="text" name="apiUrl" class="form-control">
+                                                </div>    
+                                            </div>                                                                                                                               
+                                        </div>
+                                        <!-- 대화상자 미리보기 -->
+                                        <div class="col-md-6" style="padding-right:0">
+                                            <h5><span class="col01 fa fa-chevron-right"></span><%= __('PREVIEW_DIALOG_BOX') %></h5>  
+                                            <!-- 대화상자  -->
+                                            <div class ="dialog_box03" id="dialogViewWrap">
+                                                <div class="dialogView cj-font" >
+                                                    <div class="wc-message wc-message-from-bot" style="width:90%;">
+                                                        <div class="wc-message-content">
+                                                            <svg class="wc-message-callout"></svg>
+                                                            <div>
+                                                                <div class="format-markdown">
+                                                                    <div class="textMent">
+                                                                        <h1 class="textTitle"><%= __('Please_enter_a_title') %></h1>
+                                                                        <div class="dlg_content">
+                                                                                <%= __('Please_enter_your_content') %>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                            </div>
+                            <div class="box-footer">
+                                    <div class="nec02">
+                                        <span class="nec_ico">*</span> <%= __('IS_REQUIRED') %>
+                                        <input type="hidden" name="updateDlgId" id="updateDlgId">
+                                        <input type="hidden" name="updateDlgType" id="updateDlgType">
+                                        <input type="hidden" name="updateDlgEntity" id="updateDlgEntity">
+                                        <input type="hidden" name="updateDlgRelationNo" id="updateDlgRelationNo">
+                                    </div>
+                                    <div class="btn_wrap">
+                                        <button type="button" class="btn btn_01" onclick="createNewQna();" id="createDialog"><i class="fa fa-edit"></i> <%= __('SAVE') %></button>
+                                    </div>
+                                </div>
+                        </div>
+                </section>
+                    <!-- //Main content -->
+
+                </div>
+                <!--// Content Wrapper -->
+
+
+                <!--  Footer -->
+                <%include  ../footer.html%>
+                    <!-- // Footer -->
+                    <!-- Modal -->
+                    <div class="modal fade" id="procDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h4 class="modal-title" id="myModalLabel"><%= __("DIALOG_MNG_TITLE") %></h4>
+                                    </div>
+                                    <div class="modal-body"><p id="proc_content"></p></div>
+                                    <div class="modal-footer" id="footer_button">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+
+    
+</body>
+
+</html>

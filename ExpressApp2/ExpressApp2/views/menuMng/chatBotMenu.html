@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <%include  ../common/commonLib.html%>
+
+        <<script type="text/javascript" src="/js/common/chatBotMenu.js"></script>
+
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+
+        <!-- Header -->
+        <%include  ../header.html%>
+            <!-- //Header -->
+
+            <!-- Left Menu Side -->
+            <%include  ../leftSideBar_admin.html%>
+                <!--// Left Menu Side -->
+
+                <!-- Content Wrapper -->
+                <div class="content-wrapper">
+                    <section class="content-header">
+                        <h1><%= __('CHATBOTMENU_MAPPING_MSG') %></h1>
+                    </section>
+                    <input type="hidden" id="selectChatbotHiddenNum" value="" />
+                    <!-- Main content -->
+                    <section class="content">
+                        <div class="box  color-palette-box">
+                            <div class="box-body">
+                                <div class="mt20">
+                                    <div class="col-lg-6" style="padding-left:0px !important">
+                                        <h4 class=" col-lg-6">
+                                            <%= __('CHAT_LIST') %>
+                                        </h4>
+
+                                        <div class="Tbl_wrap">
+                                            <table class="Tbl" summary="사용자 권한관리">
+                                                <colgroup>
+                                                    <col width="10%" />
+                                                    <col width="20%" />
+                                                    <col width="30%" />
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th>ChbotBot Num</th>
+                                                        <th>ChbotBot Name</th>
+                                                        <th>ChbotBot Description</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="chatbotTableBodyId">
+                                                    <tr>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="col-lg-6" style="padding:0px !important">
+                                        <h4 class=" col-lg-6">Mapping Menu</h4>
+                                        <div class=" col-lg-6" style="text-align:right; padding:0px !important">
+                                            <button type="button" class="btn btn-default" id="saveBtn">
+                                                <i class="fa fa-edit"></i> <%= __('SAVE') %>
+                                            </button>
+                                            <button type="button" class="btn btn-default" id="initBtn">
+                                                <i class="fa fa-refresh"></i> <%= __('INIT') %>
+                                            </button>
+                                        </div>
+                                        <div class="Tbl_wrap">
+                                            <table class="Tbl" summary="Mapping Menu">
+                                                <colgroup>
+                                                    <col width="3%" />
+                                                    <col width="5%" />
+                                                    <col width="20%" />
+                                                    <col width="25%" />
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th><input type="checkbox" class="flat-red" id="check-all"></th>
+                                                        <th>메뉴이름</th>
+                                                        <th>메뉴URL</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="menuTableBodyId">
+                                                    <tr>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- //Main content -->
+
+                </div>
+                <!--// Content Wrapper -->
+
+
+                <!--  Footer -->
+                <%include  ../footer.html%>
+                    <!-- // Footer -->
+
+                    <script>
+                        //iCheck for checkbox and radio inputs
+                        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                            checkboxClass: 'icheckbox_minimal-blue',
+                            radioClass: 'iradio_minimal-blue'
+                        })
+                        //Red color scheme for iCheck
+                        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+                            checkboxClass: 'icheckbox_minimal-red',
+                            radioClass: 'iradio_minimal-red'
+                        })
+                        //Flat red color scheme for iCheck
+                        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                            checkboxClass: 'icheckbox_flat-green',
+                            radioClass: 'iradio_flat-green'
+                        })
+
+                    </script>
+</body>
+
+</html>
