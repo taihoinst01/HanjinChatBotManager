@@ -77,7 +77,7 @@ function getIntentList() {
 }
 
 function createNewQna() {
-
+    $('#loadingModalMain').modal('show');
     var idx = $('form[name=dialogLayout]').length;
     var array = [];
     var exit = false;
@@ -234,11 +234,16 @@ function createNewQna() {
                 alert($('#dupleMassage').val());
                 location.href = '/users/logout';
             }
-
+            $('#loadingModalMain').modal('hide');
             $('#proc_content').html("등록되었습니다. 질문답변목록에서 확인하세요");
-            $('#footer_button').html('<button type="button" class="btn btn-default" data-dismiss="modal" onClick="/qna/qnaList"><i class="fa fa-times"></i> Close</button>');
+            $('#footer_button').html('<button type="button" class="btn btn-default" onClick="goQnaList()"><i class="fa fa-times"></i> Close</button>');
             $('#procDialog').modal('show');
         }
 
     });
+}
+
+function goQnaList(){
+    location.href = "/qna/qnaList";
+    return false;
 }

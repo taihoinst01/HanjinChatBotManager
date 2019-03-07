@@ -53,6 +53,20 @@ $(document).ready(function() {
         $('#utterModal').modal('show');
     });
 
+    //삭제폼
+    $(document).on("click", "#dlg_qnaData", function () {
+        var DELETE_DLG_ID = $(this).attr("dlg_id");
+        
+        document.qnaItemDeleteForm.reset();
+        document.qnaItemDeleteForm.DELETE_DLG_ID.value = DELETE_DLG_ID;
+        $('#qnaItemDeleteModal').modal('show');
+    });
+
+    //삭제 버튼
+    $(document).on("click", "#deleteQnaItemBtn", function () {
+        procQnaItemMaster('DELETE');
+    });
+
 });
 
 /**
@@ -108,226 +122,6 @@ $(document).on("click", "a[name=addUtter]", function(e){
 var rememberUtterInput = '';
 var rememberUtterStart = -1;
 var rememberUtterEnd = -1;
-
-/*
-$(document).on("focusin", "input[name=s_question]", function(e){
-    rememberUtterInput = $(this).val().trim();
-    rememberUtterStart = $(this).parent().find('input[name=startIndex]').val();
-    rememberUtterEnd = $(this).parent().find('input[name=endIndex]').val();
-});
-
-
-//input focusout
-$(document).on("focusout", "input[name=s_question]", function(e){
-    
-        var chkMatch = [];
-        var chkMatchIndex = [];
-        var inputStr = $("input[name=s_question]").val();
-        var inputLength = $("input[name=s_question]").val().length;
-        var utterLength = $('span[name=utterText]').length;
-
-
-        var isEngNum = false;
-        for (var i=0; i<inputLength; i++) {
-            if (isAlpabet(inputStr[i])) {
-                isEngNum = true;
-                break;
-            }
-        }
-        if (isEngNum) {
-            var indexArr = [];
-            var inputVal = $(this).val();
-            $('input[name=tokenVal]').each(function(index, item){
-                var strVal = '';
-                var isMatch = false;
-
-                var innerIndex = 0;
-                while (1) {
-                    var hasClass = $(item).parent().find('#utterText_' + index).attr('class');
-                    hasClass = hasClass == undefined? '' : hasClass;
-                    if (hasClass.indexOf('span_color') != -1) {
-                        break;
-                    }
-                    strVal += $(item).parent().find('input[name=tokenVal]').eq(index+innerIndex).val();
-                    var subInput = inputVal.substr(0, strVal.length);
-                    if (inputVal == strVal) {
-                        isMatch = true
-                        break;
-                    } else if (strVal == subInput) {
-                        innerIndex++
-                        continue;
-                    } else {
-                        break;
-                    }
-                }
-                if (isMatch) {
-                    var matchObj = new Object();
-                    matchObj.startIndex = index;
-                    matchObj.endIndex = index+innerIndex;
-                    indexArr.push(matchObj);
-                    //
-                    chkMatch.push(inputStr);
-                    var tmpIndex = index + ',' + matchObj.endIndex;
-                    chkMatchIndex.push(tmpIndex);
-                }
-            });
-        } else {
-            for (var i=0; i<=utterLength-inputLength; i++) {
-                var strTmp = '';
-                var chkLabeled = false;
-                for (var j=0; j<inputLength; j++) {
-                    var spanClass = $(this).parents('tr').prev().find('span[name=utterText]').eq(i+j).attr('class');
-                    if (typeof spanClass == 'undefined') {
-                        spanClass = '';
-                }
-                    if (spanClass.indexOf('span_color_') != -1) {
-                        chkLabeled = true;
-                        break;
-                    } else {
-                        strTmp += $(this).parents('tr').prev().find('span[name=utterText]').eq(i+j).text();
-                    }
-                }
-                if ($(this).val() == strTmp && strTmp != '' && !chkLabeled) {
-                    chkMatch.push($(this).val());
-                    var tmpNum = (i + inputLength*1)-1;
-                    var tmpIndex = i + ',' + tmpNum;
-                    chkMatchIndex.push(tmpIndex);
-                }
-            }
-        }
-        
-
-        //--------------------------------------------------------------------------------------------------------------
-        //--------------------------------------------------------------------------------------------------------------
-        var utterBodyHtml = '';
-        if (chkMatch.length > 1) {
-            $('span[name=alertSpan]').text("");
-            rememberUtterInput = $(this).val();
-            utterBodyHtml += "<select name='multiMatchUtterSel' class='form-control'  >";
-            var j=0;
-            for (j=0; j<chkMatch.length; j++) {
-                if (j == chkMatch.length-1) {
-                    utterBodyHtml += "<option value='" + chkMatchIndex[j] + "' selected>" + (j+1) + " - " + chkMatch[j] + "</option>";
-                } else {
-                    utterBodyHtml += "<option value='" + chkMatchIndex[j] + "'>" + (j+1) + " - " + chkMatch[j] + "</option>";
-                }
-            }
-            utterBodyHtml += "</select>";
-            if ($(this).parent().find('select[name=multiMatchUtterSel]').length > 0) {
-                $(this).parent().find('select[name=multiMatchUtterSel]').remove();
-            }
-            $(this).after(utterBodyHtml);
-            //$('select[name=multiMatchUtterSel]').focus();
-            
-            var matchStartIndex = chkMatchIndex[--j].split(",")[0];
-            var matchEndIndex = chkMatchIndex[j].split(",")[1];
-            //$(this).parent().find('input[name=startIndex]').val(matchStartIndex);
-            //$(this).parent().find('input[name=endIndex]').val(matchEndIndex);
-            var trIndex = $("tr[name=utterMainTr]").index($(this).parents('tr').prev());
-            var divIndex = $("tr[name=utterMainTr]").eq(trIndex).find('div[name=labelInfoDiv]').index($(this).parents('div[name=labelInfoDiv]'));
-            changeMultMatchiLabel(matchStartIndex, matchEndIndex, trIndex, divIndex);
-
-        } else if (chkMatch.length > 0) {
-            if (!chkLabeled) {
-                $(this).parent().find('span[name=alertSpan]').text("");
-                if ($(this).parent().find('select[name=multiMatchUtterSel]').length > 1) {
-                    $(this).parent().find('select[name=multiMatchUtterSel]').remove();
-                }
-
-                rememberUtterInput = $(this).val();
-                var matchStartIndex = chkMatchIndex[0].split(",")[0]*1;
-                var matchEndIndex = chkMatchIndex[0].split(",")[1]*1;
-                var colorIndexArr = [0, 1, 2, 3, 4];
-                $(this).parents('tr').prev().find('span[name=utterText]').each(function(){
-                    var classValue = $(this).attr('class');
-
-                    if (typeof classValue == 'undefined') {
-                        classValue = '';
-                    }
-
-                    if (classValue.indexOf('span_color_') != -1) {
-                        for (var i=0; i<colorIndexArr.length; i++) {
-                            if ('span_color_' + colorIndexArr[i] == $(this).attr('class')) {
-                                colorIndexArr.splice(i--, 1);
-                            }
-                        }
-                    }
-                });
-
-                for (var i=0; i<matchStartIndex; i++) {
-                    var tmpClass = $(this).parents('tr').prev().find('span[name=utterText]').eq(i).attr('class');
-                    if (typeof tmpClass == 'undefined') {
-                        tmpClass = '';
-                    }
-                    if (tmpClass.indexOf('span_color_') != -1) {
-                        if (colorIndexArr[i] == tmpClass.split('span_color_')[1]) {
-                            colorIndexArr.splice(i--, 1);
-                            break;
-                        }
-                    }
-                }
-                for (var i=matchEndIndex+1; i<matchStartIndex; i++) {
-                    var tmpClass = $(this).parents('tr').prev().find('span[name=utterText]').eq(i).attr('class');
-                    if (typeof tmpClass == 'undefined') {
-                        tmpClass = '';
-                    }
-                    if (tmpClass.indexOf('span_color_') != -1) {
-                        if (colorIndexArr[i] == tmpClass.split('span_color_')[1]) {
-                            colorIndexArr.splice(i--, 1);
-                            break;
-                        }
-                    }
-                }
-
-                if (colorIndexArr.length > 0) {
-                    for (var i=matchStartIndex; i<=matchEndIndex; i++) {
-                        $(this).parents('tr').prev().find('#utterText_' + i).addClass('span_color_' + colorIndexArr[0]);
-                    }
-                    $(this).parent().find('input[name=startIndex]').val(matchStartIndex);
-                    $(this).parent().find('input[name=endIndex]').val(matchEndIndex);
-
-                    if ($(this).parent().find('div[name=indentDiv]').length>0) {
-                        var nowIndex = $('div[name=labelInfoDiv]').index($(this).parent());
-                        var minIndex = -1;
-                        var maxIndex = -1;
-                        for (var k=nowIndex-1; k >= 0; k--) {
-                            if ($('div[name=labelInfoDiv]').eq(k).find('div[name=indentDiv]').length == 0) {
-                                minIndex = $('div[name=labelInfoDiv]').eq(k).find('input[name=startIndex]').val()==""?-1:$('div[name=labelInfoDiv]').eq(k).find('input[name=startIndex]').val();
-                                maxIndex = $('div[name=labelInfoDiv]').eq(k).find('input[name=endIndex]').val()==""?-1:$('div[name=labelInfoDiv]').eq(k).find('input[name=endIndex]').val();
-                                break;
-                            }
-                        }
-                        for (var k=nowIndex; k >= 0; k--) {
-                            if ($('div[name=labelInfoDiv]').eq(k).find('div[name=indentDiv]').length == 0) {
-                               $('div[name=labelInfoDiv]').eq(k).find('input[name=startIndex]').val(minIndex);
-                               $('div[name=labelInfoDiv]').eq(k).find('input[name=endIndex]').val(maxIndex);
-                                break;
-                            } else {
-                                var startInx = $('div[name=labelInfoDiv]').eq(k).find('input[name=startIndex]').val();
-                                var endInx = $('div[name=labelInfoDiv]').eq(k).find('input[name=endIndex]').val();
-                                if (minIndex == -1 || minIndex >= startInx) {
-                                    minIndex = startInx;
-                                }
-                                if (maxIndex == -1 || endInx >= maxIndex) {
-                                    maxIndex = endInx;
-                                }
-                            }
-                        }
-                    }
-
-                    
-                    var trIndex = $("tr[name=utterMainTr]").index($(this).parents('tr').prev());
-                    
-                    chkDulpleSelBox(trIndex, chkMatchIndex[0]);
-                }
-            }
-        } else {
-            console.log("매칭되는것 없음 ");
-            $(this).parent().find('span[name=alertSpan]').text(language.ALERT_NO_MATCHING_WORDS);
-        }
-});
-*/
-
 
 function makeUtterTable(inputText) {
 
@@ -1296,8 +1090,8 @@ function makeQnaListTable(page) {
                     tableHtml += '<td class="tex01"><button type="button" class="btn btn-default btn-sm" id="show_dlg" listPageNo="'+listPageNo+'" page_type="qna" dlg_id="' + data.rows[i].DLG_ID + '"><i class="fa fa-edit"></i> ' + language.Show_dlg + '</button></td>';
                     //tableHtml += '<td class="tex01"><button type="button" class="btn btn-default btn-sm" id="show_dlg" onClick="searchDialog(\'' + data.rows[i].DLG_ID + '\',\'qna\')"><i class="fa fa-edit"></i> ' + language.Show_dlg + '</button></td>';
                     tableHtml += '<td class="tex01">';
-                    tableHtml += '<button type="button" class="btn btn-default btn-sm" id="insert_similarQ_dlg" dlg_id="' + data.rows[i].DLG_ID + '" q_seq="' + data.rows[i].SEQ + '"><i class="fa fa-edit"></i> ' + language.Insert_similarQ + '</button>';
-                    
+                    //tableHtml += '<button type="button" class="btn btn-default btn-sm" id="insert_similarQ_dlg" dlg_id="' + data.rows[i].DLG_ID + '" q_seq="' + data.rows[i].SEQ + '"><i class="fa fa-edit"></i> ' + language.Insert_similarQ + '</button>';
+                    tableHtml += '<button type="button" class="btn btn-default btn-sm" id="dlg_qnaData" dlg_id="' + data.rows[i].DLG_ID + '"><i class="fa fa-trash"></i> ' + language.DELETE + '</button>';
                     tableHtml += '</td>';
                     tableHtml += '</tr>';
                    
@@ -1353,6 +1147,52 @@ $(document).on("keypress", "input[name=matchUtterText]", function(e){
     }
 });
 
+//qna 리스트 삭제
+function procQnaItemMaster(procType) {
+    var saveArr = new Array();
+    if (procType === 'UPDATE') {
+                
+    } else if (procType === 'NEW' ) {
+    
+    } else if (procType === 'DELETE') {
+        var data = new Object();
+        data.statusFlag = procType;
+        data.DLG_ID = $('#DELETE_DLG_ID').val();
+        saveArr.push(data);
+    }
+    
+    var jsonData = JSON.stringify(saveArr);
+    var params = {
+        'saveArr' : jsonData
+    };
+    $.ajax({
+        type: 'POST',
+        datatype: "JSON",
+        data: params,
+        url: '/qna/procQnaList',
+        success: function(data) {
+            if (data.loginStatus == '___LOGIN_TIME_OUT_Y___') {
+                alert($('#timeoutLogOut').val());
+                location.href = '/users/logout';
+            }
+            if (data.loginStatus == '___DUPLE_LOGIN_Y___') {
+                alert($('#timeoutLogOut').val());
+                location.href = '/users/logout';
+            }
+            if (data.loginStatus == 'DUPLE_LOGIN') { 
+                alert($('#dupleMassage').val());
+                location.href = '/users/logout';
+            }
+            console.log(data);
+            if (data.status === 200) {
+                alert(language['REGIST_SUCC']);
+                window.location.reload();
+            } else {
+                alert(language['It_failed']);
+            }
+        }
+    });    
+}
 
 $(document).on("click", "#insert_similarQ_dlg", function () {
 

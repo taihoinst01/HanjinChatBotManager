@@ -154,7 +154,8 @@
                                                           <th><%= __('INTENT') %></th>
                                                           <th><%= __('ENTITY') %></th>
                                                           <th><%= __('DLG_ID') %></th>
-                                                          <th><%= __('SimilarQ') %></th>
+                                                          <!--<th><%= __('SimilarQ') %></th>-->
+                                                          <th>...</th>
                                                       </tr>
                                                     <tbody id="qnaListbody">
                                                         
@@ -608,6 +609,28 @@
     </div>
 </div>
 <!-- //alert -->
+<div class="modal fade" id="qnaItemDeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel"><%= __('QNA_TITLE') %></h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" name="qnaItemDeleteForm" id="qnaItemDeleteForm">
+                    <input type="hidden" name="DELETE_DLG_ID" id="DELETE_DLG_ID">
+                </form>
+                <%= __('IS_DELETE_CONFIRM') %>
+            </div>
+            <div class="modal-footer" id="delete_footer_button">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> <%= __('CLOSE') %></button>
+                    <button type="button" class="btn btn-primary" id="deleteQnaItemBtn"><i class="fa fa-trash"></i> <%= __('DELETE') %></button> 
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 

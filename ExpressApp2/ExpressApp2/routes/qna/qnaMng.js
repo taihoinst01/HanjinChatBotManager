@@ -773,26 +773,7 @@ router.post('/dialogList', function (req, res) {
         try {
             var sourceType = req.body.sourceType;
             var groupType = req.body.groupType;
-            /*
-            var dlg_desQueryString = "select tbp.* from \n" +
-                "(select ROW_NUMBER() OVER(ORDER BY RELATION_NUM DESC, DLG_ORDER_NO, A.DLG_ID DESC) AS NUM, \n" +
-                "      A.DLG_ID, \n" +
-                "COUNT('1') OVER(PARTITION BY '1') AS TOTCNT, \n" +
-                "CEILING((ROW_NUMBER() OVER(ORDER BY RELATION_NUM DESC, DLG_ORDER_NO, A.DLG_ID DESC))/ convert(numeric ,10)) PAGEIDX, \n" +
-                "DLG_NAME, DLG_DESCRIPTION, DLG_TYPE, DLG_ORDER_NO, RELATION_NUM, B.CARD_TITLE, B.CARD_TEXT \n" +
-                "FROM TBL_DLG A, TBL_DLG_TEXT B \n" +
-                "WHERE 1=1 \n" +
-                "AND DLG_GROUP = 2 \n" +
-                "  AND B.DLG_ID = A.DLG_ID \n";
-            if (req.body.searchTitleTxt !== '') {
-                dlg_desQueryString += "AND DLG_NAME like @searchTitle \n";
-            }
-            if (req.body.searchDescTxt !== '') {
-                dlg_desQueryString += "AND DLG_DESCRIPTION like @searchText \n";
-            }
-            dlg_desQueryString += ") tbp \n" +
-                "WHERE PAGEIDX = @currentPage";
-            */
+            
             var dlg_desQueryString = `
             SELECT tbp.* 
               FROM 
@@ -827,13 +808,7 @@ router.post('/dialogList', function (req, res) {
              WHERE 1=1 
                AND tbp.PAGEIDX = @currentPage 
             `;
-            /*
-            if (typeOrder == 'DESC') {
-                dlg_desQueryString += '\n ORDER BY tbp.DLG_TYPE DESC, tbp.DLG_ORDER_NO;';
-            } else {
-                dlg_desQueryString += '\n ORDER BY tbp.DLG_TYPE ASC, tbp.DLG_ORDER_NO;';
-            }
-            */
+            
             let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
             let result1 = await pool.request()
                         .input('searchTitle', sql.NVarChar, '%' + searchTitleTxt + '%')
@@ -842,26 +817,7 @@ router.post('/dialogList', function (req, res) {
                         .query(dlg_desQueryString);
             let rows = result1.recordset;
 
-            /*
-            var result = [];
-            for (var i = 0; i < rows.length; i++) {
-                var item = {};
-
-                var num = rows[i].NUM;
-                var dlgName = rows[i].DLG_NAME;
-                var description = rows[i].DLG_DESCRIPTION;
-                var dlgType = rows[i].DLG_TYPE;
-                var dialogueId = rows[i].DLG_ID;
-
-                item.NUM = num;
-                item.DLG_ID = dialogueId;
-                item.DLG_NAME = dlgName;
-                item.DLG_DESCRIPTION = description;
-                item.DLG_TYPE = dlgType;
-
-                result.push(item);
-            }
-            */
+            
             if (rows.length > 0) {
                 res.send({ list: rows, pageList: paging.pagination(currentPage, rows[0].TOTCNT) });
             } else {
@@ -1809,6 +1765,63 @@ router.post('/newQna', function (req, res) {
 
 });
 
+router.post('/procQnaList', function (req, res) {  
+    var qnaItemArr = JSON.parse(req.body.saveArr);
+    var saveStr = "";
+    var updateStr = "";
+    var deleteStr = "";
+    var deleteTblDlgStr = "";
+    var deleteTblDlgRelationStr = "";
+    var deleteTblDlgTextStr = "";
+    var deleteTblDlgCardStr = "";
+    var deleteTblDlgQnaMngStr = "";
+    var deleteCheckDlgId = "";
+    var userId = req.session.sid;
+    
+    for (var i=0; i<qnaItemArr.length; i++) {
+        if (qnaItemArr[i].statusFlag === 'NEW') {
+            
+        } else if (qnaItemArr[i].statusFlag === 'UPDATE') {
+            
+        } else { //DEL
+            deleteCheckDlgId = qnaItemArr[i].DLG_ID;
+            deleteTblDlgStr = "DELETE FROM TBL_DLG WHERE DLG_ID = "+ qnaItemArr[i].DLG_ID;
+            deleteTblDlgRelationStr = "DELETE FROM TBL_DLG_RELATION_LUIS WHERE DLG_ID = "+ qnaItemArr[i].DLG_ID;
+            deleteTblDlgTextStr = "DELETE FROM TBL_DLG_TEXT WHERE DLG_ID = "+ qnaItemArr[i].DLG_ID;
+            deleteTblDlgCardStr = "DELETE FROM TBL_DLG_CARD WHERE DLG_ID = "+ qnaItemArr[i].DLG_ID;
+            deleteTblDlgQnaMngStr = "DELETE FROM TBL_QNAMNG WHERE DLG_ID = "+ qnaItemArr[i].DLG_ID;
+        }
+    }
 
+    (async () => {
+        try {
+            let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
+            /*
+            if (deleteStr !== "") {
+                let deleteCodeDetail = await pool.request().query(deleteStr);
+            }
+            */
+            if (deleteCheckDlgId !== "") {
+                
+                let deleteTblDlg = await pool.request().query(deleteTblDlgStr);
+                let deleteTblDlgRelation = await pool.request().query(deleteTblDlgRelationStr);
+                let deleteTblDlgText = await pool.request().query(deleteTblDlgTextStr);
+                let deleteTblDlgCard = await pool.request().query(deleteTblDlgCardStr);
+                let deleteTblDlgQnaMng = await pool.request().query(deleteTblDlgQnaMngStr);
+            }
+            res.send({status:200 , message:'Delete Success'});
+            
+        } catch (err) {
+            console.log(err);
+            res.send({status:500 , message:'Delete Error'});
+        } finally {
+            sql.close();
+        }
+    })()
+
+    sql.on('error', err => {
+        // ... error handler
+    })
+});
 
 module.exports = router;
