@@ -1803,7 +1803,7 @@ router.post('/changePW', function (req, res) {
 
             var newSalt = await pwConfig.getSaltCode();
             let chngPw = pwConfig.getPassWord(userPw, newSalt);
-//SCRT_NUM_THIRD = SCRT_NUM_SECOND, SCRT_NUM_SECOND = SCRT_NUM_FIRST, SCRT_NUM_FIRST = 2
+
             var QueryStr = `
             UPDATE TB_USER_M 
             SET  PW_INIT_YN = 'N'  

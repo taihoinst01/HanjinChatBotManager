@@ -6,10 +6,10 @@ var dbConfig = {
     server: 'localhost\\SQLEXPRESS',
     database: 'cjEmployeeManager',
     */
-    user: 'isvadmin',
+    user: 'hanjinadmin',
     password: 'qwer!asdF',
-    server: 'isvdb.database.windows.net',
-    database: 'TaihoChatBotV4Mng',
+    server: 'hanjindb.database.windows.net',
+    database: 'HanjinChatBotManager',
     connectionTimeout : 10000,
     requestTimeout : 30000,
     options: {
