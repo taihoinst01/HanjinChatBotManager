@@ -483,6 +483,9 @@ router.post('/selectAnalysisList', function (req, res) {
                             QueryStr += "AND QUERY like @searchQuestiontText \n";
                         }
 
+                        if (req.body.searchIntentText !== '') {
+                            QueryStr += "AND LUIS_INTENT like @searchIntentText \n";
+                        }
 
                         if (selResult == ''||selResult == 'all') {
                             //nothing
@@ -500,6 +503,7 @@ router.post('/selectAnalysisList', function (req, res) {
             let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
             let result1 = await pool.request()
                     .input('searchQuestiontText', sql.NVarChar, '%' + req.body.searchQuestiontText + '%')
+                    .input('searchIntentText', sql.NVarChar, '%' + req.body.searchIntentText + '%')
                     .input('selResult', sql.NVarChar, selResult)
                     .input('currentPage', sql.NVarChar, currentPage)
                     .query(QueryStr);

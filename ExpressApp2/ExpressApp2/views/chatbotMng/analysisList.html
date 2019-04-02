@@ -38,11 +38,15 @@
                     <section class="content">
                         <input type="hidden" name='currentPage' id="currentPage" value="1" />
                         <input type="hidden" id="searchQuestionHidden" name="searchQuestionHidden" value="">
+                        <input type="hidden" id="searchIntentHidden" name="searchIntentHidden" value="">
                         <div class="box  color-palette-box">
                             <div class="box-body">
                                   <div class="modal-body search_op">
-                                        <div class="form-group col-lg-6"  style=" padding-left:0px !important" >
+                                        <div class="form-group col-lg-3"  style=" padding-left:0px !important" >
                                             <input type="text" name="searchQuestion" id="searchQuestion" class="form-control" placeholder="<%= __('Please_enter_a_question') %>">
+                                        </div>
+                                        <div class="form-group col-lg-3"  style=" padding-left:0px !important" >
+                                            <input type="text" name="searchIntent" id="searchIntent" class="form-control" placeholder="<%= __('Please_enter_a_intent') %>">
                                         </div>
                                         <div class="form-group col-lg-3"  style=" padding-left:0px !important" >
                                             <select class="form-control" id="selResult" name="selResult">

@@ -62,7 +62,7 @@ $(document).ready(function() {
 
 
     $('#searchDlgBtn').click(function (e) {
-        //$('#searchIntentHidden').val($('#searchIntent').val().trim());
+        $('#searchIntentHidden').val($('#searchIntent').val().trim());
         $('#searchQuestionHidden').val($('#searchQuestion').val().trim());
         makeAnalysisTable(1);
     });
@@ -71,6 +71,15 @@ $(document).ready(function() {
         if (e.keyCode == 13) {
             var searchQuestion = $('#searchQuestionHidden').val().trim();
             if (searchQuestion != $('#searchQuestion').val().trim()) {
+                $('#searchDlgBtn').trigger('click');
+            }
+        }
+    });
+
+    $('input[name=searchIntent]').keypress(function (e) {
+        if (e.keyCode == 13) {
+            var searchIntent = $('#searchIntentHidden').val().trim();
+            if (searchIntent != $('#searchIntent').val().trim()) {
                 $('#searchDlgBtn').trigger('click');
             }
         }
@@ -86,17 +95,20 @@ $(document).on('click', '#analysisTablePaging .li_paging', function (e) {
 });
 
 var searchQuestiontText = ""; //페이징시 필요한 검색어 담아두는 변수
+var searchIntentText = ""; //페이징시 필요한 검색어 담아두는 변수
 var searchSelectRel = ""; //페이징시 필요한 검색어 담아두는 변수
 var listPageNo = "";
 function makeAnalysisTable(page) {
     if (page) {
         //$('#currentPage').val(1);
         searchQuestiontText = $('#searchQuestionHidden').val();
+        searchIntentText = $('#searchIntentHidden').val();
         searchSelectRel = $('#selResult').val();
     }
     params = {
         'currentPage': ($('#currentPage').val() == '') ? 1 : page,
         'searchQuestiontText': searchQuestiontText,
+        'searchIntentText': searchIntentText,
         'searchSelectRel': searchSelectRel
     };
     listPageNo = ($('#currentPage').val() == '') ? 1 : page;
