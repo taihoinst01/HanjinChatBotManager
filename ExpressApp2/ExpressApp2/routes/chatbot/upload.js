@@ -38,7 +38,7 @@ router.post('/file_upload', function (req, res) {
     var files = [];
     var fields_array = [];
     var files_array = [];
-    var day = new Date();
+    var modName ='';
     form.encoding = 'utf-8';
     //파일 경로 가공
     var strArray = __filename.split('routes');
@@ -50,7 +50,8 @@ router.post('/file_upload', function (req, res) {
         fields.push([field, value]);
         fields_array.push(value);
     }).on('file', function(filed,file){
-        fs.rename(file.path, form.uploadDir+'/'+file.name);
+        modName = Date.now() +'_'+ file.name; //동일한 이름의 파일을 업로드시에 중복저장을 막기위한 rename.
+        fs.rename(file.path, form.uploadDir + '/' + modName);  
 
         files.push([filed, file.name]);
         files_array.push([file.name]);
@@ -72,18 +73,21 @@ router.post('/file_upload', function (req, res) {
             'file' : files_array
         }
         var oriName = files_array[0]; //원본 파일명
-        var fiPath = req.headers.origin + '/images/uploads/' + oriName; //파일 URL 경로
+        var InsertmodName = modName;
+        console.log(InsertmodName);
+        var fiPath = req.headers.origin + '/images/uploads/' + InsertmodName; //파일 URL 경로
         //var fiPath = form.uploadDir+'/'+files_array[0];
 
         
         (async () => {
             try {
-                var insertQueryString = " INSERT INTO TBL_FILE_UPLOAD(ORIGINAL_NAME, FILE_PATH) \n";
-                    insertQueryString += " VALUES (@originalName, @filePath ); ";
+                var insertQueryString = " INSERT INTO TBL_FILE_UPLOAD(ORIGINAL_NAME, MODIFIED_NAME, FILE_PATH) \n";
+                    insertQueryString += " VALUES (@originalName, @modifiedName, @filePath ); ";
                 let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
                 //let pool = await dbConnect.getConnection(sql);
                 let result1 = await pool.request()
                     .input('originalName', sql.NVarChar, oriName)
+                    .input('modifiedName', sql.NVarChar, InsertmodName)
                     .input('filePath', sql.NVarChar, fiPath)
                     .query(insertQueryString);
      
@@ -121,7 +125,7 @@ router.post('/selectFileUpload', function (req, res) {
         //logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'router 시작');
         (async () => {
             try {
-                var QueryStr = "SELECT SEQ, ORIGINAL_NAME, FILE_PATH FROM TBL_FILE_UPLOAD ORDER BY SEQ ASC;";
+                var QueryStr = "SELECT SEQ, ORIGINAL_NAME, MODIFIED_NAME, FILE_PATH FROM TBL_FILE_UPLOAD ORDER BY SEQ ASC;";
     
                 //let pool = await dbConnect.getConnection(sql);
                 let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);

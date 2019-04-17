@@ -30,7 +30,7 @@ function fileUploadValidation(fileName) {
 function InsertFileUpload() {
     var fileValue = $("#imgFileUpload").val().split("\\");
     var fileName = fileValue[fileValue.length-1]; // 파일명
-    var fileURL = window.location.protocol + "//" + window.location.host //파일URL 경로
+    //var fileURL = window.location.protocol + "//" + window.location.host //파일URL 경로
     //+ "/" + window.location.pathname;
     //validation check
     fileUploadValidation(fileName);
@@ -67,6 +67,7 @@ function makeUploadTable() {
                 for (var i = 0; i < data.rows.length; i++) {
                     tableHtml += '<tr style="cursor:pointer" name="userTr"><td>' + data.rows[i].SEQ + '</td>';
                     tableHtml += '<td>' + data.rows[i].ORIGINAL_NAME + '</td>';
+                    tableHtml += '<td>' + data.rows[i].MODIFIED_NAME + '</td>';
                     tableHtml += '<td><p id="fileUrl' + i + '">' + data.rows[i].FILE_PATH + '</p></td>';
                     tableHtml += '<td><button type="button" onclick=copyToClipboard("#fileUrl' + i + '") ><i class="fa fa-search"></i>copy</button></td>';
                     tableHtml += '</tr>';
