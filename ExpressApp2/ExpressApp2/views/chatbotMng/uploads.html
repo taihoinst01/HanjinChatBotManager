@@ -36,13 +36,13 @@
                 <input type="hidden" name='currentPage' id="currentPage" value="1" />
                 <div class="box  color-palette-box">
                     <div class="box-body">
-                        <form action="/upload/file_upload" method="post" id="fileUploadForm" enctype="multipart/form-data">
-                            <input type="file" name="imgFile" id="imgFileUpload">
-                            <input type="button" onclick=InsertFileUpload() value="UPLOAD">
-                            <!--<input type="submit" value="UPLOAD">-->
-                            <!--<button type="submit">UPLOAD</button>-->
-                        </form>
-
+                        <!-- File 업로드 -->
+                        <div id="fileUploadDiv" style="margin-bottom: 1%">
+                            <form action="/upload/file_upload" method="post" id="fileUploadForm" enctype="multipart/form-data">
+                                <input type="file" name="imgFile" id="imgFileUpload" style="display: inline-block">
+                                <input type="button" onclick=InsertFileUpload() value="UPLOAD">
+                            </form>
+                        </div>
                         <!-- 학습 추천 테이블 -->
                         <div class="Tbl_wrap">
                             <table class="Tbl" summary="analysis 관리">
