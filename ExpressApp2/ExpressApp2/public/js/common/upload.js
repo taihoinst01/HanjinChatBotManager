@@ -21,10 +21,12 @@ $(document).ready(function() {
 
 //파일 업로드관련 validation
 function fileUploadValidation(fileName) {
+    var fileNameChk = true;
     if(fileName == "" || fileName == null){ //파일을 선택안했을시 발생 event
         alert("파일을 다시 선택하세요!");
-        return;
+        fileNameChk = false;
     }
+    return fileNameChk;
 }
 //파일 업로드
 function InsertFileUpload() {
@@ -32,11 +34,11 @@ function InsertFileUpload() {
     var fileName = fileValue[fileValue.length-1]; // 파일명
     //var fileURL = window.location.protocol + "//" + window.location.host //파일URL 경로
     //+ "/" + window.location.pathname;
+
     //validation check
-    fileUploadValidation(fileName);
-
-    $('#fileUploadForm').submit();
-
+    if(fileUploadValidation(fileName)){
+        $('#fileUploadForm').submit();
+    }
 }
 
 //파일 리스트 출력

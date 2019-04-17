@@ -45,15 +45,21 @@
                         </div>
                         <!-- 학습 추천 테이블 -->
                         <div class="Tbl_wrap">
-                            <table class="Tbl" summary="analysis 관리">
-                                <colgroup><col width="5%" /><col width="20%" /><col width="20%" /><col width="45%" /><col width="10%"></colgroup>
+                            <table class="Tbl" summary="fileUpload 관리">
+                                <colgroup>
+                                    <col width="5%" />
+                                    <col width="20%" />
+                                    <col width="20%" />
+                                    <col width="45%" />
+                                    <col width="10%">
+                                </colgroup>
                                 <tr>
                                     <th><%= __('NUM') %></th>
                                     <th>ORIGINAL FILE NAME</th>
                                     <th>MODIFIED FILE NAME</th>
-                                    <!--<th>&nbsp;</th>-->
                                     <th>FILE PATH</th>
                                     <th>URL COPY</th>
+                                    <!--<th>&nbsp;</th>-->
                                 </tr>
                                 <tbody id="uploadbody"></tbody>
                             </table>
@@ -74,40 +80,6 @@
         <!-- // Footer -->
         <!-- Modal -->
 
-        <div class="modal fade" id="procAnalysis" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title" id="myModalLabel">Analysis Log 관리</h4>
-                    </div>
-                    <div class="modal-body"><p id="proc_content"></p></div>
-                    <div class="modal-footer" id="footer_button">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <script>
-                        //iCheck for checkbox and radio inputs
-                        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-                            checkboxClass: 'icheckbox_minimal-blue',
-                            radioClass: 'iradio_minimal-blue'
-                        })
-                        //Red color scheme for iCheck
-                        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
-                            checkboxClass: 'icheckbox_minimal-red',
-                            radioClass: 'iradio_minimal-red'
-                        })
-                        //Flat red color scheme for iCheck
-                        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
-                            checkboxClass: 'icheckbox_flat-green',
-                            radioClass: 'iradio_flat-green'
-                        })
-
-        </script>
 </body>
 
 </html>
