@@ -200,6 +200,7 @@
 	"SIMULATION": "SIMULATION",
 	"CHATBOT_SIMUL": "CHATBOT SIMULATION",
 	"DASHBOARD": "DASHBOARD",
+	"FILE_UPLOAD": "FILE UPLOAD",
 	"============= COMMON  =============": "",
 	"IS_REQUIRED": " is required",
 	"SIGN_IN_REQUIRED": "Please sign in.",
@@ -330,5 +331,12 @@
 	"ACCOUNT_DISTRICTION": "LIMIT",
 	"UNLOCK_ACCOUNT_DISTRICTION": "UNLOCK",
 	"ALERT_OTHER_USER_LOGIN_WITH_SAME_ID": "Someone signed in with same account.",
-	"============= The end =============": ""
+	"============= The end =============": "",
+	"NOACCESSAUTH": "NOACCESSAUTH",
+	"QNA_CONNECT": "QNA_CONNECT",
+	"INITDLG_TITLE": "INITDLG_TITLE",
+	"SmallTalk_ENTITY_TITLE": "SmallTalk_ENTITY_TITLE",
+	"CHATBOTMNG_TITLE": "CHATBOTMNG_TITLE",
+	"CHATBOT_ENV": "CHATBOT_ENV",
+	"LUIS_SYNCING": "LUIS_SYNCING"
 }

@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\ExpressApp2",
+    "\\ExpressApp2\\ExpressApp2",
+    "\\ExpressApp2\\ExpressApp2\\node_modules",
+    "\\ExpressApp2\\ExpressApp2\\node_modules\\typedarray",
+    "\\ExpressApp2\\ExpressApp2\\routes",
+    "\\ExpressApp2\\ExpressApp2\\routes\\chatbot",
+    "\\ExpressApp2\\ExpressApp2\\views"
+  ],
+  "SelectedNode": "\\ExpressApp2\\ExpressApp2\\routes\\chatbot\\upload.js",
+  "PreviewInSolutionExplorer": false
+}

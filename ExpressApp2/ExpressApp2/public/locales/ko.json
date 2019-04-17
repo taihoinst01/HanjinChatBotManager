@@ -173,6 +173,7 @@
 	"DASHBOARD": "대시보드",
 	"TRAIN_COMPLETE": "TRAIN_COMPLETE",
 	"CHATBOT_SIMUL": "CHATBOT_SIMUL",
+	"FILE_UPLOAD": "파일업로드",
 	"============= COMMON  =============": "",
 	"SIGN_IN_REQUIRED": "로그인을 해주세요.",
 	"SIGN_OUT": "로그아웃",

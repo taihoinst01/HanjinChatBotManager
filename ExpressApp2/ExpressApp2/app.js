@@ -7,6 +7,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var i18n = require("i18n");
+var multer = require('multer');
+
 //세션
 var session = require('express-session');
 
@@ -28,6 +30,9 @@ var chatBotEnv = require('./routes/chatbot/chatBotEnv');
 var smallTalkMng = require('./routes/learning/smallTalkMng');
 var historyMng = require('./routes/chatbot/historyMng');
 var qna = require('./routes/qna/qnaMng');
+
+//file upload
+var uploads = require('./routes/chatbot/upload'); 
 
 var Logger = require("./config/logConfig");
 var logger = Logger.CreateLogger();
@@ -54,6 +59,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/upload', express.static('uploads'));
 
 var minutes = 60000*15; //60000
 //세션
@@ -352,6 +358,8 @@ app.use('/historyMng', historyMng);
 app.use('/smallTalkMng', smallTalkMng);
 app.use('/qna', qna);
 
+//file upload
+app.use('/upload', uploads);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
