@@ -39,7 +39,7 @@
                         <!-- File 업로드 -->
                         <div id="fileUploadDiv" style="margin-bottom: 1%">
                             <form action="/upload/file_upload" method="post" id="fileUploadForm" enctype="multipart/form-data">
-                                <input type="file" name="imgFile" id="imgFileUpload" style="display: inline-block">
+                                <input type="file" name="imgFile" id="imgFileUpload" accept='image/jpeg, image/gif, image/png' style="display: inline-block">            
                                 <input type="button" onclick=InsertFileUpload() value="UPLOAD">
                             </form>
                         </div>
