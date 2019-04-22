@@ -35,39 +35,6 @@
             <section class="content">
                 <div class="box  color-palette-box">
                     <div class="box-body">
-<<<<<<< HEAD
-                        <!-- File 업로드 -->
-                        <div id="fileUploadDiv" style="margin-bottom: 1%">
-                            <form action="/upload/file_upload" method="post" id="fileUploadForm" enctype="multipart/form-data">
-                                <input type="file" name="imgFile" id="imgFileUpload" accept='image/jpeg, image/gif, image/png' style="display: inline-block">            
-                                <input type="button" onclick=InsertFileUpload() value="UPLOAD">
-                            </form>
-                        </div>
-                        <!-- 학습 추천 테이블 -->
-                        <div class="Tbl_wrap">
-                            <table class="Tbl" summary="fileUpload 관리">
-                                <colgroup>
-                                    <col width="5%" />
-                                    <col width="20%" />
-                                    <col width="20%" />
-                                    <col width="45%" />
-                                    <col width="10%">
-                                </colgroup>
-                                <tr>
-                                    <th><%= __('NUM') %></th>
-                                    <th>ORIGINAL FILE NAME</th>
-                                    <th>MODIFIED FILE NAME</th>
-                                    <th>FILE PATH</th>
-                                    <th>URL COPY</th>
-                                    <!--<th>&nbsp;</th>-->
-                                </tr>
-                                <tbody id="uploadbody"></tbody>
-                            </table>
-                        </div>
-                        <!-- 페이징 -->
-                        <div class="pagination_wrap" id="analysisTablePaging">
-                            <ul class="pagination pagination-sm no-margin"></ul>
-=======
                         <div class="mt20">
                             <div class="col-lg-4" style="padding-left:0px !important">
                                 <h4 class=" col-lg-12">
@@ -83,7 +50,7 @@
                                                         <label for="inputEmail3" class="col-sm-3 control-label">
                                                             <i class="fa fa-asterisk"></i> File Select</label>
                                                         <div class="col-sm-9">
-                                                            <input type="file" name="imgFile" id="imgFileUpload" style="display: inline-block" class="btn btn-default">
+                                                            <input type="file" name="imgFile" id="imgFileUpload" style="display: inline-block" class="btn btn-default" accept='image/jpeg, image/gif, image/png'>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -123,7 +90,6 @@
                                 </div>
                             </div>
 
->>>>>>> ca07ac3428d309606e3773ab98365f5a268398ca
                         </div>
                     </div>
                 </div>
