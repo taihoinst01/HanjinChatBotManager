@@ -71,7 +71,7 @@ function makeUploadTable() {
                     tableHtml += '<td>' + data.rows[i].ORIGINAL_NAME + '</td>';
                     tableHtml += '<td>' + data.rows[i].MODIFIED_NAME + '</td>';
                     tableHtml += '<td><p id="fileUrl' + i + '">' + data.rows[i].FILE_PATH + '</p></td>';
-                    tableHtml += '<td><button type="button" onclick=copyToClipboard("#fileUrl' + i + '") ><i class="fa fa-search"></i>copy</button></td>';
+                    tableHtml += '<td><button type="button" onclick=copyToClipboard("#fileUrl' + i + '") class="btn btn-default"><i class="fa fa-search"></i> Copy</button></td>';
                     tableHtml += '</tr>';
                 }
 
