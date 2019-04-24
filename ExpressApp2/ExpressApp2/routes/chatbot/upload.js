@@ -120,40 +120,26 @@ router.post('/file_upload', function (req, res) {
 });
 
 
-//등록된 파일 리스트 출력
-router.post('/selectFileUpload', function (req, res) {
+//등록된 파일 삭제
+router.post('/deleteFileUpload', function (req, res) {
+    var deleteModName = req.body.modName;
+    
         //logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'router 시작');
         (async () => {
             try {
-                var QueryStr = "SELECT SEQ, ORIGINAL_NAME, MODIFIED_NAME, FILE_PATH FROM TBL_FILE_UPLOAD ORDER BY SEQ ASC;";
-    
+                var QueryStr = "DELETE FROM TBL_FILE_UPLOAD WHERE MODIFIED_NAME = @modifiedName ;";
+                
                 //let pool = await dbConnect.getConnection(sql);
                 let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
-                let result = await pool.request().query(QueryStr);
-    
-                let rows = result.recordset;
-    
-                var recordList = [];
-                for (var i = 0; i < rows.length; i++) {
-                    var item = {};
-                    item = rows[i];
-    
-                    recordList.push(item);
-                }
-    
-                if (rows.length > 0) {
-                    res.send({
-                        rows: recordList
-                    });
-                } else {
-                    res.send({
-                        records : 0,
-                        rows : null
-                    });
-                }
+                let result = await pool.request()
+                .input('modifiedName', sql.NVarChar, deleteModName)
+                .query(QueryStr);
+
+                res.render('chatbotMng/uploads');
             } catch (err) {
                 logger.info('[에러] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, err.message);     
-                // ... error checks
+                console.log(err);
+                res.send({ status: 500, message: 'delete Entity Error' });
             } finally {
                 sql.close();
             }
@@ -162,6 +148,51 @@ router.post('/selectFileUpload', function (req, res) {
         sql.on('error', err => {
             // ... error handler
         })
+
+});
+
+//등록된 파일 리스트 출력
+router.post('/selectFileUpload', function (req, res) {
+    //logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'router 시작');
+    (async () => {
+        try {
+            var QueryStr = "SELECT SEQ, ORIGINAL_NAME, MODIFIED_NAME, FILE_PATH FROM TBL_FILE_UPLOAD ORDER BY SEQ ASC;";
+
+            //let pool = await dbConnect.getConnection(sql);
+            let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
+            let result = await pool.request().query(QueryStr);
+
+            let rows = result.recordset;
+
+            var recordList = [];
+            for (var i = 0; i < rows.length; i++) {
+                var item = {};
+                item = rows[i];
+
+                recordList.push(item);
+            }
+
+            if (rows.length > 0) {
+                res.send({
+                    rows: recordList
+                });
+            } else {
+                res.send({
+                    records : 0,
+                    rows : null
+                });
+            }
+        } catch (err) {
+            logger.info('[에러] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, err.message);     
+            // ... error checks
+        } finally {
+            sql.close();
+        }
+    })()
+
+    sql.on('error', err => {
+        // ... error handler
+    })
 
 });
 

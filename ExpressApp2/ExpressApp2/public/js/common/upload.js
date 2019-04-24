@@ -43,28 +43,7 @@ function InsertFileUpload() {
     }
 }
 
-// //파일 업로드 시 이미지 확장자 validation
-/*
- function chk_file_type(obj) {
-     
-     var file_kind = obj.value.lastIndexOf('.');
-     var file_name = obj.value.substring(file_kind+1,obj.length);
-     var file_type = file_name.toLowerCase();
-     
-     var check_file_type=new Array();​
-   
-     check_file_type=['jpg','gif','png','jpeg','bmp'];
-   
-     if(check_file_type.indexOf(file_type)==-1){
-      alert('이미지 파일만 선택할 수 있습니다.');
-      var parent_Obj=obj.parentNode
-      var node=parent_Obj.replaceChild(obj.cloneNode(true),obj);
-      return false;
-     }else{
-         return true;
-     }
- }
-*/
+//파일 업로드 시 이미지 확장자 validation
  function imageFileCheck(fileName){
     var filePath = fileName;
     var allowedExtensions = /(\.jpg|\.JPG|\.jpeg|\.JPEG|\.png|\.PNG|\.GIF|\.gif)$/i;
@@ -105,12 +84,15 @@ function makeUploadTable() {
                 for (var i = 0; i < data.rows.length; i++) {
                     tableHtml += '<tr><td>' + data.rows[i].SEQ + '</td>';
                     tableHtml += '<td name="uploadFileView">' + data.rows[i].ORIGINAL_NAME + '</td>';
-                    tableHtml += '<td>' + data.rows[i].MODIFIED_NAME + '</td>';
+                    tableHtml += '<td>' + data.rows[i].MODIFIED_NAME + '</td>';                                        
                     tableHtml += '<td>';
                     tableHtml += '<p id="fileUrl' + i + '">' + data.rows[i].FILE_PATH + '</p>';
                     tableHtml += '<input type="hidden" name="viewFile" id="viewFile" value="'+ data.rows[i].FILE_PATH +'">';
                     tableHtml += '</td>';
                     tableHtml += '<td><button type="button" onclick=copyToClipboard("#fileUrl' + i + '") class="btn btn-default"><i class="fa fa-search"></i> Copy</button></td>';
+                    tableHtml += '<td>';
+                    tableHtml += '<button type="button" onclick=deleteFile(this) class="btn btn-default"><i class="fa fa-trash"></i> Delete</button>';
+                    tableHtml += '</td>';
                     tableHtml += '</tr>';
                 }
 
@@ -126,16 +108,50 @@ function makeUploadTable() {
     });
 }
 
+//등록된 파일 삭제
+function deleteFile(obj) {    
+    // 현재 클릭된 Row(<tr>)
+    var tr = $(obj).parent().parent();
+    var td = tr.children();
+
+    params = {
+        'modName' : td.eq(2).text()
+    };
+    $.ajax({
+        type: 'POST',
+        data: params,
+        url: '/upload/deleteFileUpload',
+        success: function (data) {
+            if (data.loginStatus == '___LOGIN_TIME_OUT_Y___') {
+                alert($('#timeoutLogOut').val());
+                location.href = '/users/logout';
+            }
+            if (data.loginStatus == '___DUPLE_LOGIN_Y___') {
+                alert($('#timeoutLogOut').val());
+                location.href = '/users/logout';
+            }
+            if (data.loginStatus == 'DUPLE_LOGIN') { 
+                alert($('#dupleMassage').val());
+                location.href = '/users/logout';
+            }
+
+            makeUploadTable();
+        }
+    });
+}
+
+
 //텍스트 복사버튼
 function copyToClipboard(element) {
     var $temp = $("<input>");
       $("body").append($temp);
       $temp.val($(element).text()).select();
-    document.execCommand("copy");
+      document.execCommand("copy");
       $temp.remove();
     alert("copy complete"); 
 }
 
+//이미지 미리보기
 $(document).on('mouseover', 'td[name=uploadFileView]', function (e) {
     var viewFile = $(this).parent().find('input[name=viewFile]').val();
     var viewFileHtml = '<img src="'+viewFile+'" width="300px">';
