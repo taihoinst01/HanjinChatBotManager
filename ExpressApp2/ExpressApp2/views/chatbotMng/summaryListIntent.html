@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 
 <head>
@@ -48,67 +48,102 @@
                     <section class="content">
                         <div class="box  color-palette-box">
                             <div class="box-body">
-                                  <div class="modal-body search_op">
-                                        <div class="form-group col-lg-8 form-inline"  style=" padding-left:0px !important" >
-                                            <label for="inputEmail3" class="control-label">검색일&nbsp;&nbsp;</label>
-                                            <input type="text" name="searchDate" id="searchDate" class="form-control" data-date-format='yyyymmdd' placeholder="<%= __('SELECT_DATE') %>">
-                                            <script>
-                                                $(function() {
-                                                  $( "#searchDate" ).datepicker({
+                                <div class="modal-body search_op">
+                                    <div class="form-group col-lg-8 form-inline" style=" padding:0px !important">
+                                        <label for="inputEmail3" class="control-label">검색일&nbsp;&nbsp;</label>
+                                        <input type="text" name="searchDate" id="searchDate" class="form-control" data-date-format='yyyymmdd' placeholder="<%= __('SELECT_DATE') %>">
+                                        <script>
+                                            $(function () {
+                                                $("#searchDate").datepicker({
                                                     dateFormat: "yy-mm-dd"
-                                                  });
                                                 });
-                                            </script>
-                                        </div>
-                                        
-                                                    
-                                        <div class="form-group col-lg-2">
-                                            Total Count : <span id="totCnt">0</span>
-                                        </div>
+                                            });
+                                        </script>
+                                    </div>
 
-                                        <div class="form-group col-lg-2 fr"  style=" margin-top:20px;text-align:right; padding-right:0px;">
-                                            <button type="button" id="searchDlgBtn" class="btn btn_01"><i class="fa fa-search"></i> <%= __('SEARCH') %></button> 
-                                            <button type="button" id="excelDownload" class="btn btn_01"><i class="fa fa-file-excel-o"></i> <%= __('Excel Download') %></button>
-                                        </div>
-                                     </div>
-                                     
 
-                                    <!-- 학습 추천 테이블 --> 
-                                    <div class="Tbl_wrap">
-                                        <table class="Tbl" summary="analysis 관리">
-                                            <!--<colgroup><col width="40%"/><col width="20%"/><col width="10%"/><col width="10%"><col width="20%"></colgroup>-->
-                                                  <tr>
-                                                      <th>REG DATE</th>
-                                                      <th>총무_총합</th>
-                                                      <th>총무_P</th>
-                                                      <th>총무_M</th>
-                                                      <th>인사_총합</th>
-                                                      <th>인사_P</th>
-                                                      <th>인사_M</th>
-                                                      <th>재무_총합</th>
-                                                      <th>재무_P</th>
-                                                      <th>재무_M</th>
-                                                      <th>IT_총합</th>
-                                                      <th>IT_P</th>
-                                                      <th>IT_M</th>
-                                                      <th>법무_총합</th>
-                                                      <th>법무_P</th>
-                                                      <th>법무_M</th>
-                                                      <th>CSV_총합</th>
-                                                      <th>CSV_P</th>
-                                                      <th>CSV_M</th>
-                                                      <th>블로썸파크_총합</th>
-                                                      <th>블로썸파크_P</th>
-                                                      <th>블로썸파크_M</th>
-                                                      <th>총합</th>
-                                                      <th>총합_P</th>
-                                                      <th>총합_M</th>
-                                                  </tr>
-                                                <tbody id="summarytbody">
-                                                    <tr><td colspan="25" class="text-center">NO DATA</td></tr>
-                                                </tbody>
-                                        </table>
-                                    </div> 
+                                    <div class="form-group col-lg-2">
+                                        Total Count : <span id="totCnt">0</span>
+                                    </div>
+
+                                    <div class="form-group col-lg-2 fr" style=" margin-top:20px;text-align:right; padding-right:0px;">
+                                        <button type="button" id="searchDlgBtn" class="btn btn_01"><i class="fa fa-search"></i> <%= __('SEARCH') %></button>
+                                        <button type="button" id="excelDownload" class="btn btn_01"><i class="fa fa-file-excel-o"></i> <%= __('Excel Download') %></button>
+                                    </div>
+                                </div>
+
+
+                                <!-- 학습 추천 테이블 1 -->
+                                <div class="Tbl_wrap case1">
+                                    <table class="Tbl" summary="analysis 관리">
+                                        <!--<colgroup><col width="40%"/><col width="20%"/><col width="10%"/><col width="10%"><col width="20%"></colgroup>-->
+                                        <tr>
+                                            <th>REG DATE</th>
+                                            <th>총무_총합</th>
+                                            <th>총무_P</th>
+                                            <th>총무_M</th>
+                                            <th>인사_총합</th>
+                                            <th>인사_P</th>
+                                            <th>인사_M</th>
+                                            <th>재무_총합</th>
+                                            <th>재무_P</th>
+                                            <th>재무_M</th>
+                                            <th>IT_총합</th>
+                                            <th>IT_P</th>
+                                            <th>IT_M</th>
+                                            <th>법무_총합</th>
+                                            <th>법무_P</th>
+                                            <th>법무_M</th>
+                                            <th>CSV_총합</th>
+                                            <th>CSV_P</th>
+                                            <th>CSV_M</th>
+                                            <th>블로썸파크_총합</th>
+                                            <th>블로썸파크_P</th>
+                                            <th>블로썸파크_M</th>
+                                            <th>총합</th>
+                                            <th>총합_P</th>
+                                            <th>총합_M</th>
+                                        </tr>
+                                        <tbody id="summarytbody">
+                                            <tr><td colspan="25" class="text-center">NO DATA</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- //학습 추천 테이블 1 -->
+                                <!-- 학습 추천 테이블 2 - 600 사이즈 -->
+                                <div class="Tbl_wrap case2">
+                                    <table class="Tbl" summary="analysis 관리">
+                                        <!--<colgroup><col width="40%"/><col width="20%"/><col width="10%"/><col width="10%"><col width="20%"></colgroup>-->
+                                        <tr>
+                                            <th>REG DATE</th>
+                                            <th>총무_총합</th>
+                                            <th>총무_P</th>
+                                            <th>총무_M</th>
+                                            <th>인사_총합</th>
+                                            <th>인사_P</th>
+                                        </tr>
+                                        <tbody id="summarytbody">
+                                            <tr><td colspan="6" class="text-center">NO DATA</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- //학습 추천 테이블 2 - 600 사이즈 -->
+                                <!-- 학습 추천 테이블 3 - 480 사이즈 -->
+                                <div class="Tbl_wrap case3">
+                                    <table class="Tbl" summary="analysis 관리">
+                                        <!--<colgroup><col width="40%"/><col width="20%"/><col width="10%"/><col width="10%"><col width="20%"></colgroup>-->
+                                        <tr>
+                                            <th>REG DATE</th>
+                                            <th>총무_총합</th>
+                                            <th>총무_P</th>
+                                            <th>총무_M</th>
+                                        </tr>
+                                        <tbody id="summarytbody">
+                                            <tr><td colspan="4" class="text-center">NO DATA</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- //학습 추천 테이블 3 - 480 사이즈 -->
                             </div>
                     </div>
             </section>

@@ -14,6 +14,7 @@
 .ml05{ margin-left:5px}
 .mt20{ margin-top:20px} 
 .mt50{ margin-top:50px}
+.mb0 {margin-bottom:0 !important;}
 .mb05{ margin-bottom:5px}
 .tc{ text-align:center}
 .hc{ display:none}
@@ -76,8 +77,8 @@
 .Tbl_wrap_br{width:98%;display:inline-block; border:solid 1px #eee; padding:1%}
 .Tbl {border-collapse:collapse;width:100%; clear:both;  }
 /*.Tbl tbody tr:hover{ background-color:#eee; cursor:pointer}*/
-.Tbl th { height:40px; color: #003364;  text-align:left; font-weight: bold; text-align:center; line-height:16px;border-bottom: 1px solid #5181ae; font-size:14px}
-.Tbl td{height:40px;  border-bottom: 1px solid #cccdce;text-align:center;line-height:18px; padding:5px 0  5px 0;word-break:break-all}
+.Tbl th { height:40px; color: #003364;  text-align:left; font-weight: bold; text-align:center; padding:0 2px; line-height:14px;border-bottom: 1px solid #5181ae; font-size:12px}
+.Tbl td{height:40px;  border-bottom: 1px solid #cccdce;text-align:center;line-height:18px; font-size:12px; padding:5px 2px  5px;word-break:break-all}
 .Tbl tr.sel:hover{ background:#eee; cursor:pointer; }
 .Tbl tr.select{ background-color:#fdf5d9}
 .Tbl td.nobol{ border-left:none}
@@ -91,11 +92,27 @@
 .txt_center{ text-align:center ; padding:0px !important}
 .Tbl a,.btn_delete{ color:#8b9197}
 .Tbl a,.btn_delete:hover{ color:#5181ae}
-.Tbl a,.btn_delete .fa{ font-size:20px}
+.Tbl a,.btn_delete .fa{ font-size:13px}
 .btn_delete { display:inline-block; margin:50px 0 0 5px; float:left}
 
+.Tbl_wrap.case2, .Tbl_wrap.case3 {display:none;}
+
+@media (max-width:600px) {
+    .Tbl_wrap.case1, .Tbl_wrap.case3 {display:none;}
+    .Tbl_wrap.case2 {display: block;}
+}
+
+@media (max-width:480px) {
+    .Tbl_wrap.case1, .Tbl_wrap.case2 {display:none;}
+    .Tbl_wrap.case3 {display: block;}
+}
+
 /* 대화상자 */
-.dialog_wrap{ width:100%; display:inline-block; margin-top:10px}
+.dialog_wrap {
+    width: 100%;
+    display: inline-block;
+    margin-top: 10px
+}
 .dialog_l{ width:6%; float:left; text-align:right}
 .dialog_r{ width:94%; float:left; padding-left:7px}
 .dialog_box{ width:98%; height:350px; background-color:#e6e9ec; border-radius:5px; display:inline-block; padding:1%; overflow-x:hidden; overflow-y:auto  }
@@ -134,7 +151,16 @@
 
 .login_footer { width:100%; text-align:center;color: #444 ;font-size:11px; margin-top:25px}
 
+/* 버튼 영역 - 진주호 */
+.btn {font-size:11px;}
+.col-lg-4 .btn, .col-lg-6 .btn {margin-bottom: 10px;}
+#dashBoardItemTbody tr td button:first-child {margin-bottom:5px;}
+#menuTbody td button#update_menuForm {margin-bottom:5px;}
 
+/* 미디어쿼리 추가 - 진주호 */
+@media (max-width:480px){
+    
+}
 
 
 

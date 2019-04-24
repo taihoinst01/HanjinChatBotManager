@@ -210,7 +210,7 @@ function selectAll() {
                         getOftQuestionHtml += '		       <div class="box-header with-border dashb"><h3 class="box-title02">' + language.Answers_to_Frequently_Asked_Questions + '</h3></div> ';
                         getOftQuestionHtml += '		       <div class="Tbl_wrap">';
                         getOftQuestionHtml += '			    <table class="table table-hover" summary="자주 묻는 질문에 대한 답변 top 10">';
-                        getOftQuestionHtml += '				<colgroup><col width="2%"/><col width="50%"/><col width="20%"/><col width="8%"/><col width="10%"/></colgroup>';
+                        getOftQuestionHtml += '				<colgroup><col width="2%"/><col width="43%"/><col width="20%"/><col width="15%"/><col width="20%"/></colgroup>';
                         getOftQuestionHtml += '				<thead>';
                         getOftQuestionHtml += '				      <tr class="text-center">';
                         getOftQuestionHtml += '					  <th> </th>';
@@ -264,7 +264,7 @@ function selectAll() {
                         drawNoneQuerytableHtml += '	       <div class="box-header with-border dashb"><h3 class="box-title02">' + language.Unanswered_questions + '</h3></div> ';
                         drawNoneQuerytableHtml += '	       <div class="Tbl_wrap">';
                         drawNoneQuerytableHtml += '		    <table class="table table-hover" summary="미답변 질문">';
-                        drawNoneQuerytableHtml += '			<colgroup><col width="35%"/><col width="10%"/><col width="5%"/>';
+                        drawNoneQuerytableHtml += '			<colgroup><col width="50%"/><col width="15%"/><col width="20%"/>';
                         drawNoneQuerytableHtml += '				  <col width="15%"/>';
                         drawNoneQuerytableHtml += '			</colgroup>';
                         drawNoneQuerytableHtml += '			<thead>';
@@ -324,7 +324,7 @@ function selectAll() {
                         drawfirstQuerytableHtml += '	<div class="box-body">';
                         drawfirstQuerytableHtml += '	       <div class="Tbl_wrap">';
                         drawfirstQuerytableHtml += '		    <table class="table table-hover" summary="">';
-                        drawfirstQuerytableHtml += '			<colgroup><col width="60%"/><col width="10%"/><col width="8%"/><col width="15%"/></colgroup>';
+                        drawfirstQuerytableHtml += '			<colgroup><col width="50%"/><col width="15%"/><col width="20%"/><col width="15%"/></colgroup>';
                         drawfirstQuerytableHtml += '			<thead>';
                         drawfirstQuerytableHtml += '			    <tr>';
                         drawfirstQuerytableHtml += '				<th>' + language.HangulQuestion + '</th>';

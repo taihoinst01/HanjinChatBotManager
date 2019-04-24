@@ -82,7 +82,7 @@ function noAnswerQListAjax(){
                             '<td><input type="checkbox" class="flat-red" name="tableCheckBox"><input type="hidden" class="seq" value="'+data.list[i].SEQ+'"></td>' +
                             '<td class="txt_left">' +
 
-                            '<a href="#" class="dashLink" name="queryLink"  onclick="return false;" style="font-size:14px">';
+                            '<a href="#" class="dashLink" name="queryLink"  onclick="return false;" style="font-size:12px">';
                     var query = data.list[i].QUERY;
                     /*
                     var entities = data.list[i].ENTITIES.split(',');
