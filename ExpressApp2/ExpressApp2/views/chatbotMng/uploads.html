@@ -10,9 +10,21 @@
     <%include  ../common/commonLib.html%>
     <!--<script src="/common/js/bootstrap.min.js"></script>-->
     <script type="text/javascript" src="/js/common/upload.js"></script>
-    <script>
-
-    </script>
+    <style>
+        #imageInfo {
+            position:absolute;
+            display:none;
+            background-color:#ffffff;
+            border:solid 2px #d0d0d0;
+            max-width:400px;
+            max-height:300px;
+            min-width: 10%;
+            height:fit-content;
+            padding:10px;
+            border-radius: 10px;
+            z-index: 1025;
+        }
+    </style>
 
 </head>
 
@@ -68,11 +80,12 @@
                                 <div class="Tbl_wrap">
                                     <table class="Tbl" summary="banned word list">
                                         <colgroup>
-                                            <col width="12%" />
-                                            <col width="21%" />
-                                            <col width="21%" />
-                                            <col width="36%" />
-                                            <col width="10%">
+                                            <col width="5%" />
+                                            <col width="20%" />
+                                            <col width="20%" />
+                                            <col width="35%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
                                         </colgroup>
                                         <thead>
                                             <tr>
@@ -81,6 +94,7 @@
                                                 <th>MODIFIED FILE NAME</th>
                                                 <th>FILE PATH</th>
                                                 <th>URL COPY</th>
+                                                <th>DELETE DATA</th>
                                                 <!--<th>&nbsp;</th>-->
                                             </tr>
                                             <tbody id="uploadbody"></tbody>
@@ -101,7 +115,13 @@
         <%include  ../footer.html%>
         <!-- // Footer -->
         <!-- Modal -->
-
+        <div id="imageInfo" style="overflow: hidden;" >
+            <table style="table-layout: fixed;">
+                <tr>
+                    <td id="viewFileHtml" style="overflow:hidden;"><img src="http://localhost:3000/images/uploads/1555913578781_no_permission.PNG" width="200px"></td>
+                </tr>
+            </table>
+        </div>
 </body>
 
 </html>
