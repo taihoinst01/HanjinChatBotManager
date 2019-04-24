@@ -228,7 +228,7 @@ function makeSmallTalkTable(page) {
                 $('#smallTalkTablePaging .pagination').html('').append(data.pageList);
 
             } else {
-                saveTableHtml = '<tr><td colspan="5" class="text-center">'+language.NO_DATA+'</td></tr>';
+                saveTableHtml = '<tr><td colspan="6" class="text-center">'+language.NO_DATA+'</td></tr>';
                 $('#smallTalktbody').html(saveTableHtml);
                 $('#smallTalkTablePaging .pagination').html('');
             }
