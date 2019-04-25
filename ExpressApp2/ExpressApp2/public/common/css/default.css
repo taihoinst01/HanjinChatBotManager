@@ -157,9 +157,13 @@
 #dashBoardItemTbody tr td button:first-child {margin-bottom:5px;}
 #menuTbody td button#update_menuForm {margin-bottom:5px;}
 
-/* 미디어쿼리 추가 - 진주호 */
-@media (max-width:480px){
-    
+/* 추가 - 진주호 */
+.divideSpace {padding-left:0;}
+@media (max-width:1199px) {
+    .divideSpace {padding: 0;}
+}
+
+@media (max-width:480px) {
 }
 
 
