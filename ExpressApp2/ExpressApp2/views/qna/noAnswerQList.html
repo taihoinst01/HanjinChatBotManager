@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 
 <head>
@@ -48,8 +48,8 @@
             <section class="content">
                 <div class="box  color-palette-box">
                     <div class="box-body">
-                        <div class="form-group w50 fl"  style="width: 250px;">
-                            <select id="recommendPeriod" class="form-control"> 
+                        <div class="form-group w50 fl w15p w30p"  style="width: 250px;">
+                            <select id="recommendPeriod" class="form-control" style="height:30px;"> 
                                 <option value="all"><%= __('ALL') %></option>
                                 <option value="yesterday"><%= __('Yesterday') %></option>
                                 <option value="lastWeek"><%= __('Last_week') %></option>
@@ -59,8 +59,8 @@
 
 
                         <!-- 검색창 --> 
-                        <div class="form-group w50 fr ">
-                            <div class="input-group input-group-sm fr" style="width: 250px;">
+                        <div class="form-group w50 w70p fr">
+                            <div class="input-group input-group-sm fr w90p" style="width: 250px;">
                                 <input type="text" name="searchRecommendText" spellcheck="false" autocomplete='off' class="form-control pull-right" placeholder="<%= __('Enter_search_word') %>">
                                 <div class="input-group-btn">
                                 <button class="btn btn-default" onclick="noAnswerQSearch()"><i class="fa fa-search"></i></button>

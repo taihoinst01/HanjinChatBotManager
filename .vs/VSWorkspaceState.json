@@ -4,16 +4,13 @@
     "\\ExpressApp2",
     "\\ExpressApp2\\ExpressApp2",
     "\\ExpressApp2\\ExpressApp2\\public",
-    "\\ExpressApp2\\ExpressApp2\\public\\common",
     "\\ExpressApp2\\ExpressApp2\\public\\common\\css",
     "\\ExpressApp2\\ExpressApp2\\public\\css",
-    "\\node_modules\\mime-db",
-    "\\node_modules\\mime-types",
-    "\\node_modules\\on-finished",
-    "\\node_modules\\remove-trailing-separator",
-    "\\node_modules\\type-is",
-    "\\node_modules\\util-deprecate"
+    "\\ExpressApp2\\ExpressApp2\\public\\js",
+    "\\ExpressApp2\\ExpressApp2\\public\\js\\common",
+    "\\ExpressApp2\\ExpressApp2\\views",
+    "\\ExpressApp2\\ExpressApp2\\views\\qna"
   ],
-  "SelectedNode": "\\ExpressApp2\\ExpressApp2\\views\\chatbotMng\\uploads.html",
+  "SelectedNode": "\\ExpressApp2\\ExpressApp2\\views\\qna\\noAnswerQList.html",
   "PreviewInSolutionExplorer": false
 }
