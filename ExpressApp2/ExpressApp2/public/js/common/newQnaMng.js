@@ -83,6 +83,7 @@ function createNewQna() {
     var exit = false;
     var startQuestion = $('#description').val();
     var selectIntent = $('#intentListSelect').val();
+    var usingApi =$('#usingApi').val();
 
     if(startQuestion.trim()==""){
         alert(language.IS_REQUIRED);
@@ -93,6 +94,14 @@ function createNewQna() {
     if (exit) return;
 
     if(selectIntent.trim()==""){
+        alert(language.IS_REQUIRED);
+        exit = true;
+        return false;
+    }
+
+    if (exit) return;
+
+    if(usingApi.trim()==""){
         alert(language.IS_REQUIRED);
         exit = true;
         return false;
@@ -220,7 +229,7 @@ function createNewQna() {
         url: '/qna/newQna',
         dataType: 'json',
         type: 'POST',
-        data: { 'data': array, 'startQuestion': startQuestion, 'selectIntent': selectIntent },
+        data: { 'data': array, 'startQuestion': startQuestion, 'selectIntent': selectIntent, 'usingApi':usingApi },
         success: function (data) {
             if (data.loginStatus == '___LOGIN_TIME_OUT_Y___') {
                 alert($('#timeoutLogOut').val());

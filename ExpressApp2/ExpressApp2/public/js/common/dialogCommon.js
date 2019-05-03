@@ -28,6 +28,13 @@ $(document).ready(function() {
         insertForm += '<option value="4">' + language.MEDIA_TYPE + '</option>';
         insertForm += '</select>';
         insertForm += '<div class="clear-both"></div>';
+        insertForm += '<br>';
+        insertForm += '<label>' + language.USING_API + '<span class="nec_ico">*</span></label>';
+        insertForm += '<select class="form-control" name="dlgType2" id="apiUsing">';
+        insertForm += '<option value="F">' + language.UNUSED + '</option>';
+        insertForm += '<option value="T">' + language.USED + '</option>';
+        insertForm += '</select>';
+        insertForm += '<div class="clear-both"></div>';
 
         insertForm += '<div class="textLayout" style="display: block;">';
         insertForm += '<div class="btn_wrap" style="clear:both">';
@@ -347,6 +354,13 @@ $(document).ready(function() {
         insertForm += '<option value="4">' + language.MEDIA_TYPE + '</option>';
         insertForm += '</select>';
         insertForm += '<div class="clear-both"></div>';
+        insertForm += '<br>';
+        insertForm += '<label>' + language.USING_API + '<span class="nec_ico">*</span> </label>';
+        insertForm += '<select class="form-control" name="dlgType2" id="apiUsing">';
+        insertForm += '<option value="F">' + language.UNUSED + '</option>';
+        insertForm += '<option value="T">' + language.USED + '</option>';
+        insertForm += '</select>';
+        insertForm += '<div class="clear-both"></div>';
         insertForm += '</form>';
         insertForm += '</div>';
         insertForm += '</div>';
@@ -411,6 +425,13 @@ $(document).ready(function() {
             insertForm += '<option value="2">' + language.TEXT_TYPE + '</option>';
             insertForm += '<option value="3">' + language.CARD_TYPE + '</option>';
             insertForm += '<option value="4">' + language.MEDIA_TYPE + '</option>';
+            insertForm += '</select>';
+            insertForm += '<div class="clear-both"></div>';
+            insertForm += '<br>';
+            insertForm += '<label>' + language.USING_API + '<span class="nec_ico">*</span> </label>';
+            insertForm += '<select class="form-control" name="dlgType2" id="apiUsing">';
+            insertForm += '<option value="F">' + language.UNUSED + '</option>';
+            insertForm += '<option value="T">' + language.USED + '</option>';
             insertForm += '</select>';
             insertForm += '<div class="clear-both"></div>';
             insertForm += '</form>';
@@ -841,6 +862,8 @@ function updateDialog() {
     var entity = $('#updateDlgEntity').val();
     var relationNum = $('#updateDlgRelationNo').val();
 
+    var apiUsing = $('#apiUsing').val();
+
     var idx = $('form[name=dialogLayout]').length;
     var array = [];
     var exit = false;
@@ -978,7 +1001,7 @@ function updateDialog() {
         url: '/qna/updateDialog',                //주소
         dataType: 'json',                  //데이터 형식
         type: 'POST',                      //전송 타입
-        data: { 'dlgId': dlgId, 'dlgType': dlgType, 'updateData': array, 'entity': entity, 'relationNum' : relationNum},      //데이터를 json 형식, 객체형식으로 전송
+        data: { 'dlgId': dlgId, 'dlgType': dlgType, 'updateData': array, 'entity': entity, 'relationNum' : relationNum, 'apiUsing':apiUsing},      //데이터를 json 형식, 객체형식으로 전송
 
         success: function (result) {
             if (result.loginStatus == 'DUPLE_LOGIN') {
@@ -1262,9 +1285,7 @@ $(document).on("click", "#show_dlg", function () {
                         cardTextHtml = cardTextHtml.replace(/\/n/gi,'</br>');
                         dlgTextArea = dlgTextArea.replace(/\/n/gi,'\r\n');
                         if (tmp.dlg[j].DLG_TYPE == 2) {
-                            
                             var dlg_card_order = tmp.dlg[j].CARD_ORDER_NO;
-
                             inputUttrHtml += '<div class=" wc-message wc-message-from-bot cj-font" style="width:90%">';
                             inputUttrHtml += '<div class="wc-message-content">';
                             inputUttrHtml += '<svg class="wc-message-callout"></svg>';
@@ -1276,17 +1297,30 @@ $(document).on("click", "#show_dlg", function () {
                             inputUttrHtml += cardTextHtml;
                             inputUttrHtml += '</div>';
                             inputUttrHtml += '</div></div></div></div></div>';
-
+                            
                             $(".insertForm form").append(dlgForm);
                             $(".insertForm form").append(deleteInsertForm);
-
+                            
                             $("#dialogLayout").eq(j).find("select[name=dlgType]").val("2").prop("selected", true);
+                            //API 사용여부
+                            if(tmp.dlg[j].API_INTENT == 'F'){ //미사용
+                                $("#dialogLayout").eq(j).find("select[name=dlgType2]").val("F").prop("selected", true);                                
+                            }else if(tmp.dlg[j].API_INTENT == 'T'){ //사용
+                                $("#dialogLayout").eq(j).find("select[name=dlgType2]").val("T").prop("selected", true);                                
+                            }
                             $("#dialogLayout").eq(j).find("input[name=dialogTitle]").val(tmp.dlg[j].CARD_TITLE);
                             //$("#dialogLayout").eq(j).find("input[name=dialogText]").val(tmp.dlg[j].CARD_TEXT);
                             //$("#dialogLayout").eq(j).find("textarea[name=dialogText]").val(tmp.dlg[j].CARD_TEXT);
                             $("#dialogLayout").eq(j).find("textarea[name=dialogText]").val(dlgTextArea);
                             $(".insertForm .textLayout").css("display", "block");
                         } else if (tmp.dlg[j].DLG_TYPE == 3) {
+                            //API 사용여부
+                            if(tmp.dlg[j].API_INTENT == 'F'){ //미사용
+                                $("#dialogLayout").eq(j).find("select[name=dlgType2]").val("F").prop("selected", true);                                
+                            }else if(tmp.dlg[j].API_INTENT == 'T'){ //사용
+                                $("#dialogLayout").eq(j).find("select[name=dlgType2]").val("T").prop("selected", true);                                
+                            }
+
                             var cardImgUrl = "";
                             if(tmp.dlg[j].IMG_URL==""||tmp.dlg[j].IMG_URL=="null"){
                                 cardImgUrl = "";
@@ -1407,6 +1441,7 @@ $(document).on("click", "#show_dlg", function () {
                                 $("#dialogLayout").find(".carouselLayout").eq(j).find("input[name=cButtonContent]:eq(3)").val(tmp.dlg[j].BTN_4_CONTEXT);
                             }
                         } else if (tmp.dlg[j].DLG_TYPE == 4) {
+                            
                             inputUttrHtml += '<div class=" wc-message wc-message-from-bot cj-font" style="width:90%">';
                             inputUttrHtml += '<div class="wc-message-content">';
                             inputUttrHtml += '<svg class="wc-message-callout"></svg>';
@@ -1433,11 +1468,17 @@ $(document).on("click", "#show_dlg", function () {
                             inputUttrHtml += '</li></ul></div></div>';
                             inputUttrHtml += '<button class="scroll next" disabled=""><img src="/images/02_contents_carousel_btn_right_401x.png"></button>';
                             inputUttrHtml += '</div></div></div></div></div>';
-
+                            
                             $(".insertForm form").append(dlgForm);
                             $(".insertForm form").append(mediaForm);
                             $("#dialogLayout .mediaLayout").after(deleteInsertForm);
                             $("#dialogLayout").eq(j).find("select[name=dlgType]").val("4").prop("selected", true);
+                            //API 사용여부
+                            if(tmp.dlg[j].API_INTENT == 'F'){ //미사용
+                                $("#dialogLayout").eq(j).find("select[name=dlgType2]").val("F").prop("selected", true);                                
+                            }else if(tmp.dlg[j].API_INTENT == 'T'){ //사용
+                                $("#dialogLayout").eq(j).find("select[name=dlgType2]").val("T").prop("selected", true);                                
+                            }
                             $("#dialogLayout").find(".textLayout").eq(j).css("display", "block");
                             $("#dialogLayout").find(".mediaLayout").eq(j).css("display", "block");
 
@@ -1477,6 +1518,7 @@ $(document).on("click", "#show_dlg", function () {
                             }
 
                         }
+
                         $('#updateDlgId').val(tmp.dlg[j].DLG_ID);
                         $('#updateDlgType').val(tmp.dlg[j].DLG_TYPE);
                         $('#updateDlgEntity').val(tmp.GROUPS);

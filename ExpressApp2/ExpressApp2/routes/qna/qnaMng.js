@@ -175,14 +175,16 @@ router.post('/getDlgAjax', function (req, res) {
     var dlgID = req.body.dlgID;
    
     
-    var selectDlgType = " SELECT DLG_ID, DLG_TYPE \n" +
-        " , DLG_NAME, DLG_DESCRIPTION , DLG_GROUP, DLG_ORDER_NO, GROUPL , GROUPM, GROUPS, '' as MissingEntities, RELATION_NUM \n" +
-        " FROM TBL_DLG \n" +
-        " WHERE DLG_ID = @dlgID \n";
+    var selectDlgType = " SELECT DLG_ID, DLG_TYPE \n"
+        + " , DLG_NAME, DLG_DESCRIPTION , DLG_GROUP, DLG_ORDER_NO, GROUPL , GROUPM, GROUPS, '' as MissingEntities, RELATION_NUM, \n" 
+        + " (SELECT API_INTENT FROM TBL_DLG_RELATION_LUIS WHERE DLG_ID = @dlgID ) AS API_INTENT \n" 
+        + " FROM TBL_DLG \n" 
+        + " WHERE DLG_ID = @dlgID \n";
         //" WHERE RELATION_NUM IN ( SELECT RELATION_NUM FROM TBL_DLG WHERE DLG_ID= @dlgID ) \n";
 
-    var dlgText = "SELECT DLG_ID, CARD_TITLE, CARD_TEXT, USE_YN, '2' AS DLG_TYPE \n"
-        + "FROM TBL_DLG_TEXT\n"
+    var dlgText = "SELECT DLG_ID, CARD_TITLE, CARD_TEXT, USE_YN, '2' AS DLG_TYPE, \n"
+        + " (SELECT API_INTENT FROM TBL_DLG_RELATION_LUIS WHERE DLG_ID = @dlgID ) AS API_INTENT \n" 
+        + "FROM TBL_DLG_TEXT \n"
         + "WHERE 1=1 \n"
         + "AND USE_YN = 'Y'\n"
         + "AND DLG_ID = @dlgID \n"
@@ -193,7 +195,8 @@ router.post('/getDlgAjax', function (req, res) {
         + "BTN_3_TYPE, BTN_3_TITLE, BTN_3_CONTEXT,\n"
         + "BTN_4_TYPE, BTN_4_TITLE, BTN_4_CONTEXT,\n"
         + "CARD_ORDER_NO, CARD_VALUE,\n"
-        + "USE_YN, '3' AS DLG_TYPE \n"
+        + "USE_YN, '3' AS DLG_TYPE, \n"
+        + " (SELECT API_INTENT FROM TBL_DLG_RELATION_LUIS WHERE DLG_ID = @dlgID ) AS API_INTENT \n"
         + "FROM TBL_DLG_CARD\n"
         + "WHERE 1=1\n"
         + "AND USE_YN = 'Y'\n"
@@ -205,7 +208,8 @@ router.post('/getDlgAjax', function (req, res) {
         + "BTN_3_TYPE, BTN_3_TITLE, BTN_3_CONTEXT,\n"
         + "BTN_4_TYPE, BTN_4_TITLE, BTN_4_CONTEXT,\n"
         + "CARD_VALUE,\n"
-        + "USE_YN, '4' AS DLG_TYPE \n"
+        + "USE_YN, '4' AS DLG_TYPE, \n"
+        + " (SELECT API_INTENT FROM TBL_DLG_RELATION_LUIS WHERE DLG_ID = @dlgID ) AS API_INTENT \n"
         + "FROM TBL_DLG_MEDIA\n"
         + "WHERE 1=1\n"
         + "AND USE_YN = 'Y'\n"
@@ -304,6 +308,7 @@ router.post('/updateDialog', function (req, res) {
     var dlgType = req.body.dlgType;
     var entity = req.body.entity;
     var relationNum = req.body.relationNum;
+    var apiUsing = req.body.apiUsing;//api사용여부
 
     //var data = req.body['updateData[]'];
     var data = req.body.updateData;
@@ -354,9 +359,6 @@ router.post('/updateDialog', function (req, res) {
 
     var updDlgOrderQuery = "UPDATE TBL_DLG SET DLG_ORDER_NO = @order WHERE DLG_ID = @dlgId";
 
-    
-    var updRelationQuery = "UPDATE TBL_DLG_RELATION_LUIS SET DLG_ID = @newDlgId WHERE DLG_ID = @dlgIdBefore";
-
     var getDlgOrder = `
         SELECT DLG_ID, DLG_ORDER_NO, DLG_DESCRIPTION
           FROM TBL_DLG 
@@ -384,6 +386,9 @@ router.post('/updateDialog', function (req, res) {
 
             var insertTblDlg = 'INSERT INTO TBL_DLG(DLG_ID,DLG_NAME,DLG_DESCRIPTION,DLG_LANG,DLG_TYPE,DLG_ORDER_NO,USE_YN,GROUPL,GROUPM,GROUPS,DLG_GROUP,RELATION_NUM) VALUES ' +
                 '(@dlgId,@dialogTitle,@dialogDesc,\'KO\',@dlgType,@dialogOrderNo,\'Y\',@groupl,@groupm,@groups,2,@relationNum)';
+
+            //api사용여부 jmh
+            var updteRelationQuery = "UPDATE TBL_DLG_RELATION_LUIS SET API_INTENT = @apiUsing WHERE DLG_ID = @dlgId";
 
             var inserTblDlgText = 'INSERT INTO TBL_DLG_TEXT(DLG_ID,CARD_TITLE,CARD_TEXT,USE_YN) VALUES ' +
                 '(@dlgId,@dialogTitle,@dialogText,\'Y\')';
@@ -413,7 +418,7 @@ router.post('/updateDialog', function (req, res) {
 
             let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
 
-            
+
             let selDlgOrder = await pool.request()
                 .input('dlgId', sql.Int, dlgIdReq)
                 .query(getDlgOrder);
@@ -484,6 +489,7 @@ router.post('/updateDialog', function (req, res) {
                     .input('groups', sql.NVarChar, entity)
                     .input('relationNum', sql.NVarChar, selDlg[0].RELATION_NUM)
                     .query(insertTblDlg)
+     
 
                 if (array[i]["dlgType"] == "2") {
 
@@ -492,6 +498,12 @@ router.post('/updateDialog', function (req, res) {
                         .input('dialogTitle', sql.NVarChar, array[i]["dialogTitle"])
                         .input('dialogText', sql.NVarChar, array[i]["dialogText"])
                         .query(inserTblDlgText);
+
+                        //api 사용여부 
+                        let resultApi = await pool.request()                    
+                        .input('apiUsing', sql.NVarChar, apiUsing)  
+                        .input('dlgId', sql.Int, dlgIdReq)  
+                        .query(updteRelationQuery)  
 
                 } else if (array[i]["dlgType"] == "3") {
 
@@ -528,8 +540,15 @@ router.post('/updateDialog', function (req, res) {
                             .query(insertTblCarousel_M);
 
                     }
+                    
+                        //api 사용여부 
+                        let resultApi = await pool.request()                    
+                        .input('apiUsing', sql.NVarChar, apiUsing)  
+                        .input('dlgId', sql.Int, dlgIdReq)  
+                        .query(updteRelationQuery) 
 
                 } else if (array[i]["dlgType"] == "4") {
+
                     //동영상 일때 cardDivision 컬럼에 play 가 있어야 한다.
                     //이것은 임시방편으로서 나중에는 수정을 해야 한다.
                     //입력하는 부분에도 있다....함께 고쳐야 한다.
@@ -561,6 +580,11 @@ router.post('/updateDialog', function (req, res) {
                         .query(insertTblDlgMedia_M)
 
                 }
+                    //api 사용여부
+                    let resultApi = await pool.request()                    
+                    .input('apiUsing', sql.NVarChar, apiUsing)  
+                    .input('dlgId', sql.Int, dlgIdReq)  
+                    .query(updteRelationQuery) 
                 
                 //20190103
                 //DYYOO 
@@ -647,6 +671,10 @@ router.post('/updateInitDialog', function (req, res) {
             var selectDlgId = 'SELECT ISNULL(MAX(DLG_ID)+1,1) AS DLG_ID FROM TBL_DLG';
             var insertTblDlg = 'INSERT INTO TBL_DLG(DLG_ID,DLG_NAME,DLG_DESCRIPTION,DLG_LANG,DLG_TYPE,DLG_ORDER_NO,USE_YN,GROUPL,GROUPM,GROUPS,DLG_GROUP) VALUES ' +
                 '(@dlgId,@dialogTitle,@dialogDesc,\'KO\',@dlgType,@dialogOrderNo,\'Y\',\'\',\'\',\'\',@dlgGroup)';
+
+            //api사용여부 jmh
+            var updteRelationQuery = "UPDATE TBL_DLG_RELATION_LUIS SET API_INTENT = @apiUsing WHERE DLG_ID = @dlgId";  
+
             var inserTblDlgText = 'INSERT INTO TBL_DLG_TEXT(DLG_ID,CARD_TITLE,CARD_TEXT,USE_YN) VALUES ' +
                 '(@dlgId,@dialogTitle,@dialogText,\'Y\')';
             var insertTblCarousel = 'INSERT INTO TBL_DLG_CARD(DLG_ID,CARD_TITLE,CARD_TEXT,IMG_URL,BTN_1_TYPE,BTN_1_TITLE,BTN_1_CONTEXT,BTN_2_TYPE,BTN_2_TITLE,BTN_2_CONTEXT,BTN_3_TYPE,BTN_3_TITLE,BTN_3_CONTEXT,BTN_4_TYPE,BTN_4_TITLE,BTN_4_CONTEXT,CARD_ORDER_NO,USE_YN,CARD_VALUE) VALUES ' +
@@ -706,6 +734,12 @@ router.post('/updateInitDialog', function (req, res) {
                         .input('dialogText', sql.NVarChar, array[i]["dialogText"])
                         .query(inserTblDlgText);
 
+                    //api 사용여부 
+                    let resultApi = await pool.request()                    
+                    .input('apiUsing', sql.NVarChar, apiUsing)  
+                    .input('dlgId', sql.Int, dlgIdReq)  
+                    .query(updteRelationQuery)
+
                 } else if (array[i]["dlgType"] == "3") {
 
                     for (var j = 0; j < array[i].carouselArr.length; j++) {
@@ -739,6 +773,11 @@ router.post('/updateInitDialog', function (req, res) {
                             .query(insertTblCarousel);
 
                     }
+                            //api 사용여부 
+                            let resultApi = await pool.request()                    
+                            .input('apiUsing', sql.NVarChar, apiUsing)  
+                            .input('dlgId', sql.Int, dlgIdReq)  
+                            .query(updteRelationQuery)
 
                 } 
 
@@ -1402,6 +1441,12 @@ router.post('/addDialog', function (req, res) {
                         .input('dialogText', sql.NVarChar, (array[i]["dialogText"].trim() == '' ? null : array[i]["dialogText"].trim()))
                         .query(inserTblDlgText);
 
+                    //api 사용여부 
+                    let resultApi = await pool.request()                    
+                    .input('apiUsing', sql.NVarChar, apiUsing)  
+                    .input('dlgId', sql.Int, i == 0 ? dlgIdReq : inputDlgId)  
+                    .query(updteRelationQuery)
+
                 } else if (array[i]["dlgType"] == "3") {
 
                     for (var j = 0; j < array[i].carouselArr.length; j++) {
@@ -1443,8 +1488,14 @@ router.post('/addDialog', function (req, res) {
 
                     tblDlgId.push(dlgId[0].DLG_ID);
 
+                    //api 사용여부 
+                    let resultApi = await pool.request()                    
+                    .input('apiUsing', sql.NVarChar, apiUsing)  
+                    .input('dlgId', sql.Int, i == 0 ? dlgIdReq : inputDlgId)  
+                    .query(updteRelationQuery)
+
                 } else if (array[i]["dlgType"] == "4") {
-                    // 공백은 Null 처리
+                    // 공백은 Null 처리               
                     for (var key in array[i]) {
                         //console.log("카드 key : " + key + " value : " + array[i]);
                         array[i][key] = array[i][key].trim();
@@ -1489,6 +1540,11 @@ router.post('/addDialog', function (req, res) {
                 }
 
                 tblDlgId.push(dlgId[0].DLG_ID);
+                //api 사용여부 
+                let resultApi = await pool.request()                    
+                .input('apiUsing', sql.NVarChar, apiUsing)  
+                .input('dlgId', sql.Int, i == 0 ? dlgIdReq : inputDlgId)  
+                .query(updteRelationQuery)
             }
 
             res.send({ list: tblDlgId });
@@ -1511,6 +1567,7 @@ router.post('/newQna', function (req, res) {
 
     var startQuestion = req.body.startQuestion;
     var selectIntentID = req.body.selectIntent;
+    var usingApi = req.body.usingApi;
     /**
      * LUIS ID||INTENT NAME
      */
@@ -1582,8 +1639,8 @@ router.post('/newQna', function (req, res) {
             var insertTblDlgMedia = 'INSERT INTO TBL_DLG_MEDIA(DLG_ID,CARD_TITLE,CARD_TEXT,MEDIA_URL,BTN_1_TYPE,BTN_1_TITLE,BTN_1_CONTEXT,BTN_2_TYPE,BTN_2_TITLE,BTN_2_CONTEXT,BTN_3_TYPE,BTN_3_TITLE,BTN_3_CONTEXT,BTN_4_TYPE,BTN_4_TITLE,BTN_4_CONTEXT,CARD_DIVISION,CARD_VALUE,USE_YN) VALUES ' +
                 '(@dlgId,@dialogTitle,@dialogText,@mediaImgUrl,@btn1Type,@buttonName1,@buttonContent1,@btn2Type,@buttonName2,@buttonContent2,@btn3Type,@buttonName3,@buttonContent3,@btn4Type,@buttonName4,@buttonContent4,@cardDivision,@cardValue,\'Y\')';
 
-            var insertTblRelation = 'INSERT INTO TBL_DLG_RELATION_LUIS(LUIS_ID , LUIS_INTENT , LUIS_ENTITIES, DLG_ID, DLG_API_DEFINE, USE_YN, DLG_QUESTION, ST_FLAG) VALUES ' +
-                '(@inputLuisId,@luisIntent,@luisEntities,@dlgId,\'D\',\'Y\',@startQuestion,\'F\')';
+            var insertTblRelation = 'INSERT INTO TBL_DLG_RELATION_LUIS(LUIS_ID , LUIS_INTENT , LUIS_ENTITIES, DLG_ID, DLG_API_DEFINE, USE_YN, DLG_QUESTION, ST_FLAG, API_INTENT) VALUES ' +
+                '(@inputLuisId,@luisIntent,@luisEntities,@dlgId,\'D\',\'Y\',@startQuestion,\'F\', @usingApi)';
                 
             var insertTblQnaMng = 'INSERT INTO TBL_QNAMNG(DLG_QUESTION , INTENT , ENTITY , GROUP_ID,DLG_ID, REG_DT, APP_ID, USE_YN) VALUES ' +
                 '(@startQuestion,@luisIntent,@luisEntities,NULL,@dlgId,GETDATE(),@selectIntentID,\'Y\')';
@@ -1635,8 +1692,9 @@ router.post('/newQna', function (req, res) {
                     .input('luisEntities', sql.NVarChar, selectIntentName)
                     .input('dlgId', sql.Int, inputDlgId)
                     .input('startQuestion', sql.NVarChar, startQuestion)
+                    .input('usingApi', sql.NVarChar, usingApi)
                     .query(insertTblRelation);
-
+            
                 let resultQnaMng = await pool.request()
                     .input('startQuestion', sql.NVarChar, startQuestion)
                     .input('luisIntent', sql.NVarChar, selectIntentName)
