@@ -47,11 +47,11 @@
                                     <div class="panel panel-default">
                                         <div class="panel-body">
                                             <form name="chatBotEnvForm" id="chatBotEnvForm">
-                                            <div class="form-group col-lg-6">
+                                            <div class="form-group col-lg-4">
                                                 <label>LUIS Time Limit&nbsp;<small>(ms)</small></label>
                                                 <input type="text" class="form-control" id="luisTimeLimit">
                                             </div>
-                                            <div class="form-group col-lg-6">
+                                            <div class="form-group col-lg-4">
                                                 <label>LUIS Score Limit<span class="nec_ico">(%)*</span></label>
                                                 <input type="number" class="form-control" id="luisScoreLimitNum" name ="luisScoreLimitNum" min="0" max="100" 
                                                        onKeyUp="if(this.value>100){this.value='100';}else if(this.value<0){this.value='0';}"
@@ -68,6 +68,12 @@
                                                     <option value="1.0">100%</option>
                                                 </select>
                                                 -->
+                                            </div>
+                                            <div class="form-group col-lg-4">
+                                                <label>LUIS API URL&nbsp;<small></small></label>
+                                                <input type="text" class="form-control" id="luisApiUrl1">&nbsp;
+                                                <input type="text" class="form-control" id="luisApiUrl2">&nbsp;
+                                                <input type="text" class="form-control" id="luisApiUrl3">
                                             </div>
                                             </form>
                                         </div>

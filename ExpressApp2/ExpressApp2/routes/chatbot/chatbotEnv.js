@@ -40,7 +40,10 @@ router.post('/selectChatbotEnv', function (req, res) {
                            " WHERE APP_NAME = @chatbotName; \n";
             var chatBotLuisStr = "SELECT TOP 1 \n" +
                             " (SELECT CNF_VALUE FROM TBL_CHATBOT_CONF WHERE CNF_TYPE='LUIS_TIME_LIMIT') AS LUIS_TIME_LIMIT, \n" +
-                            " (SELECT CNF_VALUE FROM TBL_CHATBOT_CONF WHERE CNF_TYPE='LUIS_SCORE_LIMIT') AS LUIS_SCORE_LIMIT \n" +
+                            " (SELECT CNF_VALUE FROM TBL_CHATBOT_CONF WHERE CNF_TYPE='LUIS_SCORE_LIMIT') AS LUIS_SCORE_LIMIT, \n" +
+                            " (SELECT CNF_VALUE FROM TBL_CHATBOT_CONF WHERE CNF_TYPE='LUIS_APP_URL1') AS LUIS_APP_URL1, \n" +
+                            " (SELECT CNF_VALUE FROM TBL_CHATBOT_CONF WHERE CNF_TYPE='LUIS_APP_URL2') AS LUIS_APP_URL2, \n" +
+                            " (SELECT CNF_VALUE FROM TBL_CHATBOT_CONF WHERE CNF_TYPE='LUIS_APP_URL3') AS LUIS_APP_URL3 \n" +
                             " FROM TBL_CHATBOT_CONF; \n";
 
             let db_pool = await dbConnect.getConnection(sql);
@@ -115,8 +118,13 @@ router.post('/procChatBotEnv', function (req, res) {
     var updateScoreLimit = "";
     var deleteAPIInfoQry = "";
     var insertAPIInfoQry = "";
+    var updateAPIUrl = "";
+    var resetAPIUrl = "";
     var orderNo = 0;
     var userId = req.session.sid;
+
+    //API URL 변수 저장.
+    var luisApiUrlArr = req.body.luisApiUrl;
 
     for (var i = 0; i < dataArr.length; i++) {
         if (dataArr[i].statusFlag === 'UPDATE') {
@@ -136,6 +144,21 @@ router.post('/procChatBotEnv', function (req, res) {
         }
     }
 
+    //CNF_VALUE 값을 NULL로 초기화
+    for(var i = 1; i<4; i++){
+        if(luisApiUrlArr.length == 0){
+            resetAPIUrl += "UPDATE TBL_CHATBOT_CONF SET CNF_VALUE = NULL WHERE CNF_TYPE = 'LUIS_APP_URL"+i+"'; ";
+        }
+        resetAPIUrl += "UPDATE TBL_CHATBOT_CONF SET CNF_VALUE = NULL WHERE CNF_TYPE = 'LUIS_APP_URL"+i+"'; ";
+    } 
+    //CNF_VALUE 값 업데이트
+    for(var i = 0; i < luisApiUrlArr.length; i++){
+        if(luisApiUrlArr[i] != ""){
+            updateAPIUrl +=  "UPDATE TBL_CHATBOT_CONF SET CNF_VALUE=" + luisApiUrlArr[i] + " WHERE CNF_TYPE = 'LUIS_APP_URL"+(i+1)+"'; ";
+        }
+    }
+
+
     (async () => {
         try {
             let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
@@ -147,6 +170,14 @@ router.post('/procChatBotEnv', function (req, res) {
             if (updateScoreLimit !== "") {
                 logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'TBL_CHATBOT_CONF 테이블 수정2');
                 let updateBannedWordP = await pool.request().query(updateScoreLimit);
+            }
+            if (resetAPIUrl !== "") {
+                logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'TBL_CHATBOT_CONF 테이블 수정3');
+                let resetAPIUrlP = await pool.request().query(resetAPIUrl);
+            }
+            if (updateAPIUrl !== "") {
+                logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'TBL_CHATBOT_CONF 테이블 수정4');
+                let updateAPIUrlP = await pool.request().query(updateAPIUrl);
             }
 
             if (deleteAPIInfoQry !== "") {

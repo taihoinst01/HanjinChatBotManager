@@ -217,7 +217,9 @@ router.post('/selectHistoryList', function (req, res) {
                 QueryStr += "			         SELECT MAX(SID) AS TRANS_SID, CUSTOMER_COMMENT_KR AS TRANS_COMMENT, COUNT(CUSTOMER_COMMENT_KR) AS SAME_CNT  \n";
                 QueryStr += "                  	   FROM TBL_HISTORY_QUERY\n";
                 QueryStr += "                  	   WHERE 1 = 1 \n";
-                QueryStr += "					     AND ISNULL(USER_ID, '') != '' \n";
+                
+                //2019.05.07 USER_ID가 DB상에 전부 null이므로 주석처리함.
+                //QueryStr += "					     AND ISNULL(USER_ID, '') != '' \n";
                 //QueryStr += "					     AND RTRIM(LTRIM(ISNULL(USER_ID, ''))) != '' \n";
                 QueryStr += " 					     AND RTRIM(CUSTOMER_COMMENT_KR) != ''  \n";
                 if (searchQuestion !== '') {

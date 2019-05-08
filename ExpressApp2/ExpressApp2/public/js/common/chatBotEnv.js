@@ -106,6 +106,11 @@ function selectChatBotEnv(){
                 $('#luisTimeLimit').val(data.rows[1].LUIS_TIME_LIMIT);
                 //$('#luisScoreLimit').val(data.rows[1].LUIS_SCORE_LIMIT);
                 $("#luisScoreLimitNum").val((data.rows[1].LUIS_SCORE_LIMIT*1)*100);
+
+                //API URL
+                $("#luisApiUrl1").val(data.rows[1].LUIS_APP_URL1);
+                $("#luisApiUrl2").val(data.rows[1].LUIS_APP_URL2);
+                $("#luisApiUrl3").val(data.rows[1].LUIS_APP_URL3);
                 //$("#luisScoreLimit").val(data.rows[1].LUIS_SCORE_LIMIT).attr("selected", "selected");
             } else {
                 $('#dbId').text("");
@@ -117,6 +122,27 @@ function selectChatBotEnv(){
 
 function procChatBotEnv(procType) {
     var saveArr = new Array();
+
+    //API URL 저장변수.
+    var luisApiUrl1 = $("#luisApiUrl1").val();
+    var luisApiUrl2 = $("#luisApiUrl2").val();
+    var luisApiUrl3 = $("#luisApiUrl3").val();
+
+    //API URL input value에 대한 null 체크.
+    var luisApiUrl = [];
+    if(luisApiUrl1 != ""){
+        luisApiUrl.push(luisApiUrl1);
+    }
+    if(luisApiUrl2 != ""){
+        luisApiUrl.push(luisApiUrl2);
+    }
+    if(luisApiUrl3 != ""){
+        luisApiUrl.push(luisApiUrl3);
+    }//jmh
+
+    if(luisApiUrl.length ==0){
+        alert("LUIS API URL을 하나이상 입력하세요!");
+    }
 
     if (procType === 'UPDATE') {
 
@@ -146,7 +172,7 @@ function procChatBotEnv(procType) {
         if(check==true){
             var apiNameSplit = apiNameData.split('^');
             var apiUrlSplit = apiUrlData.split('^');
-            var api_length = $('.apiFormDiv  input[name=api_name]').length;
+            var api_length = $('.apiFormDiv  input[name=api_name]').length; 
             for(var i=0; i<api_length; i++){
                 var data = new Object();
                 data.statusFlag = procType;
@@ -165,7 +191,8 @@ function procChatBotEnv(procType) {
 
     var jsonData = JSON.stringify(saveArr);
     var params = {
-        'saveArr': jsonData
+        'saveArr': jsonData,
+        'luisApiUrl': luisApiUrl
     };
     //return false;
     $.ajax({
