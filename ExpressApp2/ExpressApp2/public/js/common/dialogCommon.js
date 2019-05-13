@@ -28,13 +28,13 @@ $(document).ready(function() {
         insertForm += '<option value="4">' + language.MEDIA_TYPE + '</option>';
         insertForm += '</select>';
         insertForm += '<div class="clear-both"></div>';
-        insertForm += '<br>';
-        insertForm += '<label>' + language.USING_API + '<span class="nec_ico">*</span></label>';
-        insertForm += '<select class="form-control" name="dlgType2" id="apiUsing">';
-        insertForm += '<option value="F">' + language.UNUSED + '</option>';
-        insertForm += '<option value="T">' + language.USED + '</option>';
-        insertForm += '</select>';
-        insertForm += '<div class="clear-both"></div>';
+        // insertForm += '<br>';
+        // insertForm += '<label>' + language.USING_API + '<span class="nec_ico">*</span></label>';
+        // insertForm += '<select class="form-control" name="dlgType2" id="apiUsing">';
+        // insertForm += '<option value="F">' + language.UNUSED + '</option>';
+        // insertForm += '<option value="T">' + language.USED + '</option>';
+        // insertForm += '</select>';
+        // insertForm += '<div class="clear-both"></div>';
 
         insertForm += '<div class="textLayout" style="display: block;">';
         insertForm += '<div class="btn_wrap" style="clear:both">';
