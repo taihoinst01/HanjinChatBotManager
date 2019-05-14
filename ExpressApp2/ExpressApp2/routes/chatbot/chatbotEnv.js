@@ -154,7 +154,7 @@ router.post('/procChatBotEnv', function (req, res) {
     //CNF_VALUE 값 업데이트
     for(var i = 0; i < luisApiUrlArr.length; i++){
         if(luisApiUrlArr[i] != ""){
-            updateAPIUrl +=  "UPDATE TBL_CHATBOT_CONF SET CNF_VALUE=" + luisApiUrlArr[i] + " WHERE CNF_TYPE = 'LUIS_APP_URL"+(i+1)+"'; ";
+            updateAPIUrl +=  "UPDATE TBL_CHATBOT_CONF SET CNF_VALUE='" + luisApiUrlArr[i] + "' WHERE CNF_TYPE = 'LUIS_APP_URL"+(i+1)+"'; ";
         }
     }
 

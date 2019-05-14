@@ -182,7 +182,7 @@ $(document).ready(function() {
 
         $('.insertForm:eq(' + idx + ') .carouselLayout').remove();
         $('.insertForm:eq(' + idx + ') .carouselLayout').after().remove();
-        $('.insertForm:eq(' + idx + ') .mediaLayout').remove();
+        $('.insertForm:eq(' + idx + ') .mediaLayout').remove(); 
         $('.insertForm:eq(' + idx + ') .mediaLayout').after().remove();
         $('.insertForm:eq(' + idx + ')').find('.clear-both').each(function (index) {
             $('.insertForm:eq(' + idx + ') form').find('.addCarouselBtnDiv').remove();
@@ -192,7 +192,7 @@ $(document).ready(function() {
             }
         });
 
-        if ($(e.target).val() == "2") {
+        if ($(e.target).val() == "2") {//jmh
 
         } else if ($(e.target).val() == "3") {
             $('.insertForm:eq(' + idx + ') form .deleteInsertFormDiv').before(addCarouselForm);
