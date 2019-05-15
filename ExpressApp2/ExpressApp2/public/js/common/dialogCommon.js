@@ -138,7 +138,27 @@ $(document).ready(function() {
             '<button type="button" class="btn btn-default addCarouselBtn"><i class="fa fa-plus"></i> ' + language.INSERT_MORE_CARDS + '</button>' +
             '</div>';
 
+        textForm =
+            '<div class="form-group">' +
+            '<label>' + language.DIALOG_BOX_TITLE + '</label>' +
+            '<input type="text" name="dialogTitle" class="form-control" onkeyup="writeDialogTitle(this);" placeholder=" ' + language.Please_enter + '">' +
+            '</div>' +
+            '<div class="form-group">' +
+            '<label>' + language.DIALOG_BOX_CONTENTS + '<span class="nec_ico">*</span></label>' +
+            '<textarea id="dialogText" name="dialogText" class="form-control" onkeyup="writeDialog(this);" placeholder=" ' + language.Please_enter + ' " rows="5"></textarea>' +
+            '</div>' +
+            '<div class="form-group">' ;
+           
+
         carouselForm = '<div class="carouselLayout">' +
+            '<div class="form-group">' +
+            '<label>' + language.DIALOG_BOX_TITLE + '</label>' +
+            '<input type="text" name="dialogTitle" class="form-control" onkeyup="writeDialogTitle(this);" placeholder=" ' + language.Please_enter + '">' +
+            '</div>' +
+            '<div class="form-group">' +
+            '<label>' + language.DIALOG_BOX_CONTENTS + '<span class="nec_ico">*</span></label>' +
+            '<textarea id="dialogText" name="dialogText" class="form-control" onkeyup="writeDialog(this);" placeholder=" ' + language.Please_enter + ' " rows="5"></textarea>' +
+            '</div>' +
             '<div class="form-group">' +
             '<label>' + language.IMAGE_URL + '</label>' +
             '<input type="text" name="imgUrl" class="form-control" onkeyup="writeCarouselImg(this);" placeholder="' + language.Please_enter + '">' +
@@ -165,7 +185,16 @@ $(document).ready(function() {
             '<div class="clear-both"></div>' +
             '</div>';
 
-        mediaForm = '<label>' + language.IMAGE_URL + '<span class="nec_ico">*</span></label>' +
+        mediaForm = 
+            '<div class="form-group">' +
+            '<label>' + language.DIALOG_BOX_TITLE + '</label>' +
+            '<input type="text" name="dialogTitle" class="form-control" onkeyup="writeDialogTitle(this);" placeholder=" ' + language.Please_enter + '">' +
+            '</div>' +
+            '<div class="form-group">' +
+            '<label>' + language.DIALOG_BOX_CONTENTS + '<span class="nec_ico">*</span></label>' +
+            '<textarea id="dialogText" name="dialogText" class="form-control" onkeyup="writeDialog(this);" placeholder=" ' + language.Please_enter + ' " rows="5"></textarea>' +
+            '</div>' +
+            '<label>' + language.IMAGE_URL + '<span class="nec_ico">*</span></label>' +
             '<input type="text" name="mediaImgUrl" class="form-control" placeholder="' + language.Please_enter + '">' +
             '<div class="form-group">' +
             '<label>' + language.MEDIA_URL + '</label>' +
@@ -192,8 +221,11 @@ $(document).ready(function() {
             }
         });
 
-        if ($(e.target).val() == "2") {//jmh
-
+        //답변보기 -> 그룹정보
+        if ($(e.target).val() == "2") {
+            $('.insertForm:eq(' + idx + ') form .deleteInsertFormDiv').before(addCarouselForm);
+            $('.insertForm:eq(' + idx + ') form').find('.addCarouselBtnDiv').before(textForm);
+            $('.insertForm:eq(' + idx + ') form').find('.addCarouselBtnDiv').remove();
         } else if ($(e.target).val() == "3") {
             $('.insertForm:eq(' + idx + ') form .deleteInsertFormDiv').before(addCarouselForm);
             $('.insertForm:eq(' + idx + ') form').find('.addCarouselBtnDiv').before(carouselForm);
@@ -205,6 +237,7 @@ $(document).ready(function() {
             $('.insertForm:eq(' + idx + ') .mediaLayout').find('.addMediaBtn:last').closest('div').css('display', 'inline-block');
         }
         
+        //답변보기 -> 대화상자 미리보기
         if ($(e.target).val() == "2") {
             $(".dialogView").eq(idx).html('');
             insertHtml += '<div class=" wc-message wc-message-from-bot cj-font" style="width:80%;">';
