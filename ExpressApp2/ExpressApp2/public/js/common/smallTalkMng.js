@@ -78,6 +78,7 @@ $(document).ready(function() {
     $('#createSmallTalkBtn').click(function (e) {
         $("#smallTalkForm")[0].reset();
         //window.location.reload();
+        selectAllSmallTalkIntent();
         $('#smallTalkMngModal').modal('show');
     });
 
@@ -119,6 +120,59 @@ $(document).ready(function() {
         $('input[name="s_query"').val("");
     });
 });
+
+
+//smallTalk Intent 전체목록 가져오기
+function selectAllSmallTalkIntent(){
+    params = {
+        'data' : 1
+    };
+    $.ajax({
+        type: 'POST',
+        data: params,
+        url: '/smallTalkMng/selectAllSmallTalkIntent',
+        success: function (data) {
+            if (data.loginStatus == '___LOGIN_TIME_OUT_Y___') {
+                alert($('#timeoutLogOut').val());
+                location.href = '/users/logout';
+            }
+            if (data.loginStatus == '___DUPLE_LOGIN_Y___') {
+                alert($('#timeoutLogOut').val());
+                location.href = '/users/logout';
+            }
+            if (data.loginStatus == 'DUPLE_LOGIN') { 
+                alert($('#dupleMassage').val());
+                location.href = '/users/logout';
+            }
+
+            if (data.rows) {
+                var selectAllIntent = document.getElementById("selectAllSmallTalkIntent");
+                for (i = 0; i < data.rows.length; i++){
+                    var selectAllIntentOption = document.createElement("option");        
+                    selectAllIntentOption.text = data.rows[i].INTENT;
+                    selectAllIntentOption.value = data.rows[i].INTENT;                    
+                    selectAllIntent.options.add(selectAllIntentOption);
+                }
+            } else {
+
+            }
+        }
+    });
+}
+
+//smallTalkIntent 목록에서 smallTalk을 제외한 나머지 intent를 선택했을때 이벤트
+$(document).on("change","select[name=selectAllSmallTalkIntent]",function(){
+    var langSelect = document.getElementById("selectAllSmallTalkIntent");
+    var selectValue = langSelect.options[langSelect.selectedIndex].value;
+
+    if(selectValue != "smalltalk") {
+        $("#answerValue").attr("disabled", true); //비활성화
+    }
+    else {
+        $("#answerValue").attr("disabled", false); //활성화
+    }
+});
+
 
 $(document).on("click", "a[name=delAnswerBtn]", function(e){
     if ($('.answerValDiv  input[name=answerValue]').length < 2) {
@@ -324,8 +378,12 @@ function smallTalkProc(procType) {
         sQuery = $('#s_query').val().replace(regExp, "");
         data.statusFlag = procType;
         data.S_QUERY = sQuery;
-        data.INTENT = "smalltalk";
-        data.S_ANSWER = $('#s_answer').val();
+        data.INTENT = $('#selectAllSmallTalkIntent').val();
+        if($('#s_answer').val() == ''){
+            data.S_ANSWER = 'None';
+        }else{
+            data.S_ANSWER = $('#s_answer').val();
+        }
         data.ENTITY = $('#s_entity').val();
         saveArr.push(data);
     }else if(procType=="DEL"){
@@ -516,7 +574,7 @@ function dialogValidation(type){
         var result = "false";
         
         $('.answerValDiv  input[name=answerValue]').each(function() {
-            if ($(this).val().trim() === "") {
+            if ($(this).val().trim() === "" && $("#selectAllSmallTalkIntent").val() =="smalltalk") {
                 valueText = false;
                 return;
             }

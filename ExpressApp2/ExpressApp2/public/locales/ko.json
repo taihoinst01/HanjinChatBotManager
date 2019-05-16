@@ -324,6 +324,7 @@
 	"SmallTalk_ORI_UTTERANCE": "원래문장",
 	"SmallTalk_3ITEM": "답변은 세개까지 가능합니다",
 	"Enter_Connection_entity": "단어를 입력하세요",
+	"SMALL_TALK_INTENT":"SMALL_TALK_INTENT",
 	"============= 질문답변관리-단어설정 =============": "",
 	"ENTITY_SETTING": "단어설정",
 	"Entity definition": "엔티티 정의",
