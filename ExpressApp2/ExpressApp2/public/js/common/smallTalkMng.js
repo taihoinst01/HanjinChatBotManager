@@ -16,6 +16,9 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
+    //smallTalk INTENT 검색목록 출력.
+    selectAllSmallTalkIntent();
+
     //삭제 버튼 confirm
     $('#deleteSmallTalkBtnModal').click(function() {
         var del_count = $("#DELETE_ST_SEQ:checked").length;
@@ -72,6 +75,7 @@ $(document).ready(function() {
     $('#searchDlgBtn').click(function (e) {
         $('#searchIntentHidden').val($('#searchIntent').val().trim());
         $('#searchQuestionHidden').val($('#searchQuestion').val().trim());
+        $('#searchAllSmallTalkIntent').val();
         makeSmallTalkTable(1);
     });
 
@@ -147,11 +151,20 @@ function selectAllSmallTalkIntent(){
 
             if (data.rows) {
                 var selectAllIntent = document.getElementById("selectAllSmallTalkIntent");
+
+                var searchAllIntent = document.getElementById("searchAllSmallTalkIntent");
                 for (i = 0; i < data.rows.length; i++){
+                    //smallTalk 등록시
                     var selectAllIntentOption = document.createElement("option");        
                     selectAllIntentOption.text = data.rows[i].INTENT;
                     selectAllIntentOption.value = data.rows[i].INTENT;                    
                     selectAllIntent.options.add(selectAllIntentOption);
+                    
+                    //smallTalk 검색시
+                    var searchAllIntentOption = document.createElement("option");        
+                    searchAllIntentOption.text = data.rows[i].INTENT;
+                    searchAllIntentOption.value = data.rows[i].INTENT;                    
+                    searchAllIntent.options.add(searchAllIntentOption);
                 }
             } else {
 
@@ -215,19 +228,23 @@ $(document).on('click', '#smallTalkTablePaging .li_paging', function (e) {
 
 var searchQuestiontText = ""; //페이징시 필요한 검색어 담아두는 변수
 var searchIntentText = ""; //페이징시 필요한 검색어 담아두는 변수
+var searchAllSmallTalkIntent ="";
 var listPageNo = "";
 function makeSmallTalkTable(page) {
     if (page) {
         //$('#currentPage').val(1);
         searchQuestiontText = $('#searchQuestionHidden').val();
         searchIntentText = $('#searchIntentHidden').val();
+        //intent 검색시
+        searchAllSmallTalkIntent = $('#searchAllSmallTalkIntent').val();
     }
     params = {
         'useYn' : $('#smallTalkYn').find('option:selected').val(),
         //'currentPage': ($('#currentPage').val() == '') ? 1 : $('#currentPage').val(),
         'currentPage': ($('#currentPage').val() == '') ? 1 : page,
         'searchQuestiontText': searchQuestiontText,
-        'searchIntentText': searchIntentText
+        'searchIntentText': searchIntentText,
+        'searchAllSmallTalkIntent' : searchAllSmallTalkIntent
     };
     listPageNo = ($('#currentPage').val() == '') ? 1 : page;
     $.ajax({
@@ -258,6 +275,7 @@ function makeSmallTalkTable(page) {
                     tableHtml += '<tr style="cursor:pointer" name="userTr"><td>' + data.rows[i].NUM + '</td>';
                     tableHtml += '<td><input type="checkbox" class="flat-red" name="DELETE_ST_SEQ" id="DELETE_ST_SEQ" value="'+ data.rows[i].SEQ+'"></td>';
                     tableHtml += '<td>' + data.rows[i].ENTITY + '</td>';
+                    tableHtml += '<td>' + data.rows[i].INTENT + '</td>';
                     
                     
                     var s_qry = data.rows[i].S_QUERY.split('"').join("\"");

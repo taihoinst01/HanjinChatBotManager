@@ -54,9 +54,11 @@ router.post('/selectSmallTalkList', function (req, res) {
                         if (req.body.searchQuestiontText !== '') {
                             QueryStr += "AND S_QUERY like @searchQuestiontText \n";
                         }
-
                         if (req.body.searchIntentText !== '') {
                             QueryStr += "AND ENTITY like @searchIntentText \n";
+                        }
+                        if (req.body.searchAllSmallTalkIntent !== 'ALL') {
+                            QueryStr += "AND INTENT like @searchAllSmallTalkIntent \n";
                         }
                         QueryStr +="  ) tbp WHERE PAGEIDX = @currentPage; \n";
 
@@ -67,6 +69,7 @@ router.post('/selectSmallTalkList', function (req, res) {
                     .input('useYn', sql.NVarChar, req.body.useYn)
                     .input('searchQuestiontText', sql.NVarChar, '%' + req.body.searchQuestiontText + '%')
                     .input('searchIntentText', sql.NVarChar, '%' + req.body.searchIntentText + '%')
+                    .input('searchAllSmallTalkIntent', sql.NVarChar, '%' + req.body.searchAllSmallTalkIntent + '%')
                     .input('currentPage', sql.NVarChar, currentPage)
                     .query(QueryStr);
 
