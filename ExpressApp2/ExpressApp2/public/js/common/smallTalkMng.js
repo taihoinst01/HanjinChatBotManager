@@ -60,7 +60,7 @@ $(document).ready(function() {
     });
 
     $('#updateSmallTalk').click(function() {
-        
+
         var validation_result = dialogValidation("UPDATE");
         if(validation_result=="success"){
             makeAnswerData("UPDATE");
@@ -151,8 +151,9 @@ function selectAllSmallTalkIntent(){
 
             if (data.rows) {
                 var selectAllIntent = document.getElementById("selectAllSmallTalkIntent");
-
                 var searchAllIntent = document.getElementById("searchAllSmallTalkIntent");
+                var updateSmallTalkIntent = document.getElementById("updateSmallTalkIntent");
+
                 for (i = 0; i < data.rows.length; i++){
                     //smallTalk 등록시
                     var selectAllIntentOption = document.createElement("option");        
@@ -165,6 +166,12 @@ function selectAllSmallTalkIntent(){
                     searchAllIntentOption.text = data.rows[i].INTENT;
                     searchAllIntentOption.value = data.rows[i].INTENT;                    
                     searchAllIntent.options.add(searchAllIntentOption);
+
+                    //smallTalk 업데이트시
+                    var updateAllIntentOption = document.createElement("option");        
+                    updateAllIntentOption.text = data.rows[i].INTENT;
+                    updateAllIntentOption.value = data.rows[i].INTENT;                    
+                    updateSmallTalkIntent.options.add(updateAllIntentOption);
                 }
             } else {
 
@@ -183,6 +190,19 @@ $(document).on("change","select[name=selectAllSmallTalkIntent]",function(){
     }
     else {
         $("#answerValue").attr("disabled", false); //활성화
+    }
+});
+
+//smallTalkIntent 업데이트 목록에서 smallTalk을 제외한 나머지 intent를 선택했을때 이벤트
+$(document).on("change","select[name=updateSmallTalkIntent]",function(){
+    var langSelect2 = document.getElementById("updateSmallTalkIntent");
+    var selectValue2 = langSelect2.options[langSelect2.selectedIndex].value;
+
+    if(selectValue2 != "smalltalk") {
+        $("[name=update_answerValue]").attr("disabled", true); //비활성화
+    }
+    else {
+        $("[name=update_answerValue]").attr("disabled", false); //활성화
     }
 });
 
@@ -283,7 +303,7 @@ function makeSmallTalkTable(page) {
                     
                     s_answer = s_answer.split('&#39;').join("\\&#39;");
                     
-                    tableHtml += '<td class="txt_left tex01"><a href="#" onClick="getUpdateSmallTalk(\''+s_qry+'\',\''+s_answer+'\','+data.rows[i].SEQ+',\''+data.rows[i].USE_YN+'\'); return false;">' + data.rows[i].S_QUERY + '</a></td>';
+                    tableHtml += '<td class="txt_left tex01"><a href="#" onClick="getUpdateSmallTalk(\''+s_qry+'\',\''+s_answer+'\','+data.rows[i].SEQ+',\''+data.rows[i].USE_YN+'\',\''+data.rows[i].INTENT+'\'); return false;">' + data.rows[i].S_QUERY + '</a></td>';
                     tableHtml += '<td class="txt_left">' + answerText + '</td>';
                     tableHtml += '<td>' + data.rows[i].USE_YN + '</td>';
                     tableHtml += '</tr>';
@@ -325,17 +345,22 @@ $(document).on("click", "#addAnswerValBtn", function(e){
 });
 
 $(document).on("click", "#update_addAnswerValBtn", function(e){
-    var update_answerLength = $('.updateAnswerValDiv  input[name=update_answerValue]').length;
-    var updateAnswerStr = "";
-    if(update_answerLength > 2){
-        //$('#update_addAnswerValBtn').attr("disabled", "disabled");
-        //$('#update_addAnswerValBtn').addClass("disable");
-    }else{
-        updateAnswerStr = "<div style='margin-top:4px;'><input name='update_answerValue' id='update_answerValue' tabindex='" + update_answerLength + "' type='text' class='form-control' style=' float: left; width:80%;' placeholder='" + language.Please_enter + "'>";
-        updateAnswerStr += '<a href="#" name="update_delAnswerBtn" class="answer_delete" style="display:inline-block; margin:7px 0 0 7px; "><span class="fa fa-trash" style="font-size: 25px;"></span></a></div>';
-        $('.updateAnswerValDiv').append(updateAnswerStr);
-        $('.updateAnswerValDiv  input[name=update_answerValue]').eq($('.updateAnswerValDiv  input[name=update_answerValue]').length-1).focus();
-        //dialogValidation('UPDATE');
+    //smallTalkIntent 업데이트 목록에서 smallTalk을 제외한 나머지 intent를 선택했을때 추가버튼 클릭시 리턴.
+    if ($('#updateSmallTalkIntent').val() != 'smalltalk') {
+        alert('INTENT선택을 다시해주세요.');
+    } else {
+        var update_answerLength = $('.updateAnswerValDiv  input[name=update_answerValue]').length;
+        var updateAnswerStr = "";
+        if(update_answerLength > 2){
+            //$('#update_addAnswerValBtn').attr("disabled", "disabled");
+            //$('#update_addAnswerValBtn').addClass("disable");
+        }else{
+            updateAnswerStr = "<div style='margin-top:4px;'><input name='update_answerValue' id='update_answerValue' tabindex='" + update_answerLength + "' type='text' class='form-control' style=' float: left; width:80%;' placeholder='" + language.Please_enter + "'>";
+            updateAnswerStr += '<a href="#" name="update_delAnswerBtn" class="answer_delete" style="display:inline-block; margin:7px 0 0 7px; "><span class="fa fa-trash" style="font-size: 25px;"></span></a></div>';
+            $('.updateAnswerValDiv').append(updateAnswerStr);
+            $('.updateAnswerValDiv  input[name=update_answerValue]').eq($('.updateAnswerValDiv  input[name=update_answerValue]').length-1).focus();
+            //dialogValidation('UPDATE');
+        }
     }
 });
 
@@ -356,14 +381,15 @@ function makeAnswerData(type){
     }
 }
 
-function getUpdateSmallTalk(utterance, answer, seq, use_yn){
+function getUpdateSmallTalk(utterance, answer, seq, use_yn, intent){
     
     var ori_uttrance = utterance;
     var ori_answer = answer;
     ori_answer = ori_answer.split('\'').join("&#39;");
     var check = ori_answer.indexOf('$');
+    var ori_intent = intent;
     var updateAnswerStr = "";
-    
+
     if(check!= -1){
         var answerSplit = ori_answer.split('$');
         for ( var i=0; i< answerSplit.length; i++ ) {
@@ -374,13 +400,15 @@ function getUpdateSmallTalk(utterance, answer, seq, use_yn){
         updateAnswerStr += "<div style='margin-top:4px;'><input name='update_answerValue' id='update_answerValue' tabindex='" + i + "' type='text' class='form-control' style=' float: left; width:80%;' placeholder='" + language.Please_enter + "' value='" + ori_answer + "'>";
         updateAnswerStr += '<a href="#" name="update_delAnswerBtn" class="answer_delete" style="display:inline-block; margin:7px 0 0 7px; "><span class="fa fa-trash" style="font-size: 25px;"></span></a></div>';
     }
-
     $('#ori_utterance').text(ori_uttrance);
     $('#update_seq').val(seq);
     $('.updateAnswerValDiv').html(updateAnswerStr);
     $('.updateAnswerValDiv  input[name=update_answerValue]').eq($('.updateAnswerValDiv  input[name=update_answerValue]').length-1).focus();
     $('select[name=useYn]').val(use_yn).prop("selected", true);
-
+    $('select[name=updateSmallTalkIntent]').val(ori_intent).prop("selected", true);
+    if(ori_intent != "smalltalk") {
+        $("[name=update_answerValue]").attr("disabled", true); //비활성화
+    }
     $('#smallTalkUpdateModal').modal('show');
 
 }
@@ -422,6 +450,7 @@ function smallTalkProc(procType) {
         data.S_ANSWER = $('#update_s_answer').val();
         data.SEQ = $('#update_seq').val();
         data.USE_YN = $('#useYn').val();
+        data.INTENT = $('#updateSmallTalkIntent').val();
 
         saveArr.push(data);
     }else if(procType=="DELENTITIES"){
@@ -614,7 +643,7 @@ function dialogValidation(type){
         var result = "false";
 
         $('.updateAnswerValDiv  input[name=update_answerValue]').each(function() {
-            if ($(this).val().trim() === "") {
+            if (($(this).val().trim() === "" && $("#updateSmallTalkIntent").val() == "smalltalk") || ($(this).val().trim() === "None" && $("#updateSmallTalkIntent").val() == "smalltalk")) {
                 valueText = false;
                 return;
             }

@@ -180,7 +180,7 @@ router.post('/smallTalkProc', function (req, res) {
     var insertStr = "INSERT INTO TBL_SMALLTALK (S_QUERY, INTENT, ENTITY, S_ANSWER, DLG_TYPE, REG_DT) " +
                     " VALUES ( @S_QUERY, @INTENT, @ENTITY, @S_ANSWER,'2',GETDATE());";
     var deleteStr = "DELETE FROM TBL_SMALLTALK WHERE SEQ = @DELETE_ST_SEQ; ";
-    var updateStr = "UPDATE TBL_SMALLTALK SET S_ANSWER=@S_ANSWER, USE_YN=@USE_YN WHERE SEQ = @SEQ; ";
+    var updateStr = "UPDATE TBL_SMALLTALK SET S_ANSWER=@S_ANSWER, USE_YN=@USE_YN, INTENT = @INTENT WHERE SEQ = @SEQ; ";
     var deleteEntities = "UPDATE TBL_SMALLTALK SET ENTITY='' WHERE SEQ = @SEQ; ";
     var userId = req.session.sid;
     /*
@@ -229,6 +229,7 @@ router.post('/smallTalkProc', function (req, res) {
                     var updateSmallTalk = await pool.request()
                             .input('S_ANSWER', sql.NVarChar, injection.changeAttackKeys(dataArr[i].S_ANSWER))
                             .input('USE_YN', sql.NVarChar, injection.changeAttackKeys(dataArr[i].USE_YN))
+                            .input('INTENT', sql.NVarChar, injection.changeAttackKeys(dataArr[i].INTENT))
                             .input('SEQ', sql.NVarChar, injection.changeAttackKeys(dataArr[i].SEQ))
                             .query(updateStr);
                 }else if (dataArr[i].statusFlag === 'DELENTITIES') {
