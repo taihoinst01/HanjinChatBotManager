@@ -82,7 +82,6 @@ $(document).ready(function() {
     $('#createSmallTalkBtn').click(function (e) {
         $("#smallTalkForm")[0].reset();
         //window.location.reload();
-        selectAllSmallTalkIntent();
         $('#smallTalkMngModal').modal('show');
     });
 
