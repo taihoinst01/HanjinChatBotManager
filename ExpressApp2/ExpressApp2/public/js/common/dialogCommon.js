@@ -138,7 +138,7 @@ $(document).ready(function() {
             '<button type="button" class="btn btn-default addCarouselBtn"><i class="fa fa-plus"></i> ' + language.INSERT_MORE_CARDS + '</button>' +
             '</div>';
 
-        textForm =
+        textForm = '<div class="textLayout">' +
             '<div class="form-group">' +
             '<label>' + language.DIALOG_BOX_TITLE + '</label>' +
             '<input type="text" name="dialogTitle" class="form-control" onkeyup="writeDialogTitle(this);" placeholder=" ' + language.Please_enter + '">' +
@@ -147,18 +147,19 @@ $(document).ready(function() {
             '<label>' + language.DIALOG_BOX_CONTENTS + '<span class="nec_ico">*</span></label>' +
             '<textarea id="dialogText" name="dialogText" class="form-control" onkeyup="writeDialog(this);" placeholder=" ' + language.Please_enter + ' " rows="5"></textarea>' +
             '</div>' +
-            '<div class="form-group">' ;
+            '<div class="form-group">' +
+            '</div>';
            
 
         carouselForm = '<div class="carouselLayout">' +
-            '<div class="form-group">' +
-            '<label>' + language.DIALOG_BOX_TITLE + '</label>' +
-            '<input type="text" name="dialogTitle" class="form-control" onkeyup="writeDialogTitle(this);" placeholder=" ' + language.Please_enter + '">' +
-            '</div>' +
-            '<div class="form-group">' +
-            '<label>' + language.DIALOG_BOX_CONTENTS + '<span class="nec_ico">*</span></label>' +
-            '<textarea id="dialogText" name="dialogText" class="form-control" onkeyup="writeDialog(this);" placeholder=" ' + language.Please_enter + ' " rows="5"></textarea>' +
-            '</div>' +
+            // '<div class="form-group">' +
+            // '<label>' + language.DIALOG_BOX_TITLE + '</label>' +
+            // '<input type="text" name="dialogTitle" class="form-control" onkeyup="writeDialogTitle(this);" placeholder=" ' + language.Please_enter + '">' +
+            // '</div>' +
+            // '<div class="form-group">' +
+            // '<label>' + language.DIALOG_BOX_CONTENTS + '<span class="nec_ico">*</span></label>' +
+            // '<textarea id="dialogText" name="dialogText" class="form-control" onkeyup="writeDialog(this);" placeholder=" ' + language.Please_enter + ' " rows="5"></textarea>' +
+            // '</div>' +
             '<div class="form-group">' +
             '<label>' + language.IMAGE_URL + '</label>' +
             '<input type="text" name="imgUrl" class="form-control" onkeyup="writeCarouselImg(this);" placeholder="' + language.Please_enter + '">' +
@@ -186,14 +187,14 @@ $(document).ready(function() {
             '</div>';
 
         mediaForm = 
-            '<div class="form-group">' +
-            '<label>' + language.DIALOG_BOX_TITLE + '</label>' +
-            '<input type="text" name="dialogTitle" class="form-control" onkeyup="writeDialogTitle(this);" placeholder=" ' + language.Please_enter + '">' +
-            '</div>' +
-            '<div class="form-group">' +
-            '<label>' + language.DIALOG_BOX_CONTENTS + '<span class="nec_ico">*</span></label>' +
-            '<textarea id="dialogText" name="dialogText" class="form-control" onkeyup="writeDialog(this);" placeholder=" ' + language.Please_enter + ' " rows="5"></textarea>' +
-            '</div>' +
+            // '<div class="form-group">' +
+            // '<label>' + language.DIALOG_BOX_TITLE + '</label>' +
+            // '<input type="text" name="dialogTitle" class="form-control" onkeyup="writeDialogTitle(this);" placeholder=" ' + language.Please_enter + '">' +
+            // '</div>' +
+            // '<div class="form-group">' +
+            // '<label>' + language.DIALOG_BOX_CONTENTS + '<span class="nec_ico">*</span></label>' +
+            // '<textarea id="dialogText" name="dialogText" class="form-control" onkeyup="writeDialog(this);" placeholder=" ' + language.Please_enter + ' " rows="5"></textarea>' +
+            // '</div>' +
             '<label>' + language.IMAGE_URL + '<span class="nec_ico">*</span></label>' +
             '<input type="text" name="mediaImgUrl" class="form-control" placeholder="' + language.Please_enter + '">' +
             '<div class="form-group">' +
@@ -208,7 +209,8 @@ $(document).ready(function() {
 
         var idx = $("select[name=dlgType]").index(this);
         var insertHtml = "";
-
+        $('.insertForm:eq(' + idx + ') .textLayout').remove();
+        //$('.insertForm:eq(' + idx + ') .textLayout').after().remove();
         $('.insertForm:eq(' + idx + ') .carouselLayout').remove();
         $('.insertForm:eq(' + idx + ') .carouselLayout').after().remove();
         $('.insertForm:eq(' + idx + ') .mediaLayout').remove(); 
@@ -228,14 +230,17 @@ $(document).ready(function() {
             $('.insertForm:eq(' + idx + ') form').find('.addCarouselBtnDiv').remove();
         } else if ($(e.target).val() == "3") {
             $('.insertForm:eq(' + idx + ') form .deleteInsertFormDiv').before(addCarouselForm);
+            $('.insertForm:eq(' + idx + ') form').find('.addCarouselBtnDiv').before(textForm);
             $('.insertForm:eq(' + idx + ') form').find('.addCarouselBtnDiv').before(carouselForm);
             $('.insertForm:eq(' + idx + ') .carouselLayout').css('display', 'block');
             $('.insertForm:eq(' + idx + ') .carouselLayout').find('.addCarouselBtn:last').closest('div').css('display', 'inline-block');
-        } else if ($(e.target).val() == "4") {
-            $('.insertForm:eq(' + idx + ') form .deleteInsertFormDiv').before('<div class="mediaLayout" style="display:none;">' + mediaForm + '</div>');
-            $('.insertForm:eq(' + idx + ') .mediaLayout').css('display', 'block');
-            $('.insertForm:eq(' + idx + ') .mediaLayout').find('.addMediaBtn:last').closest('div').css('display', 'inline-block');
-        }
+        } 
+        // media
+        // else if ($(e.target).val() == "4") {
+        //     $('.insertForm:eq(' + idx + ') form .deleteInsertFormDiv').before('<div class="mediaLayout" style="display:none;">' + mediaForm + '</div>');
+        //     $('.insertForm:eq(' + idx + ') .mediaLayout').css('display', 'block');
+        //     $('.insertForm:eq(' + idx + ') .mediaLayout').find('.addMediaBtn:last').closest('div').css('display', 'inline-block');
+        // }
         
         //답변보기 -> 대화상자 미리보기
         if ($(e.target).val() == "2") {
@@ -285,39 +290,41 @@ $(document).ready(function() {
             insertHtml += '<button class="scroll next" style="display: none; height: 30px;" id="nextBtn' + (idx) + '" onclick="nextBtn(' + idx + ', this)"><img src="/images/02_contents_carousel_btn_right_401x.png"></button>';
             insertHtml += '</div></div></div></div>';
             $(".dialogView").eq(idx).html(insertHtml);
-        } else if ($(e.target).val() == "4") {
-            $(".dialogView").eq(idx).html('');
-            insertHtml += '<div class=" wc-message wc-message-from-bot cj-font">';
-            insertHtml += '<div class="wc-message-content">';
-            insertHtml += '<svg class="wc-message-callout"></svg>';
-            insertHtml += '<div>';
-            insertHtml += '<div class="wc-carousel">';
-            insertHtml += '<div>';
-            insertHtml += '<button class="scroll previous" disabled=""><img src="/images/02_contents_carousel_btn_left_401x.png"></button>';
-            insertHtml += '<div class="wc-hscroll-outer">';
-            insertHtml += '<div class="wc-hscroll" style="margin-bottom: 0px;">';
-            insertHtml += '<ul style="padding-left: 0px;">';
-            insertHtml += '<li class="wc-carousel-item wc-carousel-play">';
-            insertHtml += '<div class="wc-card hero">';
-            insertHtml += '<div class="wc-card-div imgContainer">';
-            insertHtml += '<input type="hidden" name="dlgId" value="dlg_id"/>';
-            insertHtml += '<img src="/images/USP_convenience_09.jpg">';
-            insertHtml += '<div class="playImg"></div>';
-            insertHtml += '<div class="hidden" alt="card_title"></div>';
-            insertHtml += '<div class="hidden" alt="card_value"></div>';
-            insertHtml += '</div>';
-            insertHtml += '<h1>' + language.Please_enter_a_title + '</h1>';
-            insertHtml += '<p class="dlgMediaText">' + language.Please_enter_your_content + '</p>';
-            insertHtml += '<ul class="wc-card-buttons" style="padding-left: 0px;">';
-            insertHtml += '<li><button>BTN_1_TITLE</button></li></ul>';
-            insertHtml += '</ul>';
-            insertHtml += '</div>';
-            insertHtml += '</li></ul></div></div>';
-            insertHtml += '<button class="scroll next" disabled=""><img src="/images/02_contents_carousel_btn_right_401x.png"></button>';
-            insertHtml += '</div></div></div></div></div>';
-
-            $(".dialogView").eq(idx).html(insertHtml);
         }
+        //media 
+        // else if ($(e.target).val() == "4") {
+        //     $(".dialogView").eq(idx).html('');
+        //     insertHtml += '<div class=" wc-message wc-message-from-bot cj-font">';
+        //     insertHtml += '<div class="wc-message-content">';
+        //     insertHtml += '<svg class="wc-message-callout"></svg>';
+        //     insertHtml += '<div>';
+        //     insertHtml += '<div class="wc-carousel">';
+        //     insertHtml += '<div>';
+        //     insertHtml += '<button class="scroll previous" disabled=""><img src="/images/02_contents_carousel_btn_left_401x.png"></button>';
+        //     insertHtml += '<div class="wc-hscroll-outer">';
+        //     insertHtml += '<div class="wc-hscroll" style="margin-bottom: 0px;">';
+        //     insertHtml += '<ul style="padding-left: 0px;">';
+        //     insertHtml += '<li class="wc-carousel-item wc-carousel-play">';
+        //     insertHtml += '<div class="wc-card hero">';
+        //     insertHtml += '<div class="wc-card-div imgContainer">';
+        //     insertHtml += '<input type="hidden" name="dlgId" value="dlg_id"/>';
+        //     insertHtml += '<img src="/images/USP_convenience_09.jpg">';
+        //     insertHtml += '<div class="playImg"></div>';
+        //     insertHtml += '<div class="hidden" alt="card_title"></div>';
+        //     insertHtml += '<div class="hidden" alt="card_value"></div>';
+        //     insertHtml += '</div>';
+        //     insertHtml += '<h1>' + language.Please_enter_a_title + '</h1>';
+        //     insertHtml += '<p class="dlgMediaText">' + language.Please_enter_your_content + '</p>';
+        //     insertHtml += '<ul class="wc-card-buttons" style="padding-left: 0px;">';
+        //     insertHtml += '<li><button>BTN_1_TITLE</button></li></ul>';
+        //     insertHtml += '</ul>';
+        //     insertHtml += '</div>';
+        //     insertHtml += '</li></ul></div></div>';
+        //     insertHtml += '<button class="scroll next" disabled=""><img src="/images/02_contents_carousel_btn_right_401x.png"></button>';
+        //     insertHtml += '</div></div></div></div></div>';
+
+        //     $(".dialogView").eq(idx).html(insertHtml);
+        // }
         var triggerEvent = jQuery.Event( 'keyup', { keyCode: 39, which: 39 } );
         $(this).parents('#dialogLayout').find('input[name=dialogTitle]').trigger(triggerEvent);
         $(this).parents('#dialogLayout').find('textarea[name=dialogText]').trigger(triggerEvent);
