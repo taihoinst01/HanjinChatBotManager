@@ -394,12 +394,16 @@ $(document).ready(function() {
         insertForm += '<option value="4">' + language.MEDIA_TYPE + '</option>';
         insertForm += '</select>';
         insertForm += '<div class="clear-both"></div>';
-        insertForm += '<br>';
-        insertForm += '<label>' + language.USING_API + '<span class="nec_ico">*</span> </label>';
-        insertForm += '<select class="form-control" name="dlgType2" id="apiUsing">';
-        insertForm += '<option value="F">' + language.UNUSED + '</option>';
-        insertForm += '<option value="T">' + language.USED + '</option>';
-        insertForm += '</select>';
+
+        //초기메세지관리 화면에서는 api사용여부가 필요없음.
+        if($('#initMessage').val() != 'initMessage'){
+            insertForm += '<br>';
+            insertForm += '<label>' + language.USING_API + '<span class="nec_ico">*</span> </label>';
+            insertForm += '<select class="form-control" name="dlgType2" id="apiUsing">';
+            insertForm += '<option value="F">' + language.UNUSED + '</option>';
+            insertForm += '<option value="T">' + language.USED + '</option>';
+            insertForm += '</select>';
+        }
         insertForm += '<div class="clear-both"></div>';
         insertForm += '</form>';
         insertForm += '</div>';

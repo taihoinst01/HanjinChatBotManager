@@ -314,7 +314,7 @@ function createDialog() {
     var array = [];
     var exit = false;
 
-
+    //노출순서가 null일때 실패
     if($('#dlgOrderNo').val().length < 1){
         alert(language.IS_REQUIRED);
         exit = true;
