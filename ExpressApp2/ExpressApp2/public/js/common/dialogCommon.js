@@ -391,7 +391,7 @@ $(document).ready(function() {
         insertForm += '<select class="form-control" name="dlgType">';
         insertForm += '<option value="2">' + language.TEXT_TYPE + '</option>';
         insertForm += '<option value="3">' + language.CARD_TYPE + '</option>';
-        insertForm += '<option value="4">' + language.MEDIA_TYPE + '</option>';
+        //insertForm += '<option value="4">' + language.MEDIA_TYPE + '</option>';
         insertForm += '</select>';
         insertForm += '<div class="clear-both"></div>';
 
