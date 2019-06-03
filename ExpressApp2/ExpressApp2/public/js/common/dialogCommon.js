@@ -25,7 +25,7 @@ $(document).ready(function() {
         insertForm += '<select class="form-control" name="dlgType">';
         insertForm += '<option value="2">' + language.TEXT_TYPE + '</option>';
         insertForm += '<option value="3">' + language.CARD_TYPE + '</option>';
-        insertForm += '<option value="4">' + language.MEDIA_TYPE + '</option>';
+        //insertForm += '<option value="4">' + language.MEDIA_TYPE + '</option>';
         insertForm += '</select>';
         insertForm += '<div class="clear-both"></div>';
         // insertForm += '<br>';
@@ -426,7 +426,8 @@ $(document).ready(function() {
         dialogView += '<div class="format-markdown">';
         dialogView += '<div class="textMent  ">';
         dialogView += '<h1 class="textTitle">' + language.Please_enter_a_title + '</h1>';
-        dialogView += '<p>' + language.Please_enter + '</p>';
+        dialogView += '<div class="dlg_content">'+language.Please_enter_your_content+'</div>';
+        //dialogView += '<p>' + language.Please_enter + '</p>';//jmh
         dialogView += '</div>';
         dialogView += '</div>';
         dialogView += '</div>';
@@ -468,7 +469,7 @@ $(document).ready(function() {
             insertForm += '<select class="form-control" name="dlgType">';
             insertForm += '<option value="2">' + language.TEXT_TYPE + '</option>';
             insertForm += '<option value="3">' + language.CARD_TYPE + '</option>';
-            insertForm += '<option value="4">' + language.MEDIA_TYPE + '</option>';
+            //insertForm += '<option value="4">' + language.MEDIA_TYPE + '</option>';
             insertForm += '</select>';
             insertForm += '<div class="clear-both"></div>';
             insertForm += '<br>';
@@ -592,7 +593,7 @@ function writeDialog(e) {
         $('.dialogView h1').eq(idx).text(e.value);
     } else {
         if ($(e).parent().prev().find('input[name=dialogTitle]').val() == '') {
-            $('.dialogView').children().eq(icx).find('.textMent .textTitle').text('');
+            $('.dialogView').children().eq(icx).find('.textMent .textTitle').text('');//jmh
         }
         var test = e.value;
         //alert("test111==="+test);
