@@ -33,6 +33,8 @@ var qna = require('./routes/qna/qnaMng');
 
 //file upload
 var uploads = require('./routes/chatbot/upload'); 
+//api manage
+var apiManage = require('./routes/chatbot/apiManage');
 
 var Logger = require("./config/logConfig");
 var logger = Logger.CreateLogger();
@@ -60,6 +62,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/upload', express.static('uploads'));
+app.use('/apiManage', express.static('apiManage'));
 
 var minutes = 60000*15; //60000
 //세션
@@ -360,6 +363,8 @@ app.use('/qna', qna);
 
 //file upload
 app.use('/upload', uploads);
+//api manage
+app.use('/apiManage', apiManage);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

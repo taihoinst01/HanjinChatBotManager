@@ -201,6 +201,7 @@
 	"CHATBOT_SIMUL": "CHATBOT SIMULATION",
 	"DASHBOARD": "DASHBOARD",
 	"FILE_UPLOAD": "FILE UPLOAD",
+	"MANAGE_API": "MANAGE_API",
 	"============= COMMON  =============": "",
 	"IS_REQUIRED": " is required",
 	"SIGN_IN_REQUIRED": "Please sign in.",
