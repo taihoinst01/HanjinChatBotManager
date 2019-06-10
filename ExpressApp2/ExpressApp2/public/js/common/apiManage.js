@@ -395,3 +395,10 @@ function getUpdateApiUrl(apiNum, apiSid, apiName, apiIntent, apiUrl){
 
     $('#apiUrlUpdateModal').modal('show');
 }
+
+//Banned Word List 테이블 페이지 버튼 클릭
+$(document).on('click', '#apiUrlTablePaging .li_paging', function (e) {
+    if (!$(this).hasClass('active')) {
+        makeUploadTable($(this).val());
+    }
+});
