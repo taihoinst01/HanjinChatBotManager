@@ -191,9 +191,9 @@ router.post('/getDlgAjax', function (req, res) {
         + "ORDER BY DLG_ID";
 
     var dlgCard = "SELECT DLG_ID, CARD_TEXT, CARD_TITLE, IMG_URL, BTN_1_TYPE, BTN_1_TITLE, BTN_1_CONTEXT, BTN_1_CONTEXT_M, \n"
-        + "BTN_2_TYPE, BTN_2_TITLE, BTN_2_CONTEXT,\n"
-        + "BTN_3_TYPE, BTN_3_TITLE, BTN_3_CONTEXT,\n"
-        + "BTN_4_TYPE, BTN_4_TITLE, BTN_4_CONTEXT,\n"
+        + "BTN_2_TYPE, BTN_2_TITLE, BTN_2_CONTEXT, BTN_2_CONTEXT_M, \n"
+        + "BTN_3_TYPE, BTN_3_TITLE, BTN_3_CONTEXT, BTN_3_CONTEXT_M,\n"
+        + "BTN_4_TYPE, BTN_4_TITLE, BTN_4_CONTEXT, BTN_4_CONTEXT_M,\n"
         + "CARD_ORDER_NO, CARD_VALUE,\n"
         + "USE_YN, '3' AS DLG_TYPE, \n"
         + " (SELECT API_INTENT FROM TBL_DLG_RELATION_LUIS WHERE DLG_ID = @dlgID ) AS API_INTENT \n"
@@ -393,8 +393,8 @@ router.post('/updateDialog', function (req, res) {
             var inserTblDlgText = 'INSERT INTO TBL_DLG_TEXT(DLG_ID,CARD_TITLE,CARD_TEXT,USE_YN) VALUES ' +
                 '(@dlgId,@dialogTitle,@dialogText,\'Y\')';
 
-            var insertTblCarousel_M = 'INSERT INTO TBL_DLG_CARD(DLG_ID,CARD_TITLE,CARD_TEXT,IMG_URL,BTN_1_TYPE,BTN_1_TITLE,BTN_1_CONTEXT,BTN_1_CONTEXT_M,BTN_2_TYPE,BTN_2_TITLE,BTN_2_CONTEXT,BTN_3_TYPE,BTN_3_TITLE,BTN_3_CONTEXT,BTN_4_TYPE,BTN_4_TITLE,BTN_4_CONTEXT,CARD_ORDER_NO,USE_YN,CARD_VALUE) VALUES ' +
-                '(@dlgId,@dialogTitle,@dialogText,@imgUrl,@btn1Type,@buttonName1,@buttonContent1,@buttonContent1_M,@btn2Type,@buttonName2,@buttonContent2,@btn3Type,@buttonName3,@buttonContent3,@btn4Type,@buttonName4,@buttonContent4,@cardOrderNo,\'Y\',@cardValue)';
+            var insertTblCarousel_M = 'INSERT INTO TBL_DLG_CARD(DLG_ID,CARD_TITLE,CARD_TEXT,IMG_URL,BTN_1_TYPE,BTN_1_TITLE,BTN_1_CONTEXT,BTN_1_CONTEXT_M,BTN_2_TYPE,BTN_2_TITLE,BTN_2_CONTEXT,BTN_3_TYPE,BTN_3_TITLE,BTN_3_CONTEXT,BTN_4_TYPE,BTN_4_TITLE,BTN_4_CONTEXT,CARD_ORDER_NO,USE_YN,CARD_VALUE,BTN_2_CONTEXT_M,BTN_3_CONTEXT_M,BTN_4_CONTEXT_M) VALUES ' +
+                '(@dlgId,@dialogTitle,@dialogText,@imgUrl,@btn1Type,@buttonName1,@buttonContent1,@buttonContent1_M,@btn2Type,@buttonName2,@buttonContent2,@btn3Type,@buttonName3,@buttonContent3,@btn4Type,@buttonName4,@buttonContent4,@cardOrderNo,\'Y\',@cardValue,@buttonContent2_M,@buttonContent3_M,@buttonContent4_M)';
             
             var insertTblDlgMedia_M = 'INSERT INTO TBL_DLG_MEDIA(DLG_ID,CARD_TITLE,CARD_TEXT,MEDIA_URL,BTN_1_TYPE,BTN_1_TITLE,BTN_1_CONTEXT,BTN_2_TYPE,BTN_2_TITLE,BTN_2_CONTEXT,BTN_3_TYPE,BTN_3_TITLE,BTN_3_CONTEXT,BTN_4_TYPE,BTN_4_TITLE,BTN_4_CONTEXT,CARD_DIVISION,CARD_VALUE,USE_YN) VALUES ' +
                 '(@dlgId,@dialogTitle,@dialogText,@imgUrl,@btn1Type,@buttonName1,@buttonContent1,@btn2Type,@buttonName2,@buttonContent2,@btn3Type,@buttonName3,@buttonContent3,@btn4Type,@buttonName4,@buttonContent4,@cardDivision,@cardValue,\'Y\')';
@@ -525,16 +525,19 @@ router.post('/updateDialog', function (req, res) {
                             .input('btn1Type', sql.NVarChar, carTmp["btn1Type"])
                             .input('buttonName1', sql.NVarChar, carTmp["cButtonName1"])
                             .input('buttonContent1', sql.NVarChar, carTmp["cButtonContent1"])
-                            .input('buttonContent1_M', sql.NVarChar, carTmp["cButtonContentM"])
+                            .input('buttonContent1_M', sql.NVarChar, carTmp["cButtonContentM1"])
                             .input('btn2Type', sql.NVarChar, carTmp["btn2Type"])
                             .input('buttonName2', sql.NVarChar, carTmp["cButtonName2"])
                             .input('buttonContent2', sql.NVarChar, carTmp["cButtonContent2"])
+                            .input('buttonContent2_M', sql.NVarChar, carTmp["cButtonContentM2"])
                             .input('btn3Type', sql.NVarChar, carTmp["btn3Type"])
                             .input('buttonName3', sql.NVarChar, carTmp["cButtonName3"])
                             .input('buttonContent3', sql.NVarChar, carTmp["cButtonContent3"])
+                            .input('buttonContent3_M', sql.NVarChar, carTmp["cButtonContentM3"])
                             .input('btn4Type', sql.NVarChar, carTmp["btn4Type"])
                             .input('buttonName4', sql.NVarChar, carTmp["cButtonName4"])
                             .input('buttonContent4', sql.NVarChar, carTmp["cButtonContent4"])
+                            .input('buttonContent4_M', sql.NVarChar, carTmp["cButtonContentM4"])
                             //.input('cardOrderNo', sql.Int, (j + 1))
                             .input('cardOrderNo', sql.Int, carTmp.cardOrderHiddenValue)
                             .query(insertTblCarousel_M);
@@ -1631,8 +1634,8 @@ router.post('/newQna', function (req, res) {
             var inserTblDlgText = 'INSERT INTO TBL_DLG_TEXT(DLG_ID,CARD_TITLE,CARD_TEXT,USE_YN) VALUES ' +
                 '(@dlgId,@dialogTitle,@dialogText,\'Y\')';
                 
-            var insertTblCarousel_M = 'INSERT INTO TBL_DLG_CARD(DLG_ID,CARD_TITLE,CARD_TEXT,IMG_URL,BTN_1_TYPE,BTN_1_TITLE,BTN_1_CONTEXT,BTN_1_CONTEXT_M,BTN_2_TYPE,BTN_2_TITLE,BTN_2_CONTEXT,BTN_3_TYPE,BTN_3_TITLE,BTN_3_CONTEXT,BTN_4_TYPE,BTN_4_TITLE,BTN_4_CONTEXT,CARD_ORDER_NO,USE_YN,CARD_VALUE) VALUES ' +
-            '(@dlgId,@dialogTitle,@dialogText,@imgUrl,@btn1Type,@buttonName1,@buttonContent1,@buttonContent1_M,@btn2Type,@buttonName2,@buttonContent2,@btn3Type,@buttonName3,@buttonContent3,@btn4Type,@buttonName4,@buttonContent4,@cardOrderNo,\'Y\',@cardValue)';
+            var insertTblCarousel_M = 'INSERT INTO TBL_DLG_CARD(DLG_ID,CARD_TITLE,CARD_TEXT,IMG_URL,BTN_1_TYPE,BTN_1_TITLE,BTN_1_CONTEXT,BTN_1_CONTEXT_M,BTN_2_TYPE,BTN_2_TITLE,BTN_2_CONTEXT,BTN_3_TYPE,BTN_3_TITLE,BTN_3_CONTEXT,BTN_4_TYPE,BTN_4_TITLE,BTN_4_CONTEXT,CARD_ORDER_NO,USE_YN,CARD_VALUE,BTN_2_CONTEXT_M,BTN_3_CONTEXT_M,BTN_4_CONTEXT_M) VALUES ' +
+            '(@dlgId,@dialogTitle,@dialogText,@imgUrl,@btn1Type,@buttonName1,@buttonContent1,@buttonContent1_M,@btn2Type,@buttonName2,@buttonContent2,@btn3Type,@buttonName3,@buttonContent3,@btn4Type,@buttonName4,@buttonContent4,@cardOrderNo,\'Y\',@cardValue,@buttonContent2_M,@buttonContent3_M,@buttonContent4_M)';
         
             var insertTblCarousel = 'INSERT INTO TBL_DLG_CARD(DLG_ID,CARD_TITLE,CARD_TEXT,IMG_URL,BTN_1_TYPE,BTN_1_TITLE,BTN_1_CONTEXT,BTN_2_TYPE,BTN_2_TITLE,BTN_2_CONTEXT,BTN_3_TYPE,BTN_3_TITLE,BTN_3_CONTEXT,BTN_4_TYPE,BTN_4_TITLE,BTN_4_CONTEXT,CARD_ORDER_NO,USE_YN,CARD_VALUE) VALUES ' +
                 '(@dlgId,@dialogTitle,@dialogText,@imgUrl,@btn1Type,@buttonName1,@buttonContent1,@btn2Type,@buttonName2,@buttonContent2,@btn3Type,@buttonName3,@buttonContent3,@btn4Type,@buttonName4,@buttonContent4,@cardOrderNo,\'Y\',@cardValue)';
@@ -1743,16 +1746,19 @@ router.post('/newQna', function (req, res) {
                             .input('btn1Type', sql.NVarChar, carTmp["btn1Type"])
                             .input('buttonName1', sql.NVarChar, carTmp["cButtonName1"])
                             .input('buttonContent1', sql.NVarChar, carTmp["cButtonContent1"])
-                            .input('buttonContent1_M', sql.NVarChar, carTmp["cButtonContentM"])
+                            .input('buttonContent1_M', sql.NVarChar, carTmp["cButtonContentM1"])
                             .input('btn2Type', sql.NVarChar, carTmp["btn2Type"])
                             .input('buttonName2', sql.NVarChar, carTmp["cButtonName2"])
                             .input('buttonContent2', sql.NVarChar, carTmp["cButtonContent2"])
+                            .input('buttonContent2_M', sql.NVarChar, carTmp["cButtonContentM2"])
                             .input('btn3Type', sql.NVarChar, carTmp["btn3Type"])
                             .input('buttonName3', sql.NVarChar, carTmp["cButtonName3"])
                             .input('buttonContent3', sql.NVarChar, carTmp["cButtonContent3"])
+                            .input('buttonContent3_M', sql.NVarChar, carTmp["cButtonContentM3"])
                             .input('btn4Type', sql.NVarChar, carTmp["btn4Type"])
                             .input('buttonName4', sql.NVarChar, carTmp["cButtonName4"])
                             .input('buttonContent4', sql.NVarChar, carTmp["cButtonContent4"])
+                            .input('buttonContent4_M', sql.NVarChar, carTmp["cButtonContentM4"])
                             .input('cardOrderNo', sql.Int, (j + 1))
                             .query(insertTblCarousel_M);
                     }

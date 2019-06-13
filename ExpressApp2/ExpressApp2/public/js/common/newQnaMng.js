@@ -144,6 +144,7 @@ function createNewQna() {
         if (tmp[0].value === "3") {
             var btnTypeCount = 1;
             var cButtonContentCount = 1;
+            var cButtonContentCountM = 1;
             var cButtonNameCount = 1;
             for (var j = 1; j < tmp.length; j++) {
                 if (tmp[j].name == 'btnType') {
@@ -159,9 +160,9 @@ function createNewQna() {
                     }
                 }
                 if (tmp[j].name == 'cButtonContentM') {
-                    tmp[j].name = 'cButtonContentM' + (cButtonContentCount++);
-                    if (cButtonContentCount == 5) {
-                        cButtonContentCount = 1;
+                    tmp[j].name = 'cButtonContentM' + (cButtonContentCountM++);
+                    if (cButtonContentCountM == 5) {
+                        cButtonContentCountM = 1;
                     }
                 }
                 if (tmp[j].name == 'cButtonName') {

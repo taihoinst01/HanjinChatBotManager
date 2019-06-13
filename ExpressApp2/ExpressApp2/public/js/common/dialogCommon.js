@@ -427,7 +427,7 @@ $(document).ready(function() {
         dialogView += '<div class="textMent  ">';
         dialogView += '<h1 class="textTitle">' + language.Please_enter_a_title + '</h1>';
         dialogView += '<div class="dlg_content">'+language.Please_enter_your_content+'</div>';
-        //dialogView += '<p>' + language.Please_enter + '</p>';//jmh
+        //dialogView += '<p>' + language.Please_enter + '</p>';
         dialogView += '</div>';
         dialogView += '</div>';
         dialogView += '</div>';
@@ -735,10 +735,12 @@ $(document).on('click', '.btn_delete', function (e) {
     var trLength = $(this).parents('tbody').children().length;
     if (trLength == 1) {
         $(this).parents('.btnInsertDiv').html('');
-        return;
+    }else{
+        //$(this).parent().parent().remove();
+        $(this).parents('tbody').find($(this).parents('tr')).remove();
+       // $('.btnInsertDiv').eq(divIndex).find('tbody tr').eq(trIndex).find("select[name=btnType]").trigger('change');
     }
-    $(this).parent().parent().remove();
-    $('.btnInsertDiv').eq(divIndex).find('tbody tr').eq(trIndex).find("select[name=btnType]").trigger('change');
+    e.preventDefault();//현재 이벤트의 기본동작을 중지
 });
 
 //다이얼로그생성모달 - 버튼추가
@@ -755,11 +757,23 @@ $(document).on('click', '.carouseBtn', function (e) {
         '</tr></thead>' +
         '<tbody>' +
         '<tr>' +
-        '<td><select class="form-control" name="btnType"><option value="imBack" selected>imBack</option>' +
-        '<option value="openUrl">openUrl</option></select></td>' +
-        '<td></td><td><input type="text" name="cButtonName" class="form-control" placeholder="' + language.Please_enter + '"></td>' +
-        '<td></td><td><input type="text" name="cButtonContent" class="form-control" placeholder="' + language.Please_enter + '"></td>' +
-        '<td></td><td><a href="#" class="btn_delete" style="margin:0px;"><span class="fa fa-trash"></span></a></td>' +
+        '<td>' +
+        '<select class="form-control" name="btnType">' +
+        '<option value="imBack" selected>imBack</option>' +
+        '<option value="openUrl">openUrl</option></select> ' +
+        '</td>' +
+        '<td></td>' +
+        '<td>' +
+        '<input type="text" name="cButtonName" class="form-control" placeholder="' + language.Please_enter + '">' +
+        '</td>' +
+        '<td></td>' +
+        '<td>' +
+        '<input type="text" name="cButtonContent" class="form-control" placeholder="' + language.Please_enter + '">' +
+        '</td>' +
+        '<td></td>' +
+        '<td>' + 
+        '<a href="#" class="btn_delete" style="margin:0px;"><span class="fa fa-trash"></span></a>' +
+        '</td>' +
         '</tr></tbody></table></div>';
 
     $btnInsertDiv = $(this).parent().prev().prev().prev();
@@ -906,7 +920,6 @@ function updateDialog() {
     var dlgType = $('#updateDlgType').val();
     var entity = $('#updateDlgEntity').val();
     var relationNum = $('#updateDlgRelationNo').val();
-
     var apiUsing = $('#apiUsing').val();
 
     var idx = $('form[name=dialogLayout]').length;
@@ -967,6 +980,7 @@ function updateDialog() {
         if (tmp[0].value === "3") {
             var btnTypeCount = 1;
             var cButtonContentCount = 1;
+            var cButtonContentCountM = 1;
             var cButtonNameCount = 1;
             for (var j = 1; j < tmp.length; j++) {
                 if (tmp[j].name == 'btnType') {
@@ -981,6 +995,14 @@ function updateDialog() {
                         cButtonContentCount = 1;
                     }
                 }
+
+                if (tmp[j].name == 'cButtonContentM') {
+                    tmp[j].name = 'cButtonContentM' + (cButtonContentCountM++);
+                    if (cButtonContentCountM == 5) {
+                        cButtonContentCountM = 1;
+                    }
+                }
+
                 if (tmp[j].name == 'cButtonName') {
                     tmp[j].name = 'cButtonName' + (cButtonNameCount++);
                     if (cButtonNameCount == 5) {
@@ -1007,7 +1029,7 @@ function updateDialog() {
                 object[tmp[0].name] = tmp[0].value;
                 objectCarousel[tmp[j].name] = tmp[j].value;
             }
-            //carouselArr.push(objectCarousel);
+
             object['carouselArr'] = carouselArr;
         } else if (tmp[0].value === "4") {
 
@@ -1041,7 +1063,7 @@ function updateDialog() {
     }
     
     array[array.length] = JSON.stringify($("form[name=appInsertForm]").serializeObject());//JSON.stringify($("form[name=appInsertForm]"));
-    
+  
     $.ajax({
         url: '/qna/updateDialog',                //주소
         dataType: 'json',                  //데이터 형식
@@ -1448,15 +1470,13 @@ $(document).on("click", "#show_dlg", function () {
                             $("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=cardOrderValue]").html(cardOrderNumStr);
                             $("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=cardOrderValue]").val(tmp.dlg[j].CARD_ORDER_NO).prop("selected", true);
                             
-
-                            //두연
                             if (tmp.dlg[j].BTN_1_TYPE != null && tmp.dlg[j].BTN_1_TYPE != "") {
                                 $("#dialogLayout").find(".carouselLayout").eq(j).find(".btnInsertDiv").append(inputHtml);
                                 for (var k=0; k<2; k++) {
                                     var childBtnVal = $("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=btnType]").children().eq(k).val();
                                     if (childBtnVal == tmp.dlg[j].BTN_1_TYPE) {
-                                        $("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=btnType]").children().eq(k).prop("selected", true);
-                                        $("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=btnType]").trigger('change');
+                                        $("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=btnType]").eq(0).children().eq(k).prop("selected", true);
+                                        $("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=btnType]").eq(0).trigger('change');
                                     }
                                 }
                                 //$("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=btnType]:eq(0)").val(tmp.dlg[j].BTN_1_TYPE).prop("selected", true);
@@ -1466,24 +1486,45 @@ $(document).on("click", "#show_dlg", function () {
                             }
                             if (tmp.dlg[j].BTN_2_TYPE != null && tmp.dlg[j].BTN_2_TYPE != "") {
                                 $("#dialogLayout").find(".carouselLayout").eq(j).find(".cardCopyTbl tbody").append(inputTrHtml);
-
-                                $("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=btnType]:eq(1)").val(tmp.dlg[j].BTN_2_TYPE).prop("selected", true);
+                                for (var k=0; k<2; k++) {
+                                    var childBtnVal = $("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=btnType]").children().eq(k).val();
+                                    if (childBtnVal == tmp.dlg[j].BTN_2_TYPE) {
+                                        $("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=btnType]").eq(1).children().eq(k).prop("selected", true);
+                                        $("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=btnType]").eq(1).trigger('change');
+                                    }
+                                }
+                                //$("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=btnType]:eq(1)").val(tmp.dlg[j].BTN_2_TYPE).prop("selected", true);
                                 $("#dialogLayout").find(".carouselLayout").eq(j).find("input[name=cButtonName]:eq(1)").val(tmp.dlg[j].BTN_2_TITLE);
                                 $("#dialogLayout").find(".carouselLayout").eq(j).find("input[name=cButtonContent]:eq(1)").val(tmp.dlg[j].BTN_2_CONTEXT);
+                                $("#dialogLayout").find(".carouselLayout").eq(j).find("input[name=cButtonContentM]:eq(1)").val(tmp.dlg[j].BTN_2_CONTEXT_M);
                             }
                             if (tmp.dlg[j].BTN_3_TYPE != null && tmp.dlg[j].BTN_3_TYPE != "") {
                                 $("#dialogLayout").find(".carouselLayout").eq(j).find(".cardCopyTbl tbody").append(inputTrHtml);
-
-                                $("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=btnType]:eq(2)").val(tmp.dlg[j].BTN_3_TYPE).prop("selected", true);
+                                for (var k=0; k<2; k++) {
+                                    var childBtnVal = $("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=btnType]").children().eq(k).val();
+                                    if (childBtnVal == tmp.dlg[j].BTN_3_TYPE) {
+                                        $("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=btnType]").eq(2).children().eq(k).prop("selected", true);
+                                        $("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=btnType]").eq(2).trigger('change');
+                                    }
+                                }
+                                //$("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=btnType]:eq(2)").val(tmp.dlg[j].BTN_3_TYPE).prop("selected", true);
                                 $("#dialogLayout").find(".carouselLayout").eq(j).find("input[name=cButtonName]:eq(2)").val(tmp.dlg[j].BTN_3_TITLE);
                                 $("#dialogLayout").find(".carouselLayout").eq(j).find("input[name=cButtonContent]:eq(2)").val(tmp.dlg[j].BTN_3_CONTEXT);
+                                $("#dialogLayout").find(".carouselLayout").eq(j).find("input[name=cButtonContentM]:eq(2)").val(tmp.dlg[j].BTN_3_CONTEXT_M);
                             }
                             if (tmp.dlg[j].BTN_4_TYPE != null && tmp.dlg[j].BTN_4_TYPE != "") {
                                 $("#dialogLayout").find(".carouselLayout").eq(j).find(".cardCopyTbl tbody").append(inputTrHtml);
-
-                                $("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=btnType]:eq(3)").val(tmp.dlg[j].BTN_4_TYPE).prop("selected", true);
+                                for (var k=0; k<2; k++) {
+                                    var childBtnVal = $("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=btnType]").children().eq(k).val();
+                                    if (childBtnVal == tmp.dlg[j].BTN_4_TYPE) {
+                                        $("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=btnType]").eq(3).children().eq(k).prop("selected", true);
+                                        $("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=btnType]").eq(3).trigger('change');
+                                    }
+                                }
+                                //$("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=btnType]:eq(3)").val(tmp.dlg[j].BTN_4_TYPE).prop("selected", true);
                                 $("#dialogLayout").find(".carouselLayout").eq(j).find("input[name=cButtonName]:eq(3)").val(tmp.dlg[j].BTN_4_TITLE);
                                 $("#dialogLayout").find(".carouselLayout").eq(j).find("input[name=cButtonContent]:eq(3)").val(tmp.dlg[j].BTN_4_CONTEXT);
+                                $("#dialogLayout").find(".carouselLayout").eq(j).find("input[name=cButtonContentM]:eq(3)").val(tmp.dlg[j].BTN_4_CONTEXT_M);
                             }
                         } else if (tmp.dlg[j].DLG_TYPE == 4) {
                             
@@ -1663,19 +1704,17 @@ function prevBtn(botChatNum) {
 
 
 
-
+//select박스에서 openUrl로 변경시 모바일 입력input박스 추가
 $(document).on('change', 'select[name=btnType]', function (e) {
 
     var selBtnTypVal = $(this).val();
     var trIndex = $(this).parents('tbody').find('tr').index($(this).parents('tr'));
     if (selBtnTypVal == 'openUrl') {
-        if (trIndex == 0) {
             var appendInput = '<input type="text" name="cButtonContentM" class="form-control" placeholder="' + language.INPUT_BTN_URL_MOBILE + '">';
             $(this).parents('tr').find('input[name=cButtonContent]').attr('placeholder', language.INPUT_BTN_URL_PC );
             $(this).parents('tr').find('input[name=cButtonContent]').after(appendInput);
-        } else {
-            $(this).parents('tr').find('input[name=cButtonContent]').attr('placeholder', language.INPUT_BTN_URL_PC );
-        }
+    } else if(selBtnTypVal == 'imBack'){
+        $(this).parents('tr').find('input[name=cButtonContentM]').remove();
     }
 
 });
