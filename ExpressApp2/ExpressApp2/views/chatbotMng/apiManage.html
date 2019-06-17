@@ -64,13 +64,14 @@
                                     <!-- 학습 추천 테이블 --> 
                                     <div class="Tbl_wrap">
                                         <table class="Tbl" summary="api 관리">
-                                            <colgroup><col width="5%"/><col width="5%"/><col width="20%"/><col width="20%"><col width="50%"></colgroup>
+                                            <colgroup><col width="5%"/><col width="5%"/><col width="13%"/><col width="13%"/><col width="14%"><col width="50%"></colgroup>
                                                   <tr>
                                                       <th><%= __('NUM') %></th>
                                                       <th>&nbsp;</th>
-                                                      <th><%= __('API_NAME') %></th>
-                                                      <th><%= __('API_INTENT') %></th>
-                                                      <th><%= __('API_URL') %></th>
+                                                      <th style="text-align: left"><%= __('API_NAME') %></th>
+                                                      <th style="text-align: left"><%= __('API_KORNAME') %></th>
+                                                      <th style="text-align: left"><%= __('API_INTENT') %></th>
+                                                      <th style="text-align: left"><%= __('API_URL') %></th>
                                                   </tr>
                                                 <tbody id="apiUrlBody">
                                                     
@@ -114,6 +115,10 @@
                                             <label for="inputEmail3" ><i class="fa fa-asterisk"></i> API Name</label>
                                             <input type="text" class="form-control" id="ori_apiName" name="ori_apiName" placeholder="<%= __('Please_enter_a_api_name') %>" spellcheck="false" autocomplete='off'>
                                         </div>
+                                        <div class="form-group updateApiUrlNameValDiv">
+                                            <label for="inputEmail3" ><i class="fa fa-asterisk"></i> API KorName</label>
+                                            <input type="text" class="form-control" id="ori_apiKorName" name="ori_apiKorName" placeholder="<%= __('Please_enter_a_api_name') %>" spellcheck="false" autocomplete='off'>
+                                        </div>
                                         <div class="form-group">
                                             <label for="inputEmail3" ><i class="fa fa-asterisk"></i> API Intent</label>                       
                                             <select class="form-control" id="ori_apiIntent" name="ori_apiIntent">
@@ -155,6 +160,10 @@
                                         <div class="form-group">
                                             <label for="inputEmail3" ><i class="fa fa-asterisk"></i> API Name</label>
                                             <input type="text" class="form-control" id="api_name" name="api_name" placeholder="<%= __('Please_enter_a_api_name') %>" spellcheck="false" autocomplete='off'>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" ><i class="fa fa-asterisk"></i> API KorName</label>
+                                            <input type="text" class="form-control" id="api_korName" name="api_korName" placeholder="<%= __('Please_enter_a_api_name') %>" spellcheck="false" autocomplete='off'>
                                         </div>
                                         <div class="form-group">
                                             <label for="inputEmail3" ><i class="fa fa-asterisk"></i> API Intent</label>                       

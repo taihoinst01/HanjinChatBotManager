@@ -123,7 +123,8 @@ function makeUploadTable(page) {
                 for (var i = 0; i < data.rows.length; i++) {
                     tableHtml += '<tr style="cursor:pointer" name="userTr"><td>' + data.rows[i].NUM + '</td>';
                     tableHtml += '<td><input type="checkbox" class="flat-red" name="DELETE_SID" id="DELETE_SID" value="'+ data.rows[i].SID+'"></td>';
-                    tableHtml += '<td class="txt_left tex01"><a onClick="getUpdateApiUrl('+data.rows[i].NUM+','+data.rows[i].SID+',\''+data.rows[i].API_NAME+'\',\''+data.rows[i].API_INTENT+'\',\''+data.rows[i].API_URL+'\'); return false;">' + data.rows[i].API_NAME + '</a></td>';
+                    tableHtml += '<td class="txt_left tex01"><a onClick="getUpdateApiUrl('+data.rows[i].NUM+','+data.rows[i].SID+',\''+data.rows[i].API_NAME+'\',\''+data.rows[i].API_INTENT+'\',\''+data.rows[i].API_URL+'\',\''+data.rows[i].API_KORNAME+'\'); return false;">' + data.rows[i].API_NAME + '</a></td>';
+                    tableHtml += '<td class="txt_left">' + data.rows[i].API_KORNAME + '</td>';
                     tableHtml += '<td class="txt_left">' + data.rows[i].API_INTENT + '</td>';
                     tableHtml += '<td class="txt_left">' + data.rows[i].API_URL + '</td>';
                     tableHtml += '</tr>';
@@ -140,7 +141,7 @@ function makeUploadTable(page) {
                 $('#apiUrlTablePaging .pagination').html('').append(data.pageList);
 
             } else {
-                saveTableHtml = '<tr><td colspan="5" class="text-center">'+language.NO_DATA+'</td></tr>';
+                saveTableHtml = '<tr><td colspan="6" class="text-center">'+language.NO_DATA+'</td></tr>';
                 $('#apiUrlBody').html(saveTableHtml);
                 $('#apiUrlTablePaging .pagination').html('');
             }
@@ -238,6 +239,7 @@ function apiUrlProc(procType) {
     var data = new Object();
     var regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
     var sQuery = "";
+    var api_korName ="";
 
     if (procType=="DEL"){
         $("input[name=DELETE_SID]:checked").each(function() {
@@ -252,8 +254,10 @@ function apiUrlProc(procType) {
     } else if(procType=="ADD"){
         $('#api_name').val().replace(/ /g, '');
         sQuery = $('#api_name').val().replace(regExp, "");
+        api_korName = $('#api_korName').val().replace(regExp, "");
         data.statusFlag = procType;
         data.NAME = sQuery;
+        data.API_KORNAME = api_korName;
         data.INTENT = $('#insertApiUrlIntent').val();
         data.URL = $('#api_url').val();
         saveArr.push(data);
@@ -262,6 +266,7 @@ function apiUrlProc(procType) {
         data.statusFlag = procType;
         data.SID = $('#ori_apiSid').val();
         data.NAME = $('#ori_apiName').val();
+        data.API_KORNAME = $('#ori_apiKorName').val();
         data.INTENT = $('#ori_apiIntent').val();
         data.URL = $('#ori_apiUrl').val();
 
@@ -318,11 +323,12 @@ function reloadPage(){
 function dialogValidation(type){
     if(type=="NEW"){
         var apiNameText = $('#api_name').val().trim();
+        var apiKorNameText = $('#api_korName').val().trim();
         var apiUrlText = $('#apiUrlValue').val().trim();
         var valueText = true;
         var result = "false";
 
-        if(apiNameText != "" && apiUrlText != "" && valueText) {
+        if(apiNameText != "" && apiKorNameText != "" && apiUrlText != "" && valueText) {
             //$('#addSmallTalk').removeClass("disable");
             //$('#addSmallTalk').attr("disabled", false);
             result = "success";
@@ -343,6 +349,15 @@ function dialogValidation(type){
                 return;
             }
         });
+
+        //수정 모달창에서 korName값이 미입력일 경우
+        $('#ori_apiKorName').each(function() {
+            if ($(this).val().trim() === "") {
+                valueText = false;
+                return;
+            }
+        });
+
         //수정 모달창에서 url값이 미입력일 경우
         $('#ori_apiUrl').each(function() {
             if ($(this).val().trim() === "") {
@@ -380,18 +395,20 @@ function makeApiUrlData(type){
 }
 
 //api name 클릭시 발생되는 수정 모달창 이벤트
-function getUpdateApiUrl(apiNum, apiSid, apiName, apiIntent, apiUrl){
+function getUpdateApiUrl(apiNum, apiSid, apiName, apiIntent, apiUrl, apiKorName){
     
     var ori_apiNum = apiNum;
     var ori_apiSid = apiSid;
     var ori_apiName = apiName;
     var ori_apiIntent = apiIntent;
     var ori_apiUrl = apiUrl;
+    var ori_apiKorName = apiKorName;
 
     $('#ori_apiName').val(ori_apiName);
     $('#ori_apiSid').val(ori_apiSid);
     $('select[name=ori_apiIntent]').val(ori_apiIntent).prop("selected", true);
     $('#ori_apiUrl').val(ori_apiUrl);
+    $('#ori_apiKorName').val(ori_apiKorName);
 
     $('#apiUrlUpdateModal').modal('show');
 }
