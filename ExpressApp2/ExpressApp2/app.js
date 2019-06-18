@@ -35,6 +35,8 @@ var qna = require('./routes/qna/qnaMng');
 var uploads = require('./routes/chatbot/upload'); 
 //api manage
 var apiManage = require('./routes/chatbot/apiManage');
+//user report
+var userReport = require('./routes/chatbot/userReport');
 
 var Logger = require("./config/logConfig");
 var logger = Logger.CreateLogger();
@@ -63,7 +65,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/upload', express.static('uploads'));
 app.use('/apiManage', express.static('apiManage'));
-
+app.use('/userReport', express.static('userReport'));
 var minutes = 60000*15; //60000
 //세션
 app.use(
@@ -365,6 +367,8 @@ app.use('/qna', qna);
 app.use('/upload', uploads);
 //api manage
 app.use('/apiManage', apiManage);
+//user report
+app.use('/userReport', userReport);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
