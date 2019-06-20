@@ -49,11 +49,25 @@ function makeUploadTable(page) {
 
             if (data.rows) {
                 var tableHtml = "";
+
+                //날짜 가공
+                var year = [];
+                var month = [];
+                var day = [];
+                var hour =[];
+                var minute = [];
+
                 for (var i = 0; i < data.rows.length; i++) {
+                    year[i] = data.rows[i].R_WDATE.substring(0,4);
+                    month[i] = data.rows[i].R_WDATE.substring(5,7);
+                    day[i]= data.rows[i].R_WDATE.substring(8,10);
+                    hour[i]= data.rows[i].R_WDATE.substring(11,13);
+                    minute[i]= data.rows[i].R_WDATE.substring(14,16);
+
                     tableHtml += '<tr style="cursor:pointer" name="userTr"><td>' + data.rows[i].NUM + '</td>';
                     tableHtml += '<td class="txt_left" style="text-align: center !important;">' + data.rows[i].R_COUNT + ' 점 </td>';
-                    tableHtml += '<td class="txt_left" style="text-align: center !important;">' + data.rows[i].R_COMMENT + '</td>';
-                    tableHtml += '<td class="txt_left" style="text-align: center !important;">' + data.rows[i].R_WDATE + '</td>';
+                    tableHtml += '<td class="txt_left">' + data.rows[i].R_COMMENT + '</td>';
+                    tableHtml += '<td class="txt_left" style="text-align: center !important;">' + year[i] + '년 ' +  month[i] + '월 ' + day[i] + '일 ' + hour[i] + '시 ' + minute[i] + '분 ' +'</td>';
                     tableHtml += '</tr>';
                 }
 
