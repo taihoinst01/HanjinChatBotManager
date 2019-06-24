@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <%include  ../common/commonLib.html%>
+    <link rel="stylesheet" href="/common/css/reportInsert.css">
+        <!--<script src="/common/js/bootstrap.min.js"></script>-->
+        <script type="text/javascript" src="/js/common/reportInsert.js"></script>
+        <script>          
+        </script>
+
+</head>
+
+<body >
+    <div class="wrapper">
+        <div class="reportTitle">                
+            <h3>챗봇 상담 만족도 평가하기</h3>
+        </div>
+        <br>
+        <form name="reportInsertForm" id="reportInsertForm" method="post">
+            <div class="starRev" style="text-align: center">
+                <span class="starR starOn">별1</span>&nbsp;&nbsp;&nbsp;
+                <span class="starR">별2</span>&nbsp;&nbsp;&nbsp;
+                <span class="starR">별3</span>&nbsp;&nbsp;&nbsp;
+                <span class="starR">별4</span>&nbsp;&nbsp;&nbsp;
+                <span class="starR">별5</span>
+            </div>
+            <br>
+            <div class="reportContents">
+                <div class="reportContentsTitle">
+                    <h4>챗봇 상담 후기</h4>
+                </div>
+                <div class="reportContentsGuidance">
+                    <h6>고객님의 소중한 의견을 남겨주세요(150자 이내 작성 가능)</h4>
+                </div>
+                <div class="reportContentsMessage">
+                    <textarea id="contentsMessage" placeholder="<%= __('Please_enter') %>"></textarea>
+                </div>
+            </div>
+        </form>
+        <div class="reportContents-footer">
+            <button type="button" class="btn btn_01" id="reportInsertBtn"><i class="fa fa-edit"></i> <%= __('SAVE') %></button>
+            <button type="button" class="btn btn-default btnClose"><i class="fa fa-times"></i> <%= __('CLOSE') %></button>
+        </div>
+    </div>
+</body>
+
+</html>

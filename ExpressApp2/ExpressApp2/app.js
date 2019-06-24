@@ -37,6 +37,8 @@ var uploads = require('./routes/chatbot/upload');
 var apiManage = require('./routes/chatbot/apiManage');
 //user report
 var userReport = require('./routes/chatbot/userReport');
+//report Insert
+var reportInsert = require('./routes/chatbot/reportInsert');
 
 var Logger = require("./config/logConfig");
 var logger = Logger.CreateLogger();
@@ -66,6 +68,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/upload', express.static('uploads'));
 app.use('/apiManage', express.static('apiManage'));
 app.use('/userReport', express.static('userReport'));
+app.use('/reportInsert', express.static('reportInsert'));
 var minutes = 60000*15; //60000
 //세션
 app.use(
@@ -369,6 +372,8 @@ app.use('/upload', uploads);
 app.use('/apiManage', apiManage);
 //user report
 app.use('/userReport', userReport);
+//report Insert
+app.use('/reportInsert', reportInsert);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

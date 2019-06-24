@@ -39,6 +39,12 @@
                     <input type="hidden" name='currentPage' id="currentPage" value="1" />
                     <div class="box  color-palette-box">
                         <div class="box-body">
+                            <div class="modal-body search_op">                                       
+                                <div class="form-group col-lg-3 fr"  style=" margin-top:20px;text-align:right; padding-right:0px;">
+                                    <button type="button" id="createReportBtn" class="btn btn-default " onclick='javascript:window.open("/reportInsert/reportInsert", "후기 등록", "width=440,height=330,top="+(screen.height-330)/2+",left="+(screen.width-440)/2+", scrollbars=no")'><i class="fa fa-plus"></i> <%= __('REPORT_INSERT') %></button> 
+                                </div>
+                            </div>
+
                             <div class="Tbl_wrap">
                                 <table class="Tbl" summary="챗봇 후기">
                                     <colgroup><col width="5%"/><col width="5%"/><col width="75%"/><col width="15%"/></colgroup>

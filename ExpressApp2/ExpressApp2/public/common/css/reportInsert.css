@@ -1,0 +1,36 @@
+.starR{
+	background: url('http://miuu227.godohosting.com/images/icon/ico_review.png') no-repeat right 0;
+	background-size: auto 100%;
+	width: 30px;
+	height: 30px;
+	display: inline-block;
+	text-indent: -9999px;
+	cursor: pointer;
+}
+.starR.starOn{
+	background-position:0 0;
+}
+.reportTitle h3{
+	text-align: center; 
+	font-weight: 900;
+}
+.reportContentsTitle h4{
+	font-weight: 600;
+	padding-left: 20px;
+}
+
+.reportContentsGuidance h6{
+	color: #bebebe;
+	padding-left: 20px;
+}
+.reportContentsMessage{
+	text-align: center;
+}
+.reportContentsMessage #contentsMessage{
+	border: 1px solid #bebebe;
+	width: 400px;
+	height: 100px;
+}
+.reportContents-footer{
+	text-align: center;
+}

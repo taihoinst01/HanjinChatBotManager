@@ -388,6 +388,7 @@
 	"REPORT_COUNT": "후기 점수",
 	"REPORT_COMMENT": "후기 내용",
 	"REPORT_WDATE": "후기 작성 날짜",
+	"REPORT_INSERT": "후기 등록",
 	"============= 챗봇관리-로그관리 =============": "",
 	"LOG_TITLE": "로그 관리",
 	"REPLY_TIME": "답변 시간",
