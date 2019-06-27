@@ -89,11 +89,9 @@ function makeInitDlgTable() {
                     if(data.list[i].DLG_GROUP==1){
                         dlgGroupHtml = language.WELCOME_MESSAGE;
                     }else if(data.list[i].DLG_GROUP==5){
-                        dlgGroupHtml = language.SORRY_MESSAGE;
+                        dlgGroupHtml = language.SORRY_MESSAGE1;
                     }else if(data.list[i].DLG_GROUP==6){
-                        dlgGroupHtml = language.SUGGEST_MESSAGE1;
-                    }else if(data.list[i].DLG_GROUP==7){
-                        dlgGroupHtml = language.SUGGEST_MESSAGE2;
+                        dlgGroupHtml = language.SORRY_MESSAGE2;
                     }else if(data.list[i].DLG_GROUP==3){
                         dlgGroupHtml = language.BANDEDWORD_TYPE1;
                     }else if(data.list[i].DLG_GROUP==4){

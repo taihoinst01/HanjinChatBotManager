@@ -403,7 +403,7 @@ $(document).ready(function() {
             insertForm += '<option value="T">' + language.USED + '</option>';
             insertForm += '</select>';
         }
-        insertForm += '<div class="clear-both"></div>';
+        //insertForm += '<div class="clear-both"></div>';
         insertForm += '</form>';
         insertForm += '</div>';
         insertForm += '</div>';
