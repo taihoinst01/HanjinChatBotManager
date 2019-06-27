@@ -16,7 +16,22 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-    
+    $('#dlgGroup').change(function () {
+        var dlgType = document.getElementById("dlgType");
+        if($('#dlgGroup').val() == 5 || $('#dlgGroup').val() == 6 ){
+            $('select[name="dlgType"] option[value="3"]').remove();
+        } else if($('#dlgGroup').val() == 1 || $('#dlgGroup').val() == 3 || $('#dlgGroup').val() == 4){
+            $('select[name="dlgType"]').empty();
+            var option1 = document.createElement("option");        
+            option1.text = "텍스트 타입";
+            option1.value = 2;                    
+            dlgType.options.add(option1);
+            var option2 = document.createElement("option");        
+            option2.text = "카드 타입";
+            option2.value = 3;                    
+            dlgType.options.add(option2);
+        }
+    });
 });
 var listPageNo = "";
 function makeInitDlgTable() {

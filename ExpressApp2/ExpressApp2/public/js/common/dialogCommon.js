@@ -388,10 +388,9 @@ $(document).ready(function() {
         insertForm += '<div class="form-group" >';
         insertForm += '<form name="dialogLayout" id="dialogLayout">';
         insertForm += '<label>' + language.DIALOG_BOX_TYPE + '<span class="nec_ico">*</span> </label>';
-        insertForm += '<select class="form-control" name="dlgType">';
+        insertForm += '<select class="form-control" name="dlgType" id="dlgType">';
         insertForm += '<option value="2">' + language.TEXT_TYPE + '</option>';
         insertForm += '<option value="3">' + language.CARD_TYPE + '</option>';
-        //insertForm += '<option value="4">' + language.MEDIA_TYPE + '</option>';
         insertForm += '</select>';
         insertForm += '<div class="clear-both"></div>';
 

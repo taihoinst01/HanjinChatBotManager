@@ -134,9 +134,8 @@
                                     <!--<textarea class="form-control" name="description" id="description" rows="3" placeholder="<%= __('Please_enter') %>"></textarea>-->
                                     <select id="dlgGroup" name="dlgGroup" class="form-control">
                                         <option value="1" selected><%= __('WELCOME_MESSAGE') %></option>
-                                        <option value="5"><%= __('SORRY_MESSAGE') %></option>
-                                        <option value="6"><%= __('SUGGEST_MESSAGE1') %></option>
-                                        <option value="7"><%= __('SUGGEST_MESSAGE2') %></option>
+                                        <option value="5"><%= __('SORRY_MESSAGE1') %></option>
+                                        <option value="6"><%= __('SORRY_MESSAGE2') %></option>
                                         <option value="3"><%= __('BANDEDWORD_TYPE1') %></option>
                                         <option value="4"><%= __('BANDEDWORD_TYPE2') %></option>
                                     </select>
@@ -149,7 +148,7 @@
                                         <form name="dialogLayout" id="dialogLayout">
                                                                             
                                             <label><%= __('DIALOG_BOX_TYPE') %><span class="nec_ico">*</span> </label>
-                                            <select class="form-control" name="dlgType"> 
+                                            <select class="form-control" name="dlgType" id="dlgType"> 
                                                 <option value="2"><%= __('TEXT_TYPE') %></option>
                                                 <option value="3"><%= __('CARD_TYPE') %></option>
                                             </select>  
