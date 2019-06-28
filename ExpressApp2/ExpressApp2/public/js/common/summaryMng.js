@@ -78,7 +78,6 @@ function makeSummaryTable() {
                     tableHtml += '<tr>';
                     tableHtml += '<td class="txt_left tex01">' + data.rows[i].CUSTOMER_COMMENT_KR + '</td>';
                     tableHtml += '<td class="txt_left">' + data.rows[i].CHATBOT_COMMENT_CODE + '</td>';
-                    tableHtml += '<td>' + data.rows[i].USER_ID + '</td>';
                     tableHtml += '<td>' + data.rows[i].RESULT + '</td>';
                     tableHtml += '<td>' + data.rows[i].REG_DATE_TIME + '</td>';
                     tableHtml += '</tr>';

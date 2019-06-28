@@ -656,9 +656,9 @@ router.post('/selectSummaryList', function (req, res) {
             "WHERE 1=1  \n" +
             "AND REG_DATE >= '"+startDateTime+"'  \n" +
             "AND REG_DATE < '"+endDateTime+"'  \n" +
-            "AND USER_ID IS NOT NULL  \n" +
-            "AND USER_ID <> ''  \n" +
-            "AND USER_ID NOT IN ('ejnam', 'ep47','sbpark88','lyhaz7','sokang337','srjang','p41044104','parkfaith','tiger820','jmh2244','dbendus','kevin82','eunyeong')  \n" +
+//            "AND USER_ID IS NOT NULL  \n" +
+//            "AND USER_ID <> ''  \n" +
+//            "AND USER_ID NOT IN ('ejnam', 'ep47','sbpark88','lyhaz7','sokang337','srjang','p41044104','parkfaith','tiger820','jmh2244','dbendus','kevin82','eunyeong')  \n" +
             "ORDER BY SID ASC;  \n";
             //logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'TBL_SMALLTALK 테이블 조회');
 

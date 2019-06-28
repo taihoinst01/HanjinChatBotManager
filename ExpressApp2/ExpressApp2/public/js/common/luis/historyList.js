@@ -323,7 +323,7 @@ function makeHistoryTable(newPage) {
                         tableHtml += '<tr name="userTr">';
                         tableHtml += '<td>' + data.rows[i].NUM + '</td>';
                         tableHtml += '<td style="text-align: left; padding-left:1%;"><a href="#" onClick="getHistoryDetail(' + data.rows[i].SID + '); return false;" >'+ data.rows[i].CUSTOMER_COMMENT_KR + '</a></td>';
-                        tableHtml += '<td>' + userIdText + '</td>';
+                        //tableHtml += '<td>' + userIdText + '</td>';
                         tableHtml += '<td>' + data.rows[i].SAME_CNT + '</td>';
                         //tableHtml += '<td>' + data.rows[i].CHATBOT_COMMENT_CODE + '</td>';
                         tableHtml += '<td>' + mobilePcText + '</td>';
