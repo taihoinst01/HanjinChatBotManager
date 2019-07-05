@@ -996,9 +996,10 @@ function updateDialog() {
                 }
 
                 if (tmp[j].name == 'cButtonContentM') {
-                    tmp[j].name = 'cButtonContentM' + (cButtonContentCountM++);
-                    if (cButtonContentCountM == 5) {
-                        cButtonContentCountM = 1;
+                    if(btnTypeCount == 1) {
+                        tmp[j].name = 'cButtonContentM4';    
+                    } else {
+                        tmp[j].name = 'cButtonContentM' + (btnTypeCount - 1);
                     }
                 }
 
@@ -1495,7 +1496,7 @@ $(document).on("click", "#show_dlg", function () {
                                 //$("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=btnType]:eq(1)").val(tmp.dlg[j].BTN_2_TYPE).prop("selected", true);
                                 $("#dialogLayout").find(".carouselLayout").eq(j).find("input[name=cButtonName]:eq(1)").val(tmp.dlg[j].BTN_2_TITLE);
                                 $("#dialogLayout").find(".carouselLayout").eq(j).find("input[name=cButtonContent]:eq(1)").val(tmp.dlg[j].BTN_2_CONTEXT);
-                                $("#dialogLayout").find(".carouselLayout").eq(j).find("input[name=cButtonContentM]:eq(1)").val(tmp.dlg[j].BTN_2_CONTEXT_M);
+                                $("#dialogLayout").find(".carouselLayout").eq(j).find("input[name=cButtonContent]:eq(1)").next().val(tmp.dlg[j].BTN_2_CONTEXT_M);
                             }
                             if (tmp.dlg[j].BTN_3_TYPE != null && tmp.dlg[j].BTN_3_TYPE != "") {
                                 $("#dialogLayout").find(".carouselLayout").eq(j).find(".cardCopyTbl tbody").append(inputTrHtml);
@@ -1509,7 +1510,7 @@ $(document).on("click", "#show_dlg", function () {
                                 //$("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=btnType]:eq(2)").val(tmp.dlg[j].BTN_3_TYPE).prop("selected", true);
                                 $("#dialogLayout").find(".carouselLayout").eq(j).find("input[name=cButtonName]:eq(2)").val(tmp.dlg[j].BTN_3_TITLE);
                                 $("#dialogLayout").find(".carouselLayout").eq(j).find("input[name=cButtonContent]:eq(2)").val(tmp.dlg[j].BTN_3_CONTEXT);
-                                $("#dialogLayout").find(".carouselLayout").eq(j).find("input[name=cButtonContentM]:eq(2)").val(tmp.dlg[j].BTN_3_CONTEXT_M);
+                                $("#dialogLayout").find(".carouselLayout").eq(j).find("input[name=cButtonContent]:eq(2)").next().val(tmp.dlg[j].BTN_3_CONTEXT_M);
                             }
                             if (tmp.dlg[j].BTN_4_TYPE != null && tmp.dlg[j].BTN_4_TYPE != "") {
                                 $("#dialogLayout").find(".carouselLayout").eq(j).find(".cardCopyTbl tbody").append(inputTrHtml);
@@ -1523,7 +1524,7 @@ $(document).on("click", "#show_dlg", function () {
                                 //$("#dialogLayout").find(".carouselLayout").eq(j).find("select[name=btnType]:eq(3)").val(tmp.dlg[j].BTN_4_TYPE).prop("selected", true);
                                 $("#dialogLayout").find(".carouselLayout").eq(j).find("input[name=cButtonName]:eq(3)").val(tmp.dlg[j].BTN_4_TITLE);
                                 $("#dialogLayout").find(".carouselLayout").eq(j).find("input[name=cButtonContent]:eq(3)").val(tmp.dlg[j].BTN_4_CONTEXT);
-                                $("#dialogLayout").find(".carouselLayout").eq(j).find("input[name=cButtonContentM]:eq(3)").val(tmp.dlg[j].BTN_4_CONTEXT_M);
+                                $("#dialogLayout").find(".carouselLayout").eq(j).find("input[name=cButtonContent]:eq(3)").next().val(tmp.dlg[j].BTN_4_CONTEXT_M);
                             }
                         } else if (tmp.dlg[j].DLG_TYPE == 4) {
                             

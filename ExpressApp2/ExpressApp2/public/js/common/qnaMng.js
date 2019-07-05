@@ -18,7 +18,7 @@ var language;
 })(jQuery);
 
 $(document).ready(function() {
-    makeQnaListTable();    
+    makeQnaListTable(1);    
 });
 
 var del_similar_id;
