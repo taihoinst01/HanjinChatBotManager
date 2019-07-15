@@ -1149,6 +1149,7 @@ var pageNo = "";
 //dlg 저장
 var dlgMap = new Object();
 $(document).on("click", "#show_dlg", function () {
+    
     var dlgID = $(this).attr("dlg_id");
     var pageType = $(this).attr("page_type");
     var listPageNo = $(this).attr("listPageNo");
@@ -1614,7 +1615,7 @@ $(document).on("click", "#show_dlg", function () {
                 }
             }
             $('.dialogView').html(inputUttrHtml);
-
+            
             if(pageType=="qna"){
                 //대화상자 수정 추가
                 if(result['list'].length == 0){
@@ -1629,8 +1630,8 @@ $(document).on("click", "#show_dlg", function () {
                 }
                 $('h4#myModalLabel.modal-title').text(language.Show_dlg);
                 
-
-                $('#dlgQuestion').text(show_question);
+                //$('#dlgQuestion').text(show_question);
+                $('#dlgQuestion').val(show_question);
                 $('#luisIntent').text(show_intent);
                 $("#createDialog").attr('onclick', 'updateDialog()');
                 $("#createDialog").text(language.MODIFY);
