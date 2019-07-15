@@ -1086,7 +1086,7 @@ function makeQnaListTable(page) {
                     tableHtml += '<td class="txt_left">' + data.rows[i].DLG_QUESTION + '</td>';
                     
                     tableHtml += '<td>' + data.rows[i].INTENT + '</td>';
-                    tableHtml += '<td class="txt_left">' + data.rows[i].ENTITY + '</td>';
+                    //tableHtml += '<td class="txt_left">' + data.rows[i].ENTITY + '</td>';
                     tableHtml += '<td class="tex01"><button type="button" class="btn btn-default btn-sm" id="show_dlg" listPageNo="'+listPageNo+'" page_type="qna" dlg_id="' + data.rows[i].DLG_ID + '"><i class="fa fa-edit"></i> ' + language.Show_dlg + '</button></td>';
                     //tableHtml += '<td class="tex01"><button type="button" class="btn btn-default btn-sm" id="show_dlg" onClick="searchDialog(\'' + data.rows[i].DLG_ID + '\',\'qna\')"><i class="fa fa-edit"></i> ' + language.Show_dlg + '</button></td>';
                     tableHtml += '<td class="tex01">';
@@ -1104,7 +1104,7 @@ function makeQnaListTable(page) {
                             tableHtml += '<tr>';
                             tableHtml += '<td></td>';
                             tableHtml += '<td colspan="2" class="txt_left"><i class="fa fa-caret-right" aria-hidden="true"></i> '+data.rows[i].subQryList[j].DLG_QUESTION +'</td>';
-                            tableHtml += '<td class="txt_left">'+data.rows[i].subQryList[j].ENTITY +'</td>';
+                            //tableHtml += '<td class="txt_left">'+data.rows[i].subQryList[j].ENTITY +'</td>';
                             tableHtml += '<td></td>';
                             tableHtml += '<td class="tex01"><button type="button" class="btn btn-default btn-sm" id="delete_similar" del_similar_id="' + data.rows[i].subQryList[j].SEQ + '"><i class="fa fa-trash"></i></button></td>';
                             tableHtml += '</tr>';

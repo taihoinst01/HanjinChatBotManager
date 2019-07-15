@@ -388,7 +388,10 @@ router.post('/updateDialog', function (req, res) {
                 '(@dlgId,@dialogTitle,@dialogDesc,\'KO\',@dlgType,@dialogOrderNo,\'Y\',@groupl,@groupm,@groups,2,@relationNum)';
 
             //api사용여부 jmh
-            var updteRelationQuery = "UPDATE TBL_DLG_RELATION_LUIS SET API_INTENT = @apiUsing WHERE DLG_ID = @dlgId";
+            //대표버튼 수정 추가
+            //var updteRelationQuery = "UPDATE TBL_DLG_RELATION_LUIS SET API_INTENT = @apiUsing WHERE DLG_ID = @dlgId";
+            var updteRelationQuery = "UPDATE TBL_DLG_RELATION_LUIS SET API_INTENT = @apiUsing, DLG_QUESTION = @dlgQuestion WHERE DLG_ID = @dlgId";
+            var updteQnaMngQuery = "UPDATE TBL_QNAMNG SET DLG_QUESTION = @dlgQuestion WHERE DLG_ID = @dlgId";
 
             var inserTblDlgText = 'INSERT INTO TBL_DLG_TEXT(DLG_ID,CARD_TITLE,CARD_TEXT,USE_YN) VALUES ' +
                 '(@dlgId,@dialogTitle,@dialogText,\'Y\')';
@@ -503,7 +506,14 @@ router.post('/updateDialog', function (req, res) {
                         let resultApi = await pool.request()                    
                         .input('apiUsing', sql.NVarChar, apiUsing)  
                         .input('dlgId', sql.Int, dlgIdReq)  
+                        .input('dlgQuestion', sql.NVarChar, dlgQuestion)  
                         .query(updteRelationQuery)  
+
+                        //대표버튼 수정
+                        let resultQnaMngApi = await pool.request()                    
+                        .input('dlgId', sql.Int, dlgIdReq)  
+                        .input('dlgQuestion', sql.NVarChar, dlgQuestion)  
+                        .query(updteQnaMngQuery)  
 
                 } else if (array[i]["dlgType"] == "3") {
 
@@ -548,7 +558,14 @@ router.post('/updateDialog', function (req, res) {
                         let resultApi = await pool.request()                    
                         .input('apiUsing', sql.NVarChar, apiUsing)  
                         .input('dlgId', sql.Int, dlgIdReq)  
+                        .input('dlgQuestion', sql.NVarChar, dlgQuestion)  
                         .query(updteRelationQuery) 
+
+                        //대표버튼 수정
+                        let resultQnaMngApi = await pool.request()                    
+                        .input('dlgId', sql.Int, dlgIdReq)  
+                        .input('dlgQuestion', sql.NVarChar, dlgQuestion)  
+                        .query(updteQnaMngQuery)  
 
                 } else if (array[i]["dlgType"] == "4") {
 
@@ -587,7 +604,14 @@ router.post('/updateDialog', function (req, res) {
                     let resultApi = await pool.request()                    
                     .input('apiUsing', sql.NVarChar, apiUsing)  
                     .input('dlgId', sql.Int, dlgIdReq)  
+                    .input('dlgQuestion', sql.NVarChar, dlgQuestion)  
                     .query(updteRelationQuery) 
+
+                    //대표버튼 수정
+                    let resultQnaMngApi = await pool.request()                    
+                    .input('dlgId', sql.Int, dlgIdReq)  
+                    .input('dlgQuestion', sql.NVarChar, dlgQuestion)  
+                    .query(updteQnaMngQuery)  
                 
                 //20190103
                 //DYYOO 
