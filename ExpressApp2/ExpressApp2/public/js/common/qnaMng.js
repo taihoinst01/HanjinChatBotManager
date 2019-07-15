@@ -1081,7 +1081,7 @@ function makeQnaListTable(page) {
                 var saveTableHtml = "";
                 for (var i = 0; i < data.rows.length; i++) {
                     
-                    tableHtml += '<tr><td>' + data.rows[i].NUM + '</td>';
+                    tableHtml += '<tr><td>test====' + data.rows[i].NUM + '</td>';
                     
                     tableHtml += '<td class="txt_left">' + data.rows[i].DLG_QUESTION + '</td>';
                     
