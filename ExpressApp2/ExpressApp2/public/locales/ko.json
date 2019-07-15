@@ -308,8 +308,8 @@
 	"INITDLG_TITLE": "초기메세지관리",
 	"DLG_GROUP": "답변그룹",
 	"WELCOME_MESSAGE": "Welcome Message",
-	"SORRY_MESSAGE1":"Sorry Message(일반)",
-	"SORRY_MESSAGE2":"Sorry Message(답변)",
+	"SORRY_MESSAGE1": "Sorry Message(일반)",
+	"SORRY_MESSAGE2": "Sorry Message(답변)",
 	"ORDER_NO": "노출순서",
 	"INITDLG_INPUT_TITLE": "초기메세지 등록",
 	"INITDLG_UPDATE_TITLE": "초기메세지 수정",
@@ -529,5 +529,6 @@
 	"ALERT_OTHER_USER_LOGIN_WITH_SAME_ID": "다른 사용자가 로그인했습니다. 로그아웃 됩니다.",
 	"============= 챗봇별 메뉴설정 =============": "",
 	"CHATBOTMENU_MAPPING_MSG": "챗봇별 메뉴설정",
-	"============= The end =============": ""
+	"============= The end =============": "",
+	"Representative_button": "대표 버튼"
 }

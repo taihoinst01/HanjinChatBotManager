@@ -357,5 +357,6 @@
 	"AUTHUSER_MSG": "AUTHUSER_MSG",
 	"USERAPP_MAPPING_MSG": "USERAPP_MAPPING_MSG",
 	"LIST_INIT": "LIST_INIT",
-	"HPHONE": "HPHONE"
+	"HPHONE": "HPHONE",
+	"Representative_button": "Representative button"
 }
