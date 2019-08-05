@@ -440,7 +440,7 @@ function getScorePanel() {
     $('#allCustomer').text('Loading..');
     $('#avgReplySpeed').text('Loading..');
     $('#avgQueryCnt').text('Loading..');
-    $('#avgCorrectAnswer').text('Loading..');
+    //$('#avgCorrectAnswer').text('Loading..'); //밑에 있어요.
     $('#avgReply').text('Loading..');
     $('#maxQueryCnt').text('Loading..');
     //누적상담자수, 평균 응답 속도(ms), 평균 고객 질문 수
@@ -448,11 +448,11 @@ function getScorePanel() {
     
     setTimeout(function() {}, delayInMilliseconds);
     //평균 정상 답변율
-    getScorePanel2();
+    //getScorePanel2();
     //검색 응답률
     //getScorePanel3();
     //최대 고객 질문 수
-    //getScorePanel4();
+    getScorePanel4();
 }
 
 //HISTORY 에서 SUCCESS, FAIL, ERROR, SUGGEST
@@ -465,6 +465,8 @@ function getCountPanel() {
     $('#sapWord').text("Loading..");
     $('#sapPasswordInit').text("Loading..");
     $('#smallTalkCount').text("Loading..");
+
+    $('#avgCorrectAnswer').text('Loading..'); //새로추가
     $.ajax({
         url: '/board/getCountPanel',
         dataType: 'json',
@@ -491,30 +493,30 @@ function getCountPanel() {
                 $('#successCount').text("0");
                 $('#failCount').text("0");
                 $('#errorCount').text("0");
+                $('#smallTalkCount').text("0");
+
+                $('#avgCorrectAnswer').text("0%");
+                /*
                 $('#sapWord').text("0");
                 $('#sapPasswordInit').text("0");
                 $('#suggestCount').text("0");
-                $('#smallTalkCount').text("0");
+                */
             }else{
                 $('#totalCount').text(boardCount.총합);
                 $('#successCount').text(boardCount.응답);
                 $('#failCount').text(boardCount.미응답);
                 $('#errorCount').text(boardCount.ERROR);
+                $('#smallTalkCount').text(boardCount.SMALLTALK);
+                var tempData = (boardCount.응답/boardCount.총합)*100;
+                tempData = tempData.toFixed(1);
+                $('#avgCorrectAnswer').text(tempData+"%");
+                /*
                 $('#sapWord').text(boardCount.용어사전);
                 $('#sapPasswordInit').text(boardCount.SAP초기화);
                 $('#suggestCount').text(boardCount.건의사항);
-                $('#smallTalkCount').text(boardCount.SMALLTALK);
+                */
             }
-            /*
-            $('#totalCount').text(boardCount.총합);
-            $('#successCount').text(boardCount.응답);
-            $('#failCount').text(boardCount.미응답);
-            $('#errorCount').text(boardCount.ERROR);
-            $('#sapWord').text(boardCount.용어사전);
-            $('#sapPasswordInit').text(boardCount.SAP초기화);
-            $('#suggestCount').text(boardCount.건의사항);
-            $('#smallTalkCount').text(boardCount.SMALLTALK);
-            */
+            
         },
         error : function() {   // 오류가 발생했을 때 호출된다. 
             console.log("error");
@@ -522,9 +524,13 @@ function getCountPanel() {
             $('#successCount').text("0");
             $('#failCount').text("0");
             $('#errorCount').text("0");
+            $('#smallTalkCount').text("0");
+            /*
             $('#sapWord').text("0");
             $('#sapPasswordInit').text("0");
             $('#suggestCount').text("0");
+            */
+           $('#avgCorrectAnswer').text("0%");
         },
         complete : function () {   // 정상이든 비정상인든 실행이 완료될 경우 실행될 함수
             
@@ -985,9 +991,9 @@ function getScorePanel2() {
             if (data.result) {
                 var scores = data.list;
                 var CORRECT_QRY = scores.toString();
-                $('#avgCorrectAnswer').text((CORRECT_QRY.length > 4 ? CORRECT_QRY.substr(0, 4) : CORRECT_QRY) + '%');
+                //$('#avgCorrectAnswer').text((CORRECT_QRY.length > 4 ? CORRECT_QRY.substr(0, 4) : CORRECT_QRY) + '%');
             } else {
-                $('#avgCorrectAnswer').text(0);
+                //$('#avgCorrectAnswer').text(0);
             }
         },
         error : function() {   

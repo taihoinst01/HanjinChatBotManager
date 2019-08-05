@@ -567,21 +567,16 @@ router.post('/getCountPanel', function (req, res) {
     var selChannel = req.body.selChannel;
 
     var selectQuery = `
-    SELECT ISNULL(H,0) + ISNULL(D, 0) + ISNULL(E,0) + ISNULL(S,0) + ISNULL(Q,0) + ISNULL(I,0) + ISNULL(G,0) AS '총합' 
+    SELECT ISNULL(H,0) + ISNULL(D, 0) + ISNULL(E,0) + ISNULL(S,0) AS '총합' 
            , ISNULL(H,0) AS '응답' 
            , ISNULL(D, 0) AS '미응답' 
            , ISNULL(E,0) AS 'ERROR' 
            , ISNULL(S,0) AS 'SMALLTALK' 
-           , ISNULL(Q,0) AS '용어사전' 
-           , ISNULL(I,0) AS 'SAP초기화' 
-           , ISNULL(G,0) AS '건의사항'   
       FROM ( 
              SELECT RESULT, COUNT(*) AS CNT 
-               FROM TBL_HISTORY_QUERY 
-              WHERE (USER_ID IS NOT NULL OR USER_ID <> '') 
-                -- 조건 
-                --AND  CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120)  > '20190103' 
-                AND REG_DATE  between CONVERT(date, @startDate) AND CONVERT(date, @endDate) 
+             FROM TBL_HISTORY_QUERY 
+             WHERE (1=1) 
+             AND REG_DATE  between CONVERT(date, @startDate) AND CONVERT(date, @endDate) 
     `;
     if (selDate !== 'allDay') {
         selectQuery += "                AND CONVERT(int, CONVERT(char(8), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), 112)) = CONVERT(VARCHAR, GETDATE(), 112) \n";
@@ -594,10 +589,9 @@ router.post('/getCountPanel', function (req, res) {
              GROUP BY RESULT 
             ) Q 
      PIVOT ( 
-             SUM(CNT) FOR RESULT IN ([H],[D],[E],[S],[Q],[I],[G]) 
+             SUM(CNT) FOR RESULT IN ([H],[D],[E],[S]) 
            ) AS X; 
      `;
-
      /*
     var selectQuery = "";
         selectQuery += "SELECT \n";
@@ -671,7 +665,9 @@ router.post('/getOftQuestion', function (req, res) {
     selectQuery += "     ) AA\n";
     selectQuery += "WHERE RESULT <> '' AND RESULT IN ('H')\n";
     selectQuery += "ORDER BY 질문수 DESC\n";
-    //console.log("getOftQuestion==="+selectQuery);
+
+    console.log("selectQuery==="+selectQuery);
+    
     dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue).then(pool => {
         return pool.request().query(selectQuery)
         }).then(result => {
@@ -1312,10 +1308,12 @@ router.post('/getScorePanel2', function (req, res) {
                                 .query(pannelQry2_2);
             resultSome = second_result.recordset;
             var resultList = [];
+            
             for (var i=0; i<resultAll.length; i++) {
                 for (var j=0; j<resultSome.length; j++) {
                     if (resultAll[i].CHANNEL == resultSome[j].CHANNEL && resultAll[i].Dimdate == resultSome[j].Dimdate) {
                         var avgVal = Number((resultSome[j].REPONSECNT/resultAll[i].TOTALCNT).toFixed(4));
+                        
                         resultList.push(avgVal);
                         break;
                     }

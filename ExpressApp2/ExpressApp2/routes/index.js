@@ -256,8 +256,11 @@ router.get('/list', function (req, res) {
             var chkIndexQry = 0;
             for (var i=0; i<rows.length; i++) {
 
-                var cnt_query = "SELECT  (SELECT COUNT(DLG_ID) FROM TBL_DLG) AS DLG_CNT, \n" +
-                                    "		(SELECT count(distinct DLG_INTENT) FROM TBL_DLG) AS INTENT_CNT, " + i + " AS I_INDEX;"
+                //var cnt_query = "SELECT  (SELECT COUNT(DLG_ID) FROM TBL_DLG) AS DLG_CNT, \n" +
+                //                    "		(SELECT count(distinct DLG_INTENT) FROM TBL_DLG) AS INTENT_CNT, " + i + " AS I_INDEX;"
+                var cnt_query = "SELECT \n";
+                cnt_query += "( SELECT COUNT(DLG_ID) FROM TBL_DLG ) AS DLG_CNT, \n ";
+                cnt_query += "(SELECT COUNT(DLG_ID) FROM TBL_DLG_RELATION_LUIS ) AS INTENT_CNT, " + i + " AS I_INDEX; \n ";
 
                 var dbPool = await dbConnect.getAppConnection(appSql, rows[i].CHATBOT_NAME, req.session.dbValue);
                 var result2 = await dbPool.request()
