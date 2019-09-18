@@ -90,16 +90,18 @@
                                             
                                                 <div class="clear-both"></div>
                                                 <div class="form-group" >
-                                                    <label>대표버튼</label><span class="nec_ico">*</span>
+                                                    <label>답변설명</label><span class="nec_ico">*</span>
                                                     <!--<textarea class="form-control" name="description" id="description" rows="3" placeholder="<%= __('Please_enter') %>"></textarea>-->
                                                     <input type="text" name="description" id="description" class="form-control" placeholder="<%= __('Please_enter') %>">
                                                 </div> 
                                                 <div class="clear-both"></div>
                                                 <div class="form-group" >
-                                                    <label>Intent</label><span class="nec_ico">*</span>
+                                                    <label>Intent</label><span class="nec_ico">*</span>(선택이 직접입력보다 우선)
                                                     <select id="intentListSelect" class="form-control"> 
                                                             
                                                     </select>
+                                                    <br>
+                                                    <input type="text" name="intentWrite" id="intentWrite" class="form-control" placeholder="Intent 직접입력">
                                                 </div>
                                                 <div class="form-group" >
                                                     <label>API 사용여부</label><span class="nec_ico">*</span>

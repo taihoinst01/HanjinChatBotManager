@@ -134,11 +134,14 @@ function checkNull(val, newVal) {
 //SmallTalk 관리 -> SmallTalk 등록메뉴에 INTENT목록 전체 가져오기.
 router.post('/selectAllSmallTalkIntent', function (req, res) {
     logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'router 시작');
-        var selectAll = "SELECT INTENT FROM TBL_LUIS_INTENT";
+        //var selectAll = "SELECT INTENT FROM TBL_LUIS_INTENT";
+        var selectAll = "SELECT A.* FROM ( "+
+        "SELECT INTENT FROM TBL_LUIS_INTENT UNION ALL SELECT INTENT FROM TBL_LUIS_INTENTWRITE "+
+        ")A ORDER BY A.INTENT DESC";
 
         (async () => {
             try {
-                logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'FN_SMALLTALK_ENTITY_ORDERBY_ADD 함수 엔티티 조회');
+                logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'SmallTalk 등록메뉴에 INTENT목록 전체 가져오기');
     
                 let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
                     let result1 = await pool.request().query(selectAll);

@@ -61,6 +61,12 @@
                         <!-- 검색창 --> 
                         <div class="form-group w50 w70p fr">
                             <div class="input-group input-group-sm fr w90p" style="width: 250px;">
+                                <input type="text" name="searchText" spellcheck="false" autocomplete='off' class="form-control pull-right" placeholder="기존 데이터 검색">
+                                <div class="input-group-btn">
+                                <button class="btn btn-default" onclick="getAnalysisDetailSearch()"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                            <div class="input-group input-group-sm fr w90p" style="width: 250px;">
                                 <input type="text" name="searchRecommendText" spellcheck="false" autocomplete='off' class="form-control pull-right" placeholder="<%= __('Enter_search_word') %>">
                                 <div class="input-group-btn">
                                 <button class="btn btn-default" onclick="noAnswerQSearch()"><i class="fa fa-search"></i></button>
@@ -154,6 +160,39 @@
             </div>
         </div>
     </div>
+
+    <!-- 기존 데이터검색-->
+    <div class="modal fade" id="analysisform" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="myModalLabel" aria-hidden="true" >
+        <div class="modal-dialog" style="width:50%;">
+            <div class="modal-content" style="max-height:600px;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="similarQTitle">기존 데이터 검색</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="Tbl_wrap"  style="overflow-y: auto !important;max-height: 420px !important;">
+                        <table class="Tbl">
+                            <tr>
+                                <th><%= __('NUM') %></th>
+                                <th><%= __('DLG_QUESTION') %></th>
+                                <th><%= __('INTENT') %></th>
+                            </tr>
+                        <tbody id="analysisModalBody" >
+                            
+                        </tbody>
+                        </table>
+                    </div> 
+                </div>        
+                <div class="modal-footer">
+                    <div class="btn_wrap">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> <%= __('OK') %></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+    <!-- //같은 질문 보기 -->
 
     <script>
 

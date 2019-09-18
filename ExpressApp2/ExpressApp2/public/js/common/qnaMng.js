@@ -56,9 +56,11 @@ $(document).ready(function() {
     //삭제폼
     $(document).on("click", "#dlg_qnaData", function () {
         var DELETE_DLG_ID = $(this).attr("dlg_id");
+        var DELETE_DIRECT_INTENT = $(this).attr("delete_intent");
         
         document.qnaItemDeleteForm.reset();
         document.qnaItemDeleteForm.DELETE_DLG_ID.value = DELETE_DLG_ID;
+        document.qnaItemDeleteForm.DELETE_DIRECT_INTENT.value = DELETE_DIRECT_INTENT;
         $('#qnaItemDeleteModal').modal('show');
     });
 
@@ -1086,12 +1088,9 @@ function makeQnaListTable(page) {
                     tableHtml += '<td class="txt_left">' + data.rows[i].DLG_QUESTION + '</td>';
                     
                     tableHtml += '<td>' + data.rows[i].INTENT + '</td>';
-                    //tableHtml += '<td class="txt_left">' + data.rows[i].ENTITY + '</td>';
                     tableHtml += '<td class="tex01"><button type="button" class="btn btn-default btn-sm" id="show_dlg" listPageNo="'+listPageNo+'" page_type="qna" dlg_id="' + data.rows[i].DLG_ID + '"><i class="fa fa-edit"></i> ' + language.Show_dlg + '</button></td>';
-                    //tableHtml += '<td class="tex01"><button type="button" class="btn btn-default btn-sm" id="show_dlg" onClick="searchDialog(\'' + data.rows[i].DLG_ID + '\',\'qna\')"><i class="fa fa-edit"></i> ' + language.Show_dlg + '</button></td>';
                     tableHtml += '<td class="tex01">';
-                    //tableHtml += '<button type="button" class="btn btn-default btn-sm" id="insert_similarQ_dlg" dlg_id="' + data.rows[i].DLG_ID + '" q_seq="' + data.rows[i].SEQ + '"><i class="fa fa-edit"></i> ' + language.Insert_similarQ + '</button>';
-                    tableHtml += '<button type="button" class="btn btn-default btn-sm" id="dlg_qnaData" dlg_id="' + data.rows[i].DLG_ID + '"><i class="fa fa-trash"></i> ' + language.DELETE + '</button>';
+                    tableHtml += '<button type="button" class="btn btn-default btn-sm" id="dlg_qnaData" dlg_id="' + data.rows[i].DLG_ID + '" delete_intent="' + data.rows[i].INTENT + '"><i class="fa fa-trash"></i> ' + language.DELETE + '</button>';
                     tableHtml += '</td>';
                     tableHtml += '</tr>';
                    
@@ -1155,9 +1154,12 @@ function procQnaItemMaster(procType) {
     } else if (procType === 'NEW' ) {
     
     } else if (procType === 'DELETE') {
+        
         var data = new Object();
         data.statusFlag = procType;
         data.DLG_ID = $('#DELETE_DLG_ID').val();
+        data.DELETE_DIRECT_INTENT = $.trim($("#DELETE_DIRECT_INTENT").val());
+        
         saveArr.push(data);
     }
     

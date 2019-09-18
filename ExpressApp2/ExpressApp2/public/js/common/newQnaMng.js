@@ -77,12 +77,13 @@ function getIntentList() {
 }
 
 function createNewQna() {
-    $('#loadingModalMain').modal('show');
+    
     var idx = $('form[name=dialogLayout]').length;
     var array = [];
     var exit = false;
     var startQuestion = $('#description').val();
     var selectIntent = $('#intentListSelect').val();
+    var intentWrite = $('#intentWrite').val();
     var usingApi =$('#usingApi').val();
 
     if(startQuestion.trim()==""){
@@ -92,6 +93,18 @@ function createNewQna() {
     }
 
     if (exit) return;
+
+    /* intent 선택을 하지 않고 직접입력을 하게 되면 intent 선택하는 변수에 직접입력의 데이터를 넣는다. */
+    if(selectIntent.trim()==""){
+        if(intentWrite.trim()==""){
+
+        }else{
+            selectIntent = intentWrite.trim();
+        }
+    }else{
+        //기존의 select intent
+    }
+
 
     if(selectIntent.trim()==""){
         alert(language.IS_REQUIRED);
@@ -135,7 +148,7 @@ function createNewQna() {
 
     if (exit) return;
 
-
+    $('#loadingModalMain').modal('show');
     for (var i = 0; i < idx; i++) {
         var tmp = $("form[name=dialogLayout]").eq(i).serializeArray();
         var object = {};

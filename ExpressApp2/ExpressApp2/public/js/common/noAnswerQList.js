@@ -183,7 +183,7 @@ $(document).on('click','a[name=queryLink]',function(e){
     }).show();
 });
 
-$(document).on('click','#goUtterBtn',function(e){
+$(document).on('click','#goUtterBtn_old',function(e){
  
     var selVal = $('#intentListSelect').val();
     var selText = $('#intentListSelect option:selected').text();
@@ -225,6 +225,62 @@ $(document).on('click','#goUtterBtn',function(e){
 
     }
 });
+
+$(document).on('click','#goUtterBtn',function(e){
+
+    var saveArr = new Array();
+    var data = new Object();
+ 
+    var selVal = $('#intentListSelect').val();
+    var selText = $('#intentListSelect option:selected').text();
+    var selQry = $('#selQry').val();
+    
+    data.selVal = selVal;
+    data.selText = selText;//intent
+    data.selQry = selQry;//질문
+
+    saveArr.push(data);
+    
+    var jsonData = JSON.stringify(saveArr);
+    var params = {
+        'saveArr': jsonData
+    };
+
+    $.ajax({
+        type: 'POST',
+        datatype: "JSON",
+        data: params,
+        url: '/qna/noAnswerUpdate',//analysis table 에 update한다. 루이스는 너무 복잡해~~
+        success: function (data) {
+            if (data.loginStatus == '___LOGIN_TIME_OUT_Y___') {
+                alert($('#timeoutLogOut').val());
+                location.href = '/users/logout';
+            }
+            if (data.loginStatus == '___DUPLE_LOGIN_Y___') {
+                alert($('#timeoutLogOut').val());
+                location.href = '/users/logout';
+            }
+            if (data.loginStatus == 'DUPLE_LOGIN') { 
+                alert($('#dupleMassage').val());
+                location.href = '/users/logout';
+            }
+            if (data.status === 200) {
+                $('#proc_content').html(language.REGIST_SUCC);
+                $('#footer_button').html('<button type="button" class="btn btn-default" onClick="reloadPage();return false;"><i class="fa fa-times"></i> Close</button>');
+                $('#procModal').modal('show');
+            } else {
+                $('#proc_content').html(language.It_failed);
+                $('#footer_button').html('<button type="button" class="btn btn-default" onClick="reloadPage();return false;"><i class="fa fa-times"></i> Close</button>');
+                $('#procModal').modal('show');
+            }
+        }
+    });
+});
+
+function reloadPage(){
+    $('#procModal').modal('hide');
+    noAnswerQListAjax();
+}
 
 $(document).on('click','.li_paging',function(e){
  
@@ -342,17 +398,109 @@ function getIntentList() {
             if (data.result) {
                 var htmlStr = '';
                 var intentList = data.intentList;
+                htmlStr += "<option value='NONE'>" + language.SELECT + "</option>";
                 for (var i=0; i<intentList.length; i++) {
+                    htmlStr += "<option value='" + intentList[i].APP_ID + "'>" + intentList[i].INTENT + "</option>";
+                    /*
                     if (i==0) {
                         htmlStr += "<option value='NONE'>" + language.SELECT + "</option>";
                     } else {
                         htmlStr += "<option value='" + intentList[i].APP_ID + "'>" + intentList[i].INTENT + "</option>";
                     }
+                    */
                 }
+                
                 $('#intentListSelect').html(htmlStr);
                 selectHtml = htmlStr;
             }
             
+        }
+    });
+}
+
+function getAnalysisDetailSearch() {
+
+    var searchText = $('input[name=searchText]').val();
+
+    if(!searchText) {
+        $('#alertMsg').text(language.Enter_search_word);
+        $('#alertBtnModal').modal('show');
+    } else {
+        getAnalysisDetail(searchText);
+    }
+}
+
+function getAnalysisDetail(query) {
+    var params = {
+        'query': query,
+    };
+
+    $.ajax({
+        type: 'POST',
+        data: params,
+        url: '/qna/selectAnalysisDetail',
+        beforeSend: function () {
+
+            var width = 0;
+            var height = 0;
+            var left = 0;
+            var top = 0;
+
+            width = 50;
+            height = 50;
+
+            top = ( $(window).height() - height ) / 2 + $(window).scrollTop();
+            left = ( $(window).width() - width ) / 2 + $(window).scrollLeft();
+
+            $("#loadingBar").addClass("in");
+            $("#loadingImg").css({position:'absolute'}).css({left:left,top:top});
+            $("#loadingBar").css("display","block");
+        },
+        complete: function () {
+            $("#loadingBar").removeClass("in");
+            $("#loadingBar").css("display","none");      
+        },
+        data: params,
+        success: function (data) {
+            if (data.loginStatus == '___LOGIN_TIME_OUT_Y___') {
+                alert($('#timeoutLogOut').val());
+                location.href = '/users/logout';
+            }
+            if (data.loginStatus == '___DUPLE_LOGIN_Y___') {
+                alert($('#timeoutLogOut').val());
+                location.href = '/users/logout';
+            }
+            if (data.loginStatus == 'DUPLE_LOGIN') { 
+                alert($('#dupleMassage').val());
+                location.href = '/users/logout';
+            }
+            
+            if (status) {
+                $('#alertMsg').text(language.ALERT_ERROR);
+                $('#alertBtnModal').modal('show');
+            } else {
+                
+                if (data.rows.length > 0) {
+
+                    var tableHtml = "";
+                    for (var i = 0; i < data.rows.length; i++) {
+                        tableHtml += '<tr name="userTr"><td>' + data.rows[i].NUM + '</td>';
+                        tableHtml += '<td class="txt_left">' + data.rows[i].QUERY + '</td>'
+                        tableHtml += '<td class="txt_left">' + data.rows[i].LUIS_INTENT + '</td>'
+                        tableHtml += '</tr>'
+                    }
+    
+                    saveTableHtml = tableHtml;
+                    $('#analysisModalBody').html(saveTableHtml);
+    
+                    $('#analysisform').modal('show');
+    
+                } else {
+                    saveTableHtml = '<tr><td colspan="3" class="text-center">No Data</td></tr>';
+                    $('#analysisModalBody').html(saveTableHtml);
+                    $('#analysisform').modal('show');
+                }
+            }
         }
     });
 }

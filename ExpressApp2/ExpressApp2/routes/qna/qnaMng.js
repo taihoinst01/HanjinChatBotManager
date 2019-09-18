@@ -17,6 +17,7 @@ var Logger = require("../../config/logConfig");
 var logger = Logger.CreateLogger();
 //log end
 
+var injection = require("../../config/sqlInjection");
 var router = express.Router();
 
 //질문답변 관리
@@ -1179,7 +1180,7 @@ router.post('/deleteNoAnswerQ', function (req, res) {
 
 
 
-router.post('/selectIntentApp', function (req, res) {
+router.post('/selectIntentApp_old', function (req, res) {
     var userId = req.session.sid;
 
     (async () => {
@@ -1199,6 +1200,46 @@ router.post('/selectIntentApp', function (req, res) {
     sql.on('error', err => {
         console.log(err);
     })
+});
+
+router.post('/selectIntentApp', function (req, res) {
+    logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'router 시작');
+        
+        var selectAll = "SELECT A.* FROM ( "+
+        "SELECT APP_ID, INTENT FROM TBL_LUIS_INTENT UNION ALL SELECT (SELECT TOP 1 APP_ID FROM TBL_LUIS_INTENT) AS APP_ID , INTENT FROM TBL_LUIS_INTENTWRITE "+
+        ")A ORDER BY A.INTENT DESC";
+
+        (async () => {
+            try {
+                logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'selectIntentApp');
+    
+                let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
+                    let result1 = await pool.request().query(selectAll);
+                    let rows = result1.recordset;
+
+                    var recordList = [];
+                    for (var i = 0; i < rows.length; i++) {
+                        var item = {};
+                        item = rows[i];
+                        recordList.push(item);
+                    } 
+                    
+                    if (rows.length > 0) {              
+                        res.send({ result: true, intentList: recordList});   
+                    } else {
+                        res.send({ result: false });
+                    }   
+            } catch (err) {
+                // ... error checks
+            logger.info('[에러] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, err.message);
+            res.send({ result: false });
+            } finally {
+                sql.close();
+            }
+        })()  
+        sql.on('error', err => {
+            // ... error handler
+        })
 });
 
 router.post('/selectNewIntentList', function (req, res) {
@@ -1595,12 +1636,22 @@ router.post('/newQna', function (req, res) {
     var startQuestion = req.body.startQuestion;
     var selectIntentID = req.body.selectIntent;
     var usingApi = req.body.usingApi;
+    var intentDirect = 0; //intent 직접입력인지 아닌지 구분
+    var userId = req.session.sid;
     /**
      * LUIS ID||INTENT NAME
+     * 직접입력일 경우도 고려 (app_id 는 하드코딩)
      */
-    var selectIntentIDArray = selectIntentID.split("&");
-    var selectIntentID = selectIntentIDArray[0];
-    var selectIntentName = selectIntentIDArray[1];
+    if(selectIntentID.match("&")){
+        var selectIntentIDArray = selectIntentID.split("&");
+        var selectIntentID = selectIntentIDArray[0];
+        var selectIntentName = selectIntentIDArray[1];
+        intentDirect = 0;
+    }else{
+        var selectIntentID = "fee3e917-d587-47c5-b27f-165c6dcb0e41";
+        var selectIntentName = req.body.selectIntent;
+        intentDirect = 1;
+    }
 
     var data = req.body.data;
     var array = [];
@@ -1671,19 +1722,16 @@ router.post('/newQna', function (req, res) {
                 
             var insertTblQnaMng = 'INSERT INTO TBL_QNAMNG(DLG_QUESTION , INTENT , ENTITY , GROUP_ID,DLG_ID, REG_DT, APP_ID, USE_YN) VALUES ' +
                 '(@startQuestion,@luisIntent,@luisEntities,NULL,@dlgId,GETDATE(),@selectIntentID,\'Y\')';
+            
+                //직접입력을 하였을 시에 테이블에 insert
+            var insertTblIntentWrite = 'INSERT INTO TBL_LUIS_INTENTWRITE(APP_ID , INTENT , REG_ID, REG_DT) VALUES ' +
+                '(@selectIntentID, @luisIntent, @userId, GETDATE())';
 
             var largeGroup = array[array.length - 1]["largeGroup"];
             var dlgGroup = array[array.length - 1]["dlgGroup"];
             var description = array[array.length - 1]["description"];
             var predictIntent = array[array.length - 1]["predictIntent"];
             var dialogOrderNo = array[array.length - 1]["dlgOrderNo"];
-
-            /*
-            let resultRNum = await pool.request()
-                .query(selectRelationNum);
-            var dlgNo = resultRNum.recordset;
-            */
-
             
             for (var i = 0; i < (array.length - 1); i++) {
                 var insertDlgOrderNo = 0;
@@ -1729,7 +1777,15 @@ router.post('/newQna', function (req, res) {
                     .input('dlgId', sql.Int, inputDlgId)
                     .input('selectIntentID', sql.NVarChar, selectIntentID)
                     .query(insertTblQnaMng);
-               
+
+                if(intentDirect==1){ //직접입력일 경우에만 테이블에 insert(동기화로 인해서 데이터가 날아가는 것 방지)
+                    let resultIntentWrite = await pool.request()
+                    .input('selectIntentID', sql.NVarChar, selectIntentID)
+                    .input('luisIntent', sql.NVarChar, selectIntentName)
+                    .input('userId', sql.NVarChar, userId)
+                    .query(insertTblIntentWrite);
+                }
+
                 if (array[i]["dlgType"] == "2") {
 
                     /*
@@ -1864,6 +1920,8 @@ router.post('/procQnaList', function (req, res) {
     var deleteTblDlgCardStr = "";
     var deleteTblDlgQnaMngStr = "";
     var deleteCheckDlgId = "";
+    var deleteDirectIntentStr = "";
+
     var userId = req.session.sid;
     
     for (var i=0; i<qnaItemArr.length; i++) {
@@ -1878,17 +1936,14 @@ router.post('/procQnaList', function (req, res) {
             deleteTblDlgTextStr = "DELETE FROM TBL_DLG_TEXT WHERE DLG_ID = "+ qnaItemArr[i].DLG_ID;
             deleteTblDlgCardStr = "DELETE FROM TBL_DLG_CARD WHERE DLG_ID = "+ qnaItemArr[i].DLG_ID;
             deleteTblDlgQnaMngStr = "DELETE FROM TBL_QNAMNG WHERE DLG_ID = "+ qnaItemArr[i].DLG_ID;
+
+            deleteDirectIntentStr = "DELETE FROM TBL_LUIS_INTENTWRITE WHERE INTENT = '"+ qnaItemArr[i].DELETE_DIRECT_INTENT+"'";
         }
     }
 
     (async () => {
         try {
             let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
-            /*
-            if (deleteStr !== "") {
-                let deleteCodeDetail = await pool.request().query(deleteStr);
-            }
-            */
             if (deleteCheckDlgId !== "") {
                 
                 let deleteTblDlg = await pool.request().query(deleteTblDlgStr);
@@ -1896,6 +1951,7 @@ router.post('/procQnaList', function (req, res) {
                 let deleteTblDlgText = await pool.request().query(deleteTblDlgTextStr);
                 let deleteTblDlgCard = await pool.request().query(deleteTblDlgCardStr);
                 let deleteTblDlgQnaMng = await pool.request().query(deleteTblDlgQnaMngStr);
+                let deleteDirectIntentMng = await pool.request().query(deleteDirectIntentStr);
             }
             res.send({status:200 , message:'Delete Success'});
             
@@ -1910,6 +1966,86 @@ router.post('/procQnaList', function (req, res) {
     sql.on('error', err => {
         // ... error handler
     })
+});
+
+router.post('/noAnswerUpdate', function (req, res) {
+    logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'router 시작');
+    
+    var dataArr = JSON.parse(req.body.saveArr);
+    var updateStr = "UPDATE TBL_QUERY_ANALYSIS_RESULT SET LUIS_INTENT=@LUIS_INTENT, LUIS_ENTITIES=@LUIS_ENTITIES, TRAIN_FLAG = 'M', RESULT='H', UPD_DT=GETDATE() WHERE QUERY = @QUERY; ";
+    var userId = req.session.sid;
+
+    (async () => {
+        try {
+            let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
+
+            for (var i = 0; i < dataArr.length; i++) {
+        
+                var noAnswerUpdate = await pool.request()
+                            .input('LUIS_INTENT', sql.NVarChar, injection.changeAttackKeys(dataArr[i].selText))
+                            .input('LUIS_ENTITIES', sql.NVarChar, injection.changeAttackKeys(dataArr[i].selText))
+                            .input('QUERY', sql.NVarChar, injection.changeAttackKeys(dataArr[i].selQry))
+                            .query(updateStr);
+            }
+            res.send({ status: 200, message: 'Save Success' });
+
+        } catch (err) {
+            logger.info('[에러] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, err.message);
+            res.send({ status: 500, message: 'Save Error' });
+        } finally {
+            sql.close();
+        }
+    })()
+
+    sql.on('error', err => {
+        // ... error handler
+    })
+});
+
+router.post('/selectAnalysisDetail', function (req, res) {
+    
+    logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'router 시작');
+    
+    (async () => {
+        try {
+
+            var QueryStr = "";
+            QueryStr += "  SELECT tbx.* \n";
+            QueryStr += "    FROM ( \n";
+            QueryStr += "           SELECT ROW_NUMBER() OVER(ORDER BY A.SEQ DESC) AS NUM \n";
+            QueryStr += "                  ,COUNT('1') OVER(PARTITION BY '1') AS TOTCNT \n";
+            QueryStr += "                  ,CEILING((ROW_NUMBER() OVER(ORDER BY A.SEQ DESC))/ convert(numeric ,10)) PAGEIDX \n";
+            QueryStr += "                  ,A.QUERY, A.LUIS_INTENT \n";
+            QueryStr += "             FROM TBL_QUERY_ANALYSIS_RESULT A \n";
+            QueryStr += "            WHERE A.QUERY LIKE '%" + req.body.query + "%' \n";
+            QueryStr += "            AND LUIS_INTENT != 'None' \n";
+            QueryStr += "     ) tbx\n";
+            
+            logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'TBL_QUERY_ANALYSIS_RESULT 테이블 조회 시작');
+            let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
+            let result1 = await pool.request()
+                    .query(QueryStr);
+
+            let rows = result1.recordset;
+
+            if (rows.length > 0) {
+                res.send({ rows: rows, status : true });
+            } else {
+                res.send({
+                    rows : [], 
+                    status : true 
+                });
+            }
+        } catch (err) {
+            logger.info('[에러] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, err.message);
+            res.send({ rows: [], status : false}); 
+            // ... error checks
+        } finally {
+            sql.close();
+        }
+    })()
+
+
 });
 
 module.exports = router;
