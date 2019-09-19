@@ -417,7 +417,7 @@ function getIntentList() {
         }
     });
 }
-
+//신규기능 추가
 function getAnalysisDetailSearch() {
 
     var searchText = $('input[name=searchText]').val();

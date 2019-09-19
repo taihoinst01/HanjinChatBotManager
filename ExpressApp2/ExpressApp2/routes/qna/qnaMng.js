@@ -1314,17 +1314,11 @@ router.post('/initDialogList', function (req, res) {
                 "DLG_ID, DLG_NAME, DLG_DESCRIPTION, DLG_LANG, DLG_GROUP, DLG_TYPE, DLG_ORDER_NO, USE_YN, DLG_INTENT \n" +
                 "FROM TBL_DLG \n" +
                 "WHERE DLG_GROUP != 2 \n";
-                /*
-            if (req.body.searchTitleTxt !== '') {
-                dlg_desQueryString += "AND DLG_NAME like '%" + req.body.searchTitleTxt + "%' \n";
-            }
-            if (req.body.searchDescTxt !== '') {
-                dlg_desQueryString += "AND DLG_DESCRIPTION like '%" + req.body.searchDescTxt + "%' \n";
-            }
-            */
+              
             dlg_desQueryString += ") tbp \n" +
                 "WHERE PAGEIDX = @currentPage \n" +
                 "ORDER BY DLG_GROUP ASC, DLG_ORDER_NO ASC" ;
+                
             let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
             let result1 = await pool.request().input('currentPage', sql.Int, currentPage).query(dlg_desQueryString);
             let rows = result1.recordset;
