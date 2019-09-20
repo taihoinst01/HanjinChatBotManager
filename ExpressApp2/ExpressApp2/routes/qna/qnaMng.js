@@ -1065,9 +1065,9 @@ router.post('/selectNoAnswerQList', function (req, res) {
                 "  FROM ( \n" +
                 "        SELECT TBY.*  \n" +
                 "          FROM ( \n" +
-                "		        SELECT ROW_NUMBER() OVER(ORDER BY TBX.SEQ DESC) AS NUM,  \n" +
+                "		        SELECT ROW_NUMBER() OVER(ORDER BY TBX.UPD_DT DESC) AS NUM,  \n" +
                 "                       COUNT('1') OVER(PARTITION BY '1') AS TOTCNT,  \n" +
-                "                       CEILING((ROW_NUMBER() OVER(ORDER BY TBX.SEQ DESC) )/ convert(numeric ,10)) PAGEIDX,  \n" +
+                "                       CEILING((ROW_NUMBER() OVER(ORDER BY TBX.UPD_DT DESC) )/ convert(numeric ,10)) PAGEIDX,  \n" +
                 "                       TBX.*  \n" +
                 "                 FROM (  \n" +
                 "                        SELECT SEQ,QUERY,CONVERT(CHAR(19), UPD_DT, 20) AS UPD_DT,TBH.QUERY_KR \n" + //--(SELECT RESULT FROM dbo.FN_ENTITY_ORDERBY_ADD(QUERY)) AS ENTITIES
