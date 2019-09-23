@@ -50,6 +50,12 @@ router.get('/newQnaMng', function (req, res) {
     res.render('qna/newQnaMng');
 });
 
+//질문의도연결(API)
+router.get('/apiDialogMng', function (req, res) {
+    logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'router 시작');
+    res.render('qna/apiDialogMng');
+});
+
 router.post('/selectQnaList', function (req, res) {
     logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'router 시작');
     var pageSize = checkNull(req.body.rows, 10);
@@ -1070,17 +1076,9 @@ router.post('/selectNoAnswerQList', function (req, res) {
                 "                       CEILING((ROW_NUMBER() OVER(ORDER BY TBX.UPD_DT DESC) )/ convert(numeric ,10)) PAGEIDX,  \n" +
                 "                       TBX.*  \n" +
                 "                 FROM (  \n" +
-                "                        SELECT SEQ,QUERY,CONVERT(CHAR(19), UPD_DT, 20) AS UPD_DT,TBH.QUERY_KR \n" + //--(SELECT RESULT FROM dbo.FN_ENTITY_ORDERBY_ADD(QUERY)) AS ENTITIES
-                "                          FROM TBL_QUERY_ANALYSIS_RESULT, ( \n" +
-                "						                                     SELECT CUSTOMER_COMMENT_KR AS QUERY_KR \n" +
-                "						                                       FROM TBL_HISTORY_QUERY \n" +
-                "						                                       WHERE 1=1  \n" +
-                "						                                       AND CHATBOT_COMMENT_CODE NOT IN ('SAP') \n" +
-                "						                                      GROUP BY CUSTOMER_COMMENT_KR ) TBH \n" +
-                //"                         WHERE RESULT NOT IN ('H', 'R')     \n" +
-                "                         WHERE RESULT = 'D'    \n" +
-            //    "                           AND TRAIN_FLAG = 'N'  \n" +
-                "                           AND QUERY = dbo.fn_replace_regex(TBH.QUERY_KR)  \n";
+                "                        SELECT SEQ,QUERY,CONVERT(CHAR(19), DATEADD(hh, 9, UPD_DT), 20) AS UPD_DT \n" + //--(SELECT RESULT FROM dbo.FN_ENTITY_ORDERBY_ADD(QUERY)) AS ENTITIES
+                "                          FROM TBL_QUERY_ANALYSIS_RESULT \n" +
+                "                         WHERE RESULT = 'D'    \n";
 
             if (selectType == 'yesterday') {
                 entitiesQueryString += " AND (CONVERT(CHAR(10), UPD_DT, 23)) like '%'+(select CONVERT(CHAR(10), (select dateadd(day,-1,getdate())), 23)) + '%'";
@@ -1115,7 +1113,7 @@ router.post('/selectNoAnswerQList', function (req, res) {
             var result = [];
             for (var i = 0; i < rows.length; i++) {
                 var item = {};
-                var query = rows[i].QUERY_KR;
+                var query = rows[i].QUERY;
                 var seq = rows[i].SEQ;
                 //var entities = rows[i].ENTITIES;
                 var updDt = rows[i].UPD_DT;
@@ -2040,6 +2038,144 @@ router.post('/selectAnalysisDetail', function (req, res) {
     })()
 
 
+});
+
+router.post('/selectApiDialogList', function (req, res) {
+    logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'router 시작');
+    var pageSize = checkNull(req.body.rows, 10);
+    var currentPage = checkNull(req.body.currentPage, 1);
+    
+    (async () => {
+        try {
+
+            var QueryStr = "SELECT tbp.* from \n" +
+                            " (SELECT ROW_NUMBER() OVER(ORDER BY REG_DT DESC) AS NUM, \n" +
+                            "         COUNT('1') OVER(PARTITION BY '1') AS TOTCNT, \n"  +
+                            "         CEILING((ROW_NUMBER() OVER(ORDER BY REG_DT DESC))/ convert(numeric ,10)) PAGEIDX, \n" +
+                            "         SEQ, API_QUERY, API_INTENT, REG_ID, CONVERT(CHAR(19), REG_DT, 20) AS REG_DT \n" +
+                           "          FROM TBL_API_INTENT \n" +
+                           "          WHERE 1=1 \n";
+                        if (req.body.searchQuestiontText !== '') {
+                            QueryStr += "AND API_QUERY like @searchQuestiontText \n";
+                        }
+                        if (req.body.searchIntentText !== '') {
+                            QueryStr += "AND API_INTENT like @searchIntentText \n";
+                        }
+                        QueryStr +="  ) tbp WHERE PAGEIDX = @currentPage; \n";
+
+            logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'API_INTENT 테이블 조회');
+
+            let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
+            let result1 = await pool.request()
+                    .input('searchQuestiontText', sql.NVarChar, '%' + req.body.searchQuestiontText + '%')
+                    .input('searchIntentText', sql.NVarChar, '%' + req.body.searchIntentText + '%')
+                    .input('currentPage', sql.NVarChar, currentPage)
+                    .query(QueryStr);
+
+            let rows = result1.recordset;
+
+            var recordList = [];
+            for (var i = 0; i < rows.length; i++) {
+                var item = {};
+                item = rows[i];
+
+
+                recordList.push(item);
+            }
+
+
+            if (rows.length > 0) {
+
+                var totCnt = 0;
+                if (recordList.length > 0)
+                    totCnt = checkNull(recordList[0].TOTCNT, 0);
+                var getTotalPageCount = Math.floor((totCnt - 1) / checkNull(rows[0].TOTCNT, 10) + 1);
+
+
+                res.send({
+                    records: recordList.length,
+                    total: getTotalPageCount,
+                    pageList: paging.pagination(currentPage, rows[0].TOTCNT), //page : checkNull(currentPageNo, 1),
+                    rows: recordList
+                });
+
+            } else {
+                res.send({
+                    records : 0,
+                    rows : null
+                });
+            }
+        } catch (err) {
+            logger.info('[에러] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, err.message);
+            
+            // ... error checks
+        } finally {
+            sql.close();
+        }
+    })()
+
+    sql.on('error', err => {
+        // ... error handler
+    })
+
+
+});
+
+router.post('/apiDialogProc', function (req, res) {
+    logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'router 시작');
+    
+    var dataArr = JSON.parse(req.body.saveArr);
+    var insertStr = "INSERT INTO TBL_API_INTENT (API_QUERY, API_INTENT, REG_ID, REG_DT) " +
+                    " VALUES ( @API_QUERY, @API_INTENT, @REG_ID,GETDATE());";
+    var deleteStr = "DELETE FROM TBL_API_INTENT WHERE SEQ = @DELETE_ST_SEQ; ";
+    var updateStr = "UPDATE TBL_API_INTENT SET API_QUERY=@API_QUERY, API_INTENT = @API_INTENT WHERE SEQ = @SEQ; ";
+    var userId = req.session.sid;
+
+    (async () => {
+        try {
+            let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
+
+            for (var i = 0; i < dataArr.length; i++) {
+        
+                if (dataArr[i].statusFlag === 'ADD') {
+
+                    var insertSmallTalk= await pool.request()
+                            .input('API_QUERY', sql.NVarChar, injection.changeAttackKeys(dataArr[i].API_QUERY))
+                            .input('API_INTENT', sql.NVarChar, injection.changeAttackKeys(dataArr[i].API_INTENT))
+                            .input('REG_ID', sql.NVarChar, userId)
+                            .query(insertStr);
+
+                }else if (dataArr[i].statusFlag === 'DEL') {
+
+                    var deleteSmallTalk = await pool.request()
+                            .input('DELETE_ST_SEQ', sql.NVarChar, injection.changeAttackKeys(dataArr[i].DELETE_ST_SEQ))
+                            .query(deleteStr);
+                
+                }else if (dataArr[i].statusFlag === 'UPDATE') {
+
+                    var updateSmallTalk = await pool.request()
+                            .input('S_ANSWER', sql.NVarChar, injection.changeAttackKeys(dataArr[i].S_ANSWER))
+                            .input('USE_YN', sql.NVarChar, injection.changeAttackKeys(dataArr[i].USE_YN))
+                            .input('INTENT', sql.NVarChar, injection.changeAttackKeys(dataArr[i].INTENT))
+                            .input('SEQ', sql.NVarChar, injection.changeAttackKeys(dataArr[i].SEQ))
+                            .query(updateStr);
+                }else{
+        
+                }
+            }
+            res.send({ status: 200, message: 'Save Success' });
+
+        } catch (err) {
+            logger.info('[에러] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, err.message);
+            res.send({ status: 500, message: 'Save Error' });
+        } finally {
+            sql.close();
+        }
+    })()
+
+    sql.on('error', err => {
+        // ... error handler
+    })
 });
 
 module.exports = router;
