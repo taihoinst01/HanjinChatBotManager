@@ -418,19 +418,13 @@ router.post('/intentScore', function (req, res) {
     let currentPageNo = checkNull(req.body.page, 1);
 
     var selectQuery = "";
-    selectQuery += "SELECT tbp.* from \n" +
-            " (SELECT ROW_NUMBER() OVER(ORDER BY A.LUIS_INTENT DESC) AS NUM, \n" +
-            "         COUNT('1') OVER(PARTITION BY '1') AS TOTCNT, \n"  +
-            "         CEILING((ROW_NUMBER() OVER(ORDER BY A.LUIS_INTENT DESC))/ convert(numeric , 9)) PAGEIDX, \n";
-    selectQuery += "	LOWER(A.LUIS_INTENT) AS intentName, \n";
-    //selectQuery += "ROUND(AVG(CAST(A.LUIS_INTENT_SCORE AS FLOAT)), 2) AS intentScoreAVG,  \n";
-    //selectQuery += "MAX(CAST(A.LUIS_INTENT_SCORE AS FLOAT)) AS intentScoreMAX , \n";
-    //selectQuery += "MIN(CAST(A.LUIS_INTENT_SCORE AS FLOAT)) AS intentScoreMIN, \n";
-    selectQuery += "COUNT(*) AS intentCount \n";
-    selectQuery += "FROM	TBL_HISTORY_QUERY A, TBL_QUERY_ANALYSIS_RESULT B \n";
-    selectQuery += "WHERE	1=1 \n";
-    //selectQuery += "AND dbo.FN_REPLACE_REGEX(A.CUSTOMER_COMMENT_KR) =  B.QUERY \n";
-    selectQuery += "AND A.CUSTOMER_COMMENT_KR =  B.QUERY \n";
+    selectQuery += "SELECT tbp.* from ( \n";
+    selectQuery += "SELECT  \n";
+    selectQuery += "ROW_NUMBER() OVER(ORDER BY LUIS_INTENT DESC) AS NUM, \n";
+    selectQuery += "COUNT('1') OVER(PARTITION BY '1') AS TOTCNT, \n";
+    selectQuery += "CEILING((ROW_NUMBER() OVER(ORDER BY LUIS_INTENT DESC))/ convert(numeric , 9)) PAGEIDX, \n";
+    selectQuery += "LUIS_INTENT AS intentName, COUNT(*) AS  intentCount FROM TBL_HISTORY_QUERY \n";
+    selectQuery += "WHERE LUIS_INTENT ! = '' \n";
     selectQuery += "AND CONVERT(date, '" + startDate + "') <= CONVERT(date, REG_DATE)  AND  CONVERT(date, REG_DATE)   <= CONVERT(date, '" + endDate + "') ";
     
     if (selDate !== 'allDay') {
@@ -440,7 +434,7 @@ router.post('/intentScore', function (req, res) {
         selectQuery += "AND	CHANNEL = '" + selChannel + "' \n";
     }
 
-    selectQuery += "GROUP BY A.LUIS_INTENT ) tbp \n";
+    selectQuery += "GROUP BY LUIS_INTENT ) tbp \n";
     selectQuery += " WHERE 1=1 \n" +
                     " AND PAGEIDX = " + currentPageNo + "; \n";
 
@@ -663,7 +657,10 @@ router.post('/getOftQuestion', function (req, res) {
     selectQuery += "     LEFT OUTER JOIN (SELECT LUIS_INTENT,MIN(DLG_ID) AS DLG_ID FROM TBL_DLG_RELATION_LUIS GROUP BY LUIS_INTENT) RE\n";
     selectQuery += "       ON AN.LUIS_INTENT = RE.LUIS_INTENT\n";
     selectQuery += "     ) AA\n";
-    selectQuery += "WHERE RESULT <> '' AND RESULT IN ('H')\n";
+    //selectQuery += "WHERE RESULT <> '' AND RESULT IN ('H')\n";
+    //selectQuery += "ORDER BY 질문수 DESC\n";
+    selectQuery += "WHERE RESULT='H'\n";
+    selectQuery += "AND 질문수 > 1\n";
     selectQuery += "ORDER BY 질문수 DESC\n";
     
     dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue).then(pool => {
@@ -920,7 +917,7 @@ router.post('/getResponseScore', function (req, res) {
         selectQuery += "	 ), 0) AS MIN_REPLY \n";
         selectQuery += "	 , ISNULL(AVG(유저별답변시간합), 0) AS REPLY_SUM \n";
         selectQuery += "FROM ( ";
-        selectQuery += "SELECT USER_ID, SUM(RESPONSE_TIME) AS 유저별답변시간합, AVG(RESPONSE_TIME) AS 유저별평균답변시간 \n";
+        selectQuery += "SELECT USER_NUMBER, SUM(RESPONSE_TIME) AS 유저별답변시간합, AVG(RESPONSE_TIME) AS 유저별평균답변시간 \n";
         selectQuery += "  FROM TBL_HISTORY_QUERY  \n";
         selectQuery += " WHERE 1=1  \n";
         selectQuery += "AND CONVERT(date, '" + startDate + "') <= CONVERT(date, REG_DATE)  AND  CONVERT(date, REG_DATE)   <= CONVERT(date, '" + endDate + "') ";
@@ -931,7 +928,7 @@ router.post('/getResponseScore', function (req, res) {
             if (selChannel !== 'all') {
                 selectQuery += "AND	CHANNEL = '" + selChannel + "' \n";
             }
-        selectQuery += "GROUP BY USER_ID \n";
+        selectQuery += "GROUP BY USER_NUMBER \n";
         selectQuery += ") A \n";
     
     dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue).then(pool => {
@@ -972,12 +969,11 @@ router.post('/getQueryByEachTime', function (req, res) {
             }
         selectQuery += "	 GROUP BY USER_NUMBER, datename(hh,reg_date), CHANNEL, CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), CUSTOMER_COMMENT_KR \n";
         selectQuery += "	 ) HI \n";
-        selectQuery += "LEFT OUTER JOIN TBL_QUERY_ANALYSIS_RESULT AN \n";
-        selectQuery += "ON HI.CUSTOMER_COMMENT_KR = AN.QUERY \n";
+        //selectQuery += "LEFT OUTER JOIN TBL_QUERY_ANALYSIS_RESULT AN \n";
+        //selectQuery += "ON HI.CUSTOMER_COMMENT_KR = AN.QUERY \n";
         selectQuery += "GROUP BY (REPLICATE('0', 2 - LEN(시간)) + 시간)  \n";
         selectQuery += "HAVING 1=1 \n";
         selectQuery += "ORDER BY TIME; \n";
-
 
     dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue).then(pool => {
         return pool.request().query(selectQuery)
@@ -1098,11 +1094,11 @@ router.post('/getSimulUrlInfo', function (req, res) {
 
 
 var pannelQry0 = `
-SELECT COUNT(DISTINCT A.USER_ID) AS CUSOMER_CNT 
+SELECT COUNT(DISTINCT A.USER_NUMBER) AS CUSOMER_CNT 
 FROM  ( 
-    SELECT ISNULL(USER_ID, '') AS USER_ID, CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120) AS REG_DATE 
+    SELECT ISNULL(USER_NUMBER, '') AS USER_NUMBER, CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120) AS REG_DATE 
       FROM   TBL_HISTORY_QUERY 
-    GROUP BY ISNULL(USER_ID, ''), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120) 
+    GROUP BY ISNULL(USER_NUMBER, ''), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120) 
   ) A 
  WHERE  1=1  
    AND REG_DATE  between CONVERT(date, @startDate) AND CONVERT(date, @endDate) 
@@ -1392,7 +1388,7 @@ router.post('/getScorePanel4', function (req, res) {
         pannelQry4 += "AND	CHANNEL = @selChannel \n";
     }
     pannelQry4 += ` 
-        GROUP BY USER_ID 
+        GROUP BY USER_NUMBER 
         ) B 
     ), 0) AS MAX_QRY  
     `;
