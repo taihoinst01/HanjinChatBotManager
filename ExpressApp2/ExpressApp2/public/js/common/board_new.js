@@ -507,7 +507,7 @@ function getCountPanel() {
                 $('#failCount').text(boardCount.미응답);
                 $('#errorCount').text(boardCount.ERROR);
                 $('#smallTalkCount').text(boardCount.SMALLTALK);
-                var tempData = (boardCount.응답/boardCount.총합)*100;
+                var tempData = ((boardCount.응답+boardCount.SMALLTALK)/boardCount.총합)*100;
                 tempData = tempData.toFixed(1);
                 $('#avgCorrectAnswer').text(tempData+"%");
                 /*
