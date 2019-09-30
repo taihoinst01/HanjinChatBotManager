@@ -1076,7 +1076,7 @@ router.post('/selectNoAnswerQList', function (req, res) {
                 "                       CEILING((ROW_NUMBER() OVER(ORDER BY TBX.UPD_DT DESC) )/ convert(numeric ,10)) PAGEIDX,  \n" +
                 "                       TBX.*  \n" +
                 "                 FROM (  \n" +
-                "                        SELECT SEQ,QUERY,CONVERT(CHAR(19), DATEADD(hh, 9, UPD_DT), 20) AS UPD_DT \n" + //--(SELECT RESULT FROM dbo.FN_ENTITY_ORDERBY_ADD(QUERY)) AS ENTITIES
+                "                        SELECT SEQ,QUERY, (CONVERT(CHAR(23), UPD_DT, 21)) AS UPD_DT \n" + //--(SELECT RESULT FROM dbo.FN_ENTITY_ORDERBY_ADD(QUERY)) AS ENTITIES
                 "                          FROM TBL_QUERY_ANALYSIS_RESULT \n" +
                 "                         WHERE RESULT = 'D'    \n";
 
@@ -1964,7 +1964,7 @@ router.post('/noAnswerUpdate', function (req, res) {
     logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'router 시작');
     
     var dataArr = JSON.parse(req.body.saveArr);
-    var updateStr = "UPDATE TBL_QUERY_ANALYSIS_RESULT SET LUIS_INTENT=@LUIS_INTENT, LUIS_ENTITIES=@LUIS_ENTITIES, TRAIN_FLAG = 'M', RESULT='H', UPD_DT=GETDATE() WHERE QUERY = @QUERY; ";
+    var updateStr = "UPDATE TBL_QUERY_ANALYSIS_RESULT SET LUIS_INTENT=@LUIS_INTENT, LUIS_ENTITIES=@LUIS_ENTITIES, TRAIN_FLAG = 'M', RESULT='H', UPD_DT=DATEADD(hh, 9, GETDATE()) WHERE QUERY = @QUERY; ";
     var userId = req.session.sid;
 
     (async () => {
@@ -2126,7 +2126,7 @@ router.post('/apiDialogProc', function (req, res) {
     
     var dataArr = JSON.parse(req.body.saveArr);
     var insertStr = "INSERT INTO TBL_API_INTENT (API_QUERY, API_INTENT, REG_ID, REG_DT) " +
-                    " VALUES ( @API_QUERY, @API_INTENT, @REG_ID,GETDATE());";
+                    " VALUES ( @API_QUERY, @API_INTENT, @REG_ID, DATEADD(hh, 9, GETDATE()));";
     var deleteStr = "DELETE FROM TBL_API_INTENT WHERE SEQ = @DELETE_ST_SEQ; ";
     var updateStr = "UPDATE TBL_API_INTENT SET API_QUERY=@API_QUERY, API_INTENT = @API_INTENT WHERE SEQ = @SEQ; ";
     var userId = req.session.sid;

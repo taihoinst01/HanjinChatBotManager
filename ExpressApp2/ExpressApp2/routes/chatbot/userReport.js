@@ -23,31 +23,40 @@ var router = express.Router();
 
 //챗봇후기 관리 페이지 경로
 router.get('/userReport', function (req, res, next) {
-        logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'router 시작');
-        res.render("chatbotMng/userReport")
-    });
+    logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?") > 0 ? req.originalUrl.split("?")[0] : req.originalUrl, 'router 시작');
+    res.render("chatbotMng/userReport")
+});
 
 //챗봇후기 리스트 출력
 router.post('/selectReportList', function (req, res) {
     //logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'router 시작');
-    var pageSize = checkNull(req.body.rows, 10);
     var currentPage = checkNull(req.body.currentPage, 1);
+    var startDate = req.body.startDate;
+    var endDate = req.body.endDate;
+    var selPoint = req.body.selPoint;
     (async () => {
         try {
 
             var QueryStr = "SELECT tbp.* from \n" +
-                            " (SELECT ROW_NUMBER() OVER(ORDER BY SID ASC) AS NUM, \n" +
-                            "         COUNT('1') OVER(PARTITION BY '1') AS TOTCNT, \n"  +
-                            "         CEILING((ROW_NUMBER() OVER(ORDER BY SID DESC))/ convert(numeric ,10)) PAGEIDX, \n" +
-                            "         SID, R_COUNT, R_COMMENT, R_WDATE \n" +
-                           "          FROM TBL_CHATBOT_USEREPORT \n" +
-                           "          WHERE 1=1 \n";
-                QueryStr +="  ) tbp WHERE PAGEIDX = @currentPage; \n";            
+                " (SELECT ROW_NUMBER() OVER(ORDER BY SID ASC) AS NUM, \n" +
+                "         COUNT('1') OVER(PARTITION BY '1') AS TOTCNT, \n" +
+                "         CEILING((ROW_NUMBER() OVER(ORDER BY SID DESC))/ convert(numeric ,10)) PAGEIDX, \n" +
+                "         SID, R_COUNT, R_COMMENT, R_WDATE \n" +
+                "          FROM TBL_CHATBOT_USEREPORT \n" +
+                "          WHERE 1=1 \n";
+            QueryStr += "AND CONVERT(date, @startDate) <= CONVERT(date, R_WDATE)  AND  CONVERT(date, R_WDATE)   <= CONVERT(date, @endDate) ";
+            if (selPoint !== 'all') {
+                QueryStr += "AND	R_COUNT = @selPoint \n";
+            }
+            QueryStr += "  ) tbp WHERE PAGEIDX = @currentPage; \n";
 
             let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
             let result1 = await pool.request()
-            .input('currentPage', sql.NVarChar, currentPage)
-            .query(QueryStr);
+                .input('currentPage', sql.NVarChar, currentPage)
+                .input('startDate', sql.NVarChar, startDate)
+                .input('endDate', sql.NVarChar, endDate)
+                .input('selPoint', sql.NVarChar, selPoint)
+                .query(QueryStr);
 
             let rows = result1.recordset;
 
@@ -76,14 +85,87 @@ router.post('/selectReportList', function (req, res) {
 
             } else {
                 res.send({
-                    records : 0,
-                    rows : null
+                    records: 0,
+                    rows: null
                 });
             }
         } catch (err) {
-            logger.info('[에러] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, err.message);
+            logger.info('[에러] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?") > 0 ? req.originalUrl.split("?")[0] : req.originalUrl, err.message);
             console.log(err);
-            
+
+            // ... error checks
+        } finally {
+            sql.close();
+        }
+    })()
+
+    sql.on('error', err => {
+        // ... error handler
+    })
+});
+
+router.post('/selectReportListAll', function (req, res) {
+    //logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'router 시작');
+    var currentPage = checkNull(req.body.currentPage, 1);
+    var startDate = req.body.startDate;
+    var endDate = req.body.endDate;
+    var selPoint = req.body.selPoint;
+
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;      // "+ 1" becouse the 1st month is 0
+    var day = date.getDate();
+    var hour = date.getHours();
+    var minutes = date.getMinutes();
+    var secconds = date.getSeconds();
+    var seedatetime = year + pad(day, 2) + pad(month, 2) + '_' + pad(hour, 2) + 'h' + pad(minutes, 2) + 'm' + pad(secconds, 2) + 's';
+    var fildPath_ = req.session.appName + '_Chatbot Report_' + req.session.sid + '_' + seedatetime + ".xlsx";
+
+    (async () => {
+        try {
+
+            var QueryStr = "SELECT SID, R_COUNT, R_COMMENT, R_WDATE \n" +
+                "FROM TBL_CHATBOT_USEREPORT \n" +
+                "WHERE 1=1 \n";
+            QueryStr += "AND CONVERT(date, @startDate) <= CONVERT(date, R_WDATE)  AND  CONVERT(date, R_WDATE)   <= CONVERT(date, @endDate) ";
+            if (selPoint !== 'all') {
+                QueryStr += "AND	R_COUNT = @selPoint \n";
+            }
+            let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
+            let result1 = await pool.request()
+                .input('startDate', sql.NVarChar, startDate)
+                .input('endDate', sql.NVarChar, endDate)
+                .input('selPoint', sql.NVarChar, selPoint)
+                .query(QueryStr);
+
+            let rows = result1.recordset;
+
+            var recordList = [];
+            for (var i = 0; i < rows.length; i++) {
+                var item = {};
+                item = rows[i];
+
+                recordList.push(item);
+            }
+
+            if (rows.length > 0) {
+                res.send({
+                    rows: rows
+                    , fildPath_: fildPath_
+                    , appName: req.session.appName
+                    , userId: req.session.sid
+                    , status: true
+                });
+            } else {
+                res.send({
+                    rows: [],
+                    status: true
+                });
+            }
+        } catch (err) {
+            logger.info('[에러] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?") > 0 ? req.originalUrl.split("?")[0] : req.originalUrl, err.message);
+            console.log(err);
+
             // ... error checks
         } finally {
             sql.close();
@@ -101,6 +183,11 @@ function checkNull(val, newVal) {
     } else {
         return val;
     }
+}
+
+function pad(n, width) {
+    n = n + '';
+    return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
 }
 
 module.exports = router;
