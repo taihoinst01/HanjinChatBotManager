@@ -133,9 +133,12 @@ router.get('/dashBoard', function (req, res) {
 /* GET users listing. */
 router.post('/intentScore', function (req, res) {
 
-    var startDate = req.body.startDate;
-    var endDate = req.body.endDate;
-    var selDate = req.body.selDate;
+    //var startDate = req.body.startDate;
+    //var endDate = req.body.endDate;
+    var selDate = "";
+    var startDate = req.body.startDate+" 00:00:00";
+    var endDate = req.body.endDate+" 23:59:59";
+
     var selChannel = req.body.selChannel;
     let currentPageNo = checkNull(req.body.page, 1);
 
@@ -145,9 +148,10 @@ router.post('/intentScore', function (req, res) {
     selectQuery += "ROW_NUMBER() OVER(ORDER BY LUIS_INTENT DESC) AS NUM, \n";
     selectQuery += "COUNT('1') OVER(PARTITION BY '1') AS TOTCNT, \n";
     selectQuery += "CEILING((ROW_NUMBER() OVER(ORDER BY LUIS_INTENT DESC))/ convert(numeric , 9)) PAGEIDX, \n";
-    selectQuery += "LUIS_INTENT AS intentName, COUNT(*) AS  intentCount FROM TBL_HISTORY_QUERY \n";
+    selectQuery += "LUIS_INTENT AS intentName, COUNT(*) AS  intentCount FROM TBL_HISTORY_QUERY WITH (INDEX(HISTORY_REGINDEX))\n";
     selectQuery += "WHERE LUIS_INTENT ! = '' \n";
-    selectQuery += "AND CONVERT(date, '" + startDate + "') <= CONVERT(date, REG_DATE)  AND  CONVERT(date, REG_DATE)   <= CONVERT(date, '" + endDate + "') ";
+    //selectQuery += "AND CONVERT(date, '" + startDate + "') <= CONVERT(date, REG_DATE)  AND  CONVERT(date, REG_DATE)   <= CONVERT(date, '" + endDate + "') ";
+    selectQuery += "AND REG_DATE BETWEEN '" + startDate + "' AND '" + endDate + "' ";
     
     if (selDate !== 'allDay') {
         selectQuery += "AND CONVERT(int, CONVERT(char(8), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), 112)) = CONVERT(VARCHAR, GETDATE(), 112) \n";
@@ -177,6 +181,9 @@ router.post('/getScorePanel', function (req, res) {
     var startDate = req.body.startDate;
     var endDate = req.body.endDate;
     var selDate = req.body.selDate;
+    //var selDate = "";
+    //var startDate = req.body.startDate+" 00:00:00";
+    //var endDate = req.body.endDate+" 23:59:59";
     var selChannel = req.body.selChannel;
 
     var selectQuery = "";
@@ -277,9 +284,12 @@ router.post('/getScorePanel', function (req, res) {
 });
 
 router.post('/getCountPanel', function (req, res) {
-    var startDate = req.body.startDate;
-    var endDate = req.body.endDate;
-    var selDate = req.body.selDate;
+    //var startDate = req.body.startDate;
+    //var endDate = req.body.endDate;
+    //var selDate = req.body.selDate;
+    var selDate = "";
+    var startDate = req.body.startDate+" 00:00:00";
+    var endDate = req.body.endDate+" 23:59:59";
     var selChannel = req.body.selChannel;
 
     var selectQuery = `
@@ -290,9 +300,9 @@ router.post('/getCountPanel', function (req, res) {
            , ISNULL(S,0) AS 'SMALLTALK' 
       FROM ( 
              SELECT RESULT, COUNT(*) AS CNT 
-             FROM TBL_HISTORY_QUERY 
+             FROM TBL_HISTORY_QUERY WITH (INDEX(HISTORY_REGINDEX)) 
              WHERE (1=1) 
-             AND REG_DATE  between CONVERT(date, @startDate) AND CONVERT(date, @endDate) 
+             AND REG_DATE BETWEEN @startDate AND @endDate
     `;
     if (selDate !== 'allDay') {
         selectQuery += "                AND CONVERT(int, CONVERT(char(8), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), 112)) = CONVERT(VARCHAR, GETDATE(), 112) \n";
@@ -308,26 +318,8 @@ router.post('/getCountPanel', function (req, res) {
              SUM(CNT) FOR RESULT IN ([H],[D],[E],[S]) 
            ) AS X; 
      `;
-     /*
-    var selectQuery = "";
-        selectQuery += "SELECT \n";
-        selectQuery += "    COUNT(CASE WHEN RESULT = 'H' THEN 1 END ) SUCCESS, \n";
-        selectQuery += "    COUNT(CASE WHEN RESULT = 'D' THEN 1 END ) FAIL, \n";
-        selectQuery += "    COUNT(CASE WHEN RESULT = 'G' THEN 1 END ) SUGGEST, \n";
-        selectQuery += "    COUNT(CASE WHEN RESULT = 'E' THEN 1 END ) ERROR, \n"; 
-        selectQuery += "    COUNT(CASE WHEN RESULT = 'Q' THEN 1 END ) SAPWORD, \n"; 
-        selectQuery += "    COUNT(CASE WHEN RESULT = 'I' THEN 1 END ) SAPPASSWORDINIT \n"; 
-        selectQuery += "FROM TBL_HISTORY_QUERY \n";
-        selectQuery += "WHERE CUSTOMER_COMMENT_KR != '건의사항입력' \n";
-        selectQuery += "AND REG_DATE  between CONVERT(date, '" + startDate + "') AND CONVERT(date, '" + endDate + "') \n";
-        if (selDate !== 'allDay') {
-            selectQuery += "AND CONVERT(int, CONVERT(char(8), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), 112)) = CONVERT(VARCHAR, GETDATE(), 112) \n";
-        }
-        if (selChannel !== 'all') {
-            selectQuery += "AND	CHANNEL = '" + selChannel + "' \n";
-        }
-        //console.log("selectQuery===="+selectQuery);
-    */
+     
+   //console.log("getCountPanel===="+selectQuery);
     dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue).then(pool => {
         return pool.request()
                     .input('startDate', sql.NVarChar, startDate)
@@ -346,9 +338,12 @@ router.post('/getCountPanel', function (req, res) {
 });
 
 router.post('/getOftQuestion', function (req, res) {
-    var startDate = req.body.startDate;
-    var endDate = req.body.endDate;
-    var selDate = req.body.selDate;
+    //var startDate = req.body.startDate;
+    //var endDate = req.body.endDate;
+    //var selDate = req.body.selDate;
+    var selDate = "";
+    var startDate = req.body.startDate+" 00:00:00";
+    var endDate = req.body.endDate+" 23:59:59";
     var selChannel = req.body.selChannel;
 
     var selectQuery = "";
@@ -363,12 +358,14 @@ router.post('/getOftQuestion', function (req, res) {
     selectQuery += "      FROM\n";
     selectQuery += "      (\n";
     selectQuery += "         SELECT CUSTOMER_COMMENT_KR, COUNT(*) AS '질문수', CHANNEL\n";
-    selectQuery += "           FROM TBL_HISTORY_QUERY\n";
+    selectQuery += "           FROM TBL_HISTORY_QUERY WITH (INDEX(HISTORY_REGINDEX))\n";
     selectQuery += "          WHERE 1=1\n";
     selectQuery += "            and REG_DATE  between CONVERT(date, '" + startDate + "') AND CONVERT(date, '" + endDate + "') \n";
+    /*
     if (selDate !== 'allDay') {
         selectQuery += "AND CONVERT(int, CONVERT(char(8), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), 112)) = CONVERT(VARCHAR, GETDATE(), 112) \n";
     }
+    */
     if (selChannel !== 'all') {
         selectQuery += "AND	CHANNEL = '" + selChannel + "' \n";
     }
@@ -384,7 +381,7 @@ router.post('/getOftQuestion', function (req, res) {
     selectQuery += "WHERE RESULT='H'\n";
     selectQuery += "AND 질문수 > 1\n";
     selectQuery += "ORDER BY 질문수 DESC\n";
-    
+
     dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue).then(pool => {
         return pool.request().query(selectQuery)
         }).then(result => {
@@ -399,9 +396,12 @@ router.post('/getOftQuestion', function (req, res) {
 });
 
 router.post('/nodeQuery', function (req, res) {
-    var startDate = req.body.startDate;
-    var endDate = req.body.endDate;
-    var selDate = req.body.selDate;
+    //var startDate = req.body.startDate;
+    //var endDate = req.body.endDate;
+    //var selDate = req.body.selDate;
+    var selDate = "";
+    var startDate = req.body.startDate+" 00:00:00";
+    var endDate = req.body.endDate+" 23:59:59";
     var selChannel = req.body.selChannel;
     var currentPage = checkNull(req.body.page, 1);
 
@@ -433,10 +433,11 @@ router.post('/nodeQuery', function (req, res) {
         selectQuery += "                           , MAX(B.LUIS_INTENT_SCORE) AS LUIS_INTENT_SCORE \n";
         selectQuery += "                           , B.LUIS_INTENT AS LUIS_INTENT \n";
         selectQuery += "                           , B.LUIS_ENTITIES AS LUIS_ENTITIES \n";
-        selectQuery += "                      FROM TBL_HISTORY_QUERY A, TBL_QUERY_ANALYSIS_RESULT B--, TBL_DLG_RELATION_LUIS C  \n";
+        selectQuery += "                      FROM TBL_HISTORY_QUERY A WITH (INDEX(HISTORY_REGINDEX)), TBL_QUERY_ANALYSIS_RESULT B--, TBL_DLG_RELATION_LUIS C  \n";
         selectQuery += "                      WHERE 1=1 \n";
         selectQuery += "                        AND  A.CUSTOMER_COMMENT_KR = B.QUERY \n";
-        selectQuery += "                        AND CONVERT(date, '" + startDate + "') <= CONVERT(date, REG_DATE)  AND  CONVERT(date, REG_DATE)   <= CONVERT(date, '" + endDate + "')  \n";
+        //selectQuery += "                        AND CONVERT(date, '" + startDate + "') <= CONVERT(date, REG_DATE)  AND  CONVERT(date, REG_DATE)   <= CONVERT(date, '" + endDate + "')  \n";
+        selectQuery += "                        AND REG_DATE BETWEEN '" + startDate + "' AND '" + endDate + "'  \n";
         selectQuery += "                      GROUP BY A.CUSTOMER_COMMENT_KR,B.QUERY, A.CHANNEL, B.LUIS_INTENT, B.LUIS_ENTITIES, B.RESULT --,C.DLG_ID, \n";
         selectQuery += "                     \n";       
         selectQuery += "                     \n";
@@ -467,7 +468,6 @@ router.post('/nodeQuery', function (req, res) {
         selectQuery += " ) tbp \n";
         selectQuery += " WHERE 1=1 AND PAGEIDX = " + currentPage + "; \n";
         
-                    //console.log("nodeQuery==="+selectQuery);
     dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue).then(pool => {
         return pool.request().query(selectQuery)
         }).then(result => {
@@ -506,8 +506,8 @@ router.post('/firstQueryBar', function (req, res) {
         selectQuery += "         , LOWER(analysis.LUIS_INTENT) as INTENT \n";
         selectQuery += "         , analysis.LUIS_ENTITIES as 답변 \n";
         selectQuery += "         , ROUND(CAST(analysis.LUIS_INTENT_SCORE AS FLOAT),2) as 컨피던스 \n";
-        selectQuery += "         , case when history.customer_comment_kr ='Kona의 주요특징' or history.customer_comment_kr ='견적 내기' or history.customer_comment_kr ='시승신청' \n";
-        selectQuery += "                     or history.customer_comment_kr ='나에게 맞는 모델을 추천해줘' then '메뉴' else '대화' end as 메시지구분 \n";
+        //selectQuery += "         , case when history.customer_comment_kr ='Kona의 주요특징' or history.customer_comment_kr ='견적 내기' or history.customer_comment_kr ='시승신청' \n";
+        //selectQuery += "                     or history.customer_comment_kr ='나에게 맞는 모델을 추천해줘' then '메뉴' else '대화' end as 메시지구분 \n";
         selectQuery += "         , 날짜 \n";
         selectQuery += "    FROM ( \n";
         selectQuery += "        SELECT  ROW_NUMBER() OVER (PARTITION BY user_number ORDER BY min(sid) asc) AS Row \n";
@@ -518,7 +518,7 @@ router.post('/firstQueryBar', function (req, res) {
         selectQuery += "            , reg_date \n";
         selectQuery += "            , channel \n";
         selectQuery += "            , CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120) AS 날짜 \n";
-        selectQuery += "        FROM    tbl_history_query \n";
+        selectQuery += "        FROM    TBL_HISTORY_QUERY A WITH (INDEX(HISTORY_REGINDEX)) \n";
         selectQuery += "        WHERE  1=1 \n";
         selectQuery += "AND CONVERT(date, '" + startDate + "') <= CONVERT(date, REG_DATE)  AND  CONVERT(date, REG_DATE)   <= CONVERT(date, '" + endDate + "') ";
     
@@ -534,6 +534,8 @@ router.post('/firstQueryBar', function (req, res) {
         selectQuery += ") A \n";
         selectQuery += "GROUP BY INTENT \n";
 
+        //console.log("firstQueryBar===="+selectQuery);
+
     dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue).then(pool => {
         return pool.request().query(selectQuery)
         }).then(result => {
@@ -548,9 +550,12 @@ router.post('/firstQueryBar', function (req, res) {
 });
 
 router.post('/firstQueryTable', function (req, res) {
-    var startDate = req.body.startDate;
-    var endDate = req.body.endDate;
-    var selDate = req.body.selDate;
+    //var startDate = req.body.startDate;
+    //var endDate = req.body.endDate;
+    //var selDate = req.body.selDate;
+    var selDate = "";
+    var startDate = req.body.startDate+" 00:00:00";
+    var endDate = req.body.endDate+" 23:59:59";
     var selChannel = req.body.selChannel;
     let currentPageNo = checkNull(req.body.page, 1);
     var selectQuery = "";
@@ -573,12 +578,15 @@ router.post('/firstQueryTable', function (req, res) {
         selectQuery += "            , REG_DATE \n";
         selectQuery += "            , CHANNEL AS 채널 \n";
         selectQuery += "            , CONVERT(CHAR(19),CONVERT(DATETIME,REG_DATE),120) AS 날짜 \n";
-        selectQuery += "        FROM    TBL_HISTORY_QUERY \n";
+        selectQuery += "        FROM    TBL_HISTORY_QUERY A WITH (INDEX(HISTORY_REGINDEX)) \n";
         selectQuery += "        WHERE  1=1 \n";
-        selectQuery += "	AND CONVERT(date, '" + startDate + "') <= CONVERT(date, REG_DATE)  AND  CONVERT(date, REG_DATE)   <= CONVERT(date, '" + endDate + "') \n";
+        //selectQuery += "	AND CONVERT(date, '" + startDate + "') <= CONVERT(date, REG_DATE)  AND  CONVERT(date, REG_DATE)   <= CONVERT(date, '" + endDate + "') \n";
+        selectQuery += "	AND REG_DATE BETWEEN '" + startDate + "' AND '" + endDate + "' \n";
+        /*
         if (selDate !== 'allDay') {
             selectQuery += "AND CONVERT(int, CONVERT(char(8), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), 112)) = CONVERT(VARCHAR, GETDATE(), 112) \n";
         }
+        */
         if (selChannel !== 'all') {
             selectQuery += "AND	CHANNEL = '" + selChannel + "' \n";
         }
@@ -819,7 +827,7 @@ var pannelQry0 = `
 SELECT COUNT(DISTINCT A.USER_NUMBER) AS CUSOMER_CNT 
 FROM  ( 
     SELECT ISNULL(USER_NUMBER, '') AS USER_NUMBER, CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120) AS REG_DATE 
-      FROM   TBL_HISTORY_QUERY 
+      FROM   TBL_HISTORY_QUERY WITH (INDEX(HISTORY_REGINDEX))
     GROUP BY ISNULL(USER_NUMBER, ''), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120) 
   ) A 
  WHERE  1=1  
@@ -829,7 +837,7 @@ FROM  (
 var pannelQry1 = `
 SELECT ISNULL(SUM(RESPONSE_TIME)/COUNT(RESPONSE_TIME), 0) AS REPLY_SPEED 
        , CASE WHEN COUNT(*) != 0 THEN COUNT(*)/COUNT(DISTINCT USER_NUMBER) ELSE 0 END AS USER_QRY_AVG 
-  FROM   TBL_HISTORY_QUERY 
+  FROM   TBL_HISTORY_QUERY WITH (INDEX(HISTORY_REGINDEX))
  WHERE  1=1  
    AND REG_DATE  between CONVERT(date, @startDate) AND CONVERT(date, @endDate) 
 `;
@@ -884,15 +892,19 @@ SELECT CASE WHEN COUNT(*) != 0 THEN ROUND(SUM(C.답변율)/ COUNT(*), 2) ELSE 0 
 
 router.post('/getScorePanel1', function (req, res) {
     logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'router 시작');
-    var startDate = req.body.startDate;
-    var endDate = req.body.endDate;
-    var selDate = req.body.selDate;
+    //var startDate = req.body.startDate;
+    //var endDate = req.body.endDate;
+    //var selDate = req.body.selDate;
+    var selDate = "";
+    var startDate = req.body.startDate+" 00:00:00";
+    var endDate = req.body.endDate+" 23:59:59";
     var selChannel = req.body.selChannel;
-
+/*
     if (selDate !== 'allDay') {
         pannelQry0 += "AND CONVERT(int, CONVERT(char(8), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), 112)) = CONVERT(VARCHAR, GETDATE(), 112) \n";
         pannelQry1 += "AND CONVERT(int, CONVERT(char(8), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), 112)) = CONVERT(VARCHAR, GETDATE(), 112) \n";
     }
+    */
     if (selChannel !== 'all') {
         pannelQry0 += "AND	CHANNEL = @selChannel \n";
         pannelQry1 += "AND	CHANNEL = @selChannel \n";
@@ -1089,9 +1101,12 @@ router.post('/getScorePanel3', function (req, res) {
 
 router.post('/getScorePanel4', function (req, res) {
     logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'router 시작');
-    var startDate = req.body.startDate;
-    var endDate = req.body.endDate;
-    var selDate = req.body.selDate;
+    //var startDate = req.body.startDate;
+    //var endDate = req.body.endDate;
+    //var selDate = req.body.selDate;
+    var selDate = "";
+    var startDate = req.body.startDate+" 00:00:00";
+    var endDate = req.body.endDate+" 23:59:59";
     var selChannel = req.body.selChannel;
     
     var pannelQry4 = `
@@ -1099,9 +1114,9 @@ router.post('/getScorePanel4', function (req, res) {
         (SELECT MAX(B.CNT) 
         FROM (
                 SELECT COUNT(*) AS CNT 
-                FROM TBL_HISTORY_QUERY 
+                FROM TBL_HISTORY_QUERY WITH (INDEX(HISTORY_REGINDEX))
                 WHERE 1=1 
-                    AND REG_DATE  between CONVERT(date, @startDate) AND CONVERT(date, @endDate) 
+                    AND REG_DATE BETWEEN @startDate AND @endDate 
     `;
     if (selDate !== 'allDay') {
         pannelQry4 += "AND CONVERT(int, CONVERT(char(8), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), 112)) = CONVERT(VARCHAR, GETDATE(), 112) \n";

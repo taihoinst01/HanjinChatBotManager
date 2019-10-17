@@ -302,9 +302,9 @@ function makeHistoryTable(newPage) {
                             }
                         }
 
-                        if(data.rows[i].MOBILE_YN=="M"){
+                        if(data.rows[i].MOBILE_YN=="MOBILE"){
                             mobilePcText = "Mobile"
-                        }else if(data.rows[i].MOBILE_YN=="P"){
+                        }else if(data.rows[i].MOBILE_YN=="PC"){
                             mobilePcText = "PC"
                         }else{
                             mobilePcText = "NONE";

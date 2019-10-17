@@ -73,12 +73,14 @@
                                                     <%= __('datetype') %>
                                                 </label>
                                                 <select class="form-control" id="selDate" name="selDate">
+                                                    <option value="today">
+                                                       <%= __('day') %>
+                                                    </option>
+                                                    <!--
                                                     <option value="allDay">
                                                         <%= __('allDates') %>
                                                     </option>
-                                                    <option value="today">
-                                                        <%= __('day') %>
-                                                    </option>
+                                                    -->
                                                     <option value="select">
                                                         <%= __('SELECT_DATE') %>
                                                     </option>
@@ -126,8 +128,8 @@
                                                 </label>
                                                 <select class="form-control" id="selMobilePc" name="selMobilePc">
                                                     <option value="all"><%= __('All') %></option>
-                                                    <option value="M">Mobile</option>
-                                                    <option value="P">PC</option>
+                                                    <option value="MOBILE">Mobile</option>
+                                                    <option value="PC">PC</option>
                                                 </select>
                                             </div>
                                         </div>

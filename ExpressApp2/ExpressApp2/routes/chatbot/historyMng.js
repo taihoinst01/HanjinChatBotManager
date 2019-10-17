@@ -65,12 +65,14 @@ router.post('/selectHistoryListAll', function (req, res) {
 
     var searchQuestion = req.body.searchQuestion;
     var searchUserId = req.body.searchUserId;
-    var startDate = req.body.startDate;
-    var endDate = req.body.endDate;
+    var startDate = "";
+    var endDate = "";
+    //var startDate = req.body.startDate;
+    //var endDate = req.body.endDate;
     var selDate = req.body.selDate;
     var selMobilePc = req.body.selMobilePc;
     var selResult = req.body.selResult;
-
+    
     var date = new Date();
     var year = date.getFullYear();
     var month = date.getMonth() + 1;      // "+ 1" becouse the 1st month is 0
@@ -81,6 +83,15 @@ router.post('/selectHistoryListAll', function (req, res) {
     var seedatetime = year + pad(day, 2) + pad(month, 2) + '_'+ pad(hour, 2) + 'h' + pad(minutes, 2) + 'm' + pad(secconds, 2) + 's';
 
     var fildPath_ = req.session.appName + '_' + req.session.sid + '_' + seedatetime + ".xlsx";
+
+    if(selDate == 'today'){
+        startDate = pad(month, 2)+'/'+pad(day, 2)+'/'+year+' '+'00:00:00';
+        endDate = pad(month, 2)+'/'+pad(day, 2)+'/'+year+' '+'23:59:59';
+    }else {
+        startDate = req.body.startDate+' '+'00:00:00';
+        endDate = req.body.endDate+' '+'23:59:59';
+    }
+    
     
     if (chkBoardParams(req.body, req.session.channelList)) {
         logger.info('[에러]history 검색 필터 오류 [id : %s] [url : %s] [error : %s]', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, req.body.toString());
@@ -105,15 +116,28 @@ router.post('/selectHistoryListAll', function (req, res) {
                 QueryStr += "                  ,(CASE RTRIM(A.DLG_ID) WHEN '' THEN 'NONE' \n";
                 QueryStr += "                         ELSE ISNULL(A.DLG_ID, 'NONE') END \n";
                 QueryStr += "                  ) AS DLG_ID, A.SID, TBL_B.SAME_CNT \n";
-                QueryStr += "             FROM TBL_HISTORY_QUERY A, \n";
+                QueryStr += "             FROM TBL_HISTORY_QUERY A WITH (INDEX(HISTORY_REGINDEX)),\n";
                 QueryStr += "                  ( \n";
                 QueryStr += "			         SELECT CUSTOMER_COMMENT_KR AS TRANS_COMMENT, COUNT(CUSTOMER_COMMENT_KR) AS SAME_CNT \n";
-                QueryStr += "                  	   FROM TBL_HISTORY_QUERY\n";
-                QueryStr += "                  	   WHERE CUSTOMER_COMMENT_KR != '건의사항입력' \n";
+                QueryStr += "                  	   FROM TBL_HISTORY_QUERY A WITH (INDEX(HISTORY_REGINDEX))\n";
+                QueryStr += "                  	   WHERE 1=1";
+                if (selDate == 'today'||selDate == 'select') {
+                    QueryStr += "AND REG_DATE BETWEEN @startDate AND @endDate  \n";
+                }else{
+                QueryStr += "";
+                }
                 QueryStr += "                  GROUP BY CUSTOMER_COMMENT_KR\n";
                 QueryStr += "                  ) TBL_B \n";
                 QueryStr += "            WHERE RTRIM(CUSTOMER_COMMENT_KR) != '' \n";
+                if (selDate == 'today'||selDate == 'select') {
+                    QueryStr += "AND REG_DATE BETWEEN @startDate AND @endDate  \n";
+                }else{
+                QueryStr += "";
+                }
                 QueryStr += "              AND A.CUSTOMER_COMMENT_KR = TBL_B.TRANS_COMMENT \n";
+
+                QueryStr += "     ) tbx\n";
+                QueryStr += "     WHERE 1=1\n";
                 if (searchQuestion !== '') {
                     QueryStr += "     AND TBL_B.TRANS_COMMENT LIKE @searchQuestion \n";
                 }
@@ -121,19 +145,14 @@ router.post('/selectHistoryListAll', function (req, res) {
                 if (searchUserId !== '') {
                     QueryStr += "     AND USER_ID LIKE @searchUserId \n";
                 }
-                
-                if (selDate == 'today') {
-                    QueryStr += "AND CONVERT(int, CONVERT(char(8), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), 112)) = CONVERT(VARCHAR, GETDATE(), 112) \n";
-                } else if (selDate == 'select') {
-                    QueryStr += "AND CONVERT(date, @startDate) <= CONVERT(date, REG_DATE)  AND  CONVERT(date, REG_DATE)   <= CONVERT(date, @endDate) ";
-                }
+
+
                 if (selResult !== 'all') {
                     QueryStr += "AND	RESULT = @selResult \n";
                 }
                 if (selMobilePc !== 'all') {
                     QueryStr += " AND	MOBILE_YN = @selMobilePc \n";
                 }
-                QueryStr += "     ) tbx\n";
                 logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'TBL_HISTORY_QUERY 테이블 조회 시작');
                 let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
                 let result1 = await pool.request()
@@ -187,6 +206,20 @@ router.post('/selectHistoryList', function (req, res) {
     var selResult = req.body.selResult;
     var selMobilePc = req.body.selMobilePc;
     var currentPage = checkNull(req.body.currentPage, 1);
+
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;      // "+ 1" becouse the 1st month is 0
+    var day = date.getDate();
+
+    if(selDate == 'today'){
+        startDate = pad(month, 2)+'/'+pad(day, 2)+'/'+year+' '+'00:00:00';
+        endDate = pad(month, 2)+'/'+pad(day, 2)+'/'+year+' '+'23:59:59';
+    }else {
+        startDate = req.body.startDate+' '+'00:00:00';
+        endDate = req.body.endDate+' '+'23:59:59';
+    }
+    
     
     if (chkBoardParams(req.body, req.session.channelList)) {
         logger.info('[에러]history 검색 필터 오류 [id : %s] [url : %s] [error : %s]', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, req.body.toString());
@@ -211,17 +244,28 @@ router.post('/selectHistoryList', function (req, res) {
                 QueryStr += "                  ,(CASE RTRIM(A.DLG_ID) WHEN '' THEN 'NONE' \n";
                 QueryStr += "                         ELSE ISNULL(A.DLG_ID, 'NONE') END \n";
                 QueryStr += "                  ) AS DLG_ID, A.SID, TBL_B.SAME_CNT \n";
-                QueryStr += "             FROM TBL_HISTORY_QUERY A \n";
-                QueryStr += "             INNER JOIN  \n";
+                QueryStr += "             FROM TBL_HISTORY_QUERY A WITH (INDEX(HISTORY_REGINDEX)),\n";
                 QueryStr += "                  ( \n";
-                QueryStr += "			         SELECT MAX(SID) AS TRANS_SID, CUSTOMER_COMMENT_KR AS TRANS_COMMENT, COUNT(CUSTOMER_COMMENT_KR) AS SAME_CNT  \n";
-                QueryStr += "                  	   FROM TBL_HISTORY_QUERY\n";
-                QueryStr += "                  	   WHERE 1 = 1 \n";
-                
-                //2019.05.07 USER_ID가 DB상에 전부 null이므로 주석처리함.
-                //QueryStr += "					     AND ISNULL(USER_ID, '') != '' \n";
-                //QueryStr += "					     AND RTRIM(LTRIM(ISNULL(USER_ID, ''))) != '' \n";
-                QueryStr += " 					     AND RTRIM(CUSTOMER_COMMENT_KR) != ''  \n";
+                QueryStr += "			         SELECT CUSTOMER_COMMENT_KR AS TRANS_COMMENT, COUNT(CUSTOMER_COMMENT_KR) AS SAME_CNT \n";
+                QueryStr += "                  	   FROM TBL_HISTORY_QUERY A WITH (INDEX(HISTORY_REGINDEX))\n";
+                QueryStr += "                  	   WHERE 1=1";
+                if (selDate == 'today'||selDate == 'select') {
+                    QueryStr += "AND REG_DATE BETWEEN @startDate AND @endDate  \n";
+                }else{
+                QueryStr += "";
+                }
+                QueryStr += "                  GROUP BY CUSTOMER_COMMENT_KR\n";
+                QueryStr += "                  ) TBL_B \n";
+                QueryStr += "            WHERE RTRIM(CUSTOMER_COMMENT_KR) != '' \n";
+                if (selDate == 'today'||selDate == 'select') {
+                    QueryStr += "AND REG_DATE BETWEEN @startDate AND @endDate  \n";
+                }else{
+                QueryStr += "";
+                }
+                QueryStr += "              AND A.CUSTOMER_COMMENT_KR = TBL_B.TRANS_COMMENT \n";
+
+                QueryStr += "     ) tbx\n";
+                QueryStr += "     WHERE PAGEIDX = @currentPage\n";
                 if (searchQuestion !== '') {
                     QueryStr += "     AND TBL_B.TRANS_COMMENT LIKE @searchQuestion \n";
                 }
@@ -229,28 +273,15 @@ router.post('/selectHistoryList', function (req, res) {
                 if (searchUserId !== '') {
                     QueryStr += "     AND USER_ID LIKE @searchUserId \n";
                 }
-                
-                if (selDate == 'today') {
-                    QueryStr += " AND CONVERT(int, CONVERT(char(8), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), 112)) = CONVERT(VARCHAR, GETDATE(), 112) \n";
-                } else if (selDate == 'select') {
-                    QueryStr += " AND CONVERT(date, @startDate) <= CONVERT(date, REG_DATE)  AND  CONVERT(date, REG_DATE)   <= CONVERT(date, @endDate) ";
-                }
+
+
                 if (selResult !== 'all') {
-                    QueryStr += " AND	RESULT = @selResult \n";
+                    QueryStr += "AND	RESULT = @selResult \n";
                 }
                 if (selMobilePc !== 'all') {
                     QueryStr += " AND	MOBILE_YN = @selMobilePc \n";
                 }
-                QueryStr += "                  GROUP BY CUSTOMER_COMMENT_KR\n";
-                QueryStr += "                   \n";
-                QueryStr += "                   \n";
-                QueryStr += "                  ) TBL_B \n";
-                QueryStr += "				  ON SID = TBL_B.TRANS_SID \n";
-                QueryStr += "            WHERE 1=1 \n";
-                //QueryStr += "              AND A.CHATBOT_COMMENT_CODE NOT IN ('SAP') \n";
-                QueryStr += "     ) tbx\n";
-                QueryStr += "  WHERE PAGEIDX = @currentPage\n";
-                
+
                 logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'TBL_HISTORY_QUERY 테이블 조회 시작');
                 let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
                 let result1 = await pool.request()
