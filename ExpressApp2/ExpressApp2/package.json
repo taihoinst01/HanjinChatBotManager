@@ -23,7 +23,7 @@
     "fs-extra": "^7.0.1",
     "i18n": "~0.8.3",
     "moment": "^2.22.2",
-    "morgan": "^1.7.0",
+    "morgan": "^1.9.1",
     "mssql": "4.1.0",
     "multer": "^1.4.1",
     "node-rest-client": "^3.1.0",
