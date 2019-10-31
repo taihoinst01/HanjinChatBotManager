@@ -152,10 +152,11 @@ router.post('/intentScore', function (req, res) {
     selectQuery += "WHERE LUIS_INTENT ! = '' \n";
     //selectQuery += "AND CONVERT(date, '" + startDate + "') <= CONVERT(date, REG_DATE)  AND  CONVERT(date, REG_DATE)   <= CONVERT(date, '" + endDate + "') ";
     selectQuery += "AND REG_DATE BETWEEN '" + startDate + "' AND '" + endDate + "' ";
-    
+    /*
     if (selDate !== 'allDay') {
         selectQuery += "AND CONVERT(int, CONVERT(char(8), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), 112)) = CONVERT(VARCHAR, GETDATE(), 112) \n";
     }
+    */
     if (selChannel !== 'all') {
         selectQuery += "AND	CHANNEL = '" + selChannel + "' \n";
     }
@@ -212,9 +213,11 @@ router.post('/getScorePanel', function (req, res) {
         selectQuery += ") C \n";
         selectQuery += "WHERE 1=1 \n";
         selectQuery += "AND C.REG_DATE  between CONVERT(date, '" + startDate + "') AND CONVERT(date, '" + endDate + "') \n";
+        /*
         if (selDate !== 'allDay') {
             selectQuery += "AND CONVERT(int, CONVERT(char(8), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), 112)) = CONVERT(VARCHAR, GETDATE(), 112) \n";
         }
+        */
         if (selChannel !== 'all') {
             selectQuery += "AND	CHANNEL = '" + selChannel + "' \n";
         }
@@ -240,9 +243,11 @@ router.post('/getScorePanel', function (req, res) {
         selectQuery += ") C \n";
         selectQuery += "WHERE 1=1 \n";
         selectQuery += "AND C.REG_DATE  between CONVERT(date, '" + startDate + "') AND CONVERT(date, '" + endDate + "') \n";
+        /*
         if (selDate !== 'allDay') {
             selectQuery += "AND CONVERT(int, CONVERT(char(8), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), 112)) = CONVERT(VARCHAR, GETDATE(), 112) \n";
         }
+        */
         if (selChannel !== 'all') {
             selectQuery += "AND	CHANNEL = '" + selChannel + "' \n";
         }
@@ -251,9 +256,11 @@ router.post('/getScorePanel', function (req, res) {
 
         selectQuery += "    , ISNULL((SELECT MAX(B.CNT) FROM (SELECT COUNT(*) AS CNT FROM TBL_HISTORY_QUERY WHERE 1=1 ";
         selectQuery += "AND REG_DATE  between CONVERT(date, '" + startDate + "') AND CONVERT(date, '" + endDate + "') \n";
+        /*
     if (selDate !== 'allDay') {
         selectQuery += "AND CONVERT(int, CONVERT(char(8), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), 112)) = CONVERT(VARCHAR, GETDATE(), 112) \n";
     }
+    */
     if (selChannel !== 'all') {
         selectQuery += "AND	CHANNEL = '" + selChannel + "' \n";
     }
@@ -261,10 +268,11 @@ router.post('/getScorePanel', function (req, res) {
         selectQuery += "FROM   TBL_HISTORY_QUERY \n";
         selectQuery += "WHERE  1=1 \n";
         selectQuery += "AND REG_DATE  between CONVERT(date, '" + startDate + "') AND CONVERT(date, '" + endDate + "') \n";
-    
+    /*
     if (selDate !== 'allDay') {
         selectQuery += "AND CONVERT(int, CONVERT(char(8), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), 112)) = CONVERT(VARCHAR, GETDATE(), 112) \n";
     }
+    */
     if (selChannel !== 'all') {
         selectQuery += "AND	CHANNEL = '" + selChannel + "' \n";
     }
@@ -304,9 +312,11 @@ router.post('/getCountPanel', function (req, res) {
              WHERE (1=1) 
              AND REG_DATE BETWEEN @startDate AND @endDate
     `;
+    /*
     if (selDate !== 'allDay') {
         selectQuery += "                AND CONVERT(int, CONVERT(char(8), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), 112)) = CONVERT(VARCHAR, GETDATE(), 112) \n";
     }
+    */
     if (selChannel !== 'all') {
         selectQuery += "                AND	CHANNEL = '" + selChannel + "' \n";
     }
@@ -521,10 +531,11 @@ router.post('/firstQueryBar', function (req, res) {
         selectQuery += "        FROM    TBL_HISTORY_QUERY A WITH (INDEX(HISTORY_REGINDEX)) \n";
         selectQuery += "        WHERE  1=1 \n";
         selectQuery += "AND CONVERT(date, '" + startDate + "') <= CONVERT(date, REG_DATE)  AND  CONVERT(date, REG_DATE)   <= CONVERT(date, '" + endDate + "') ";
-    
+    /*
             if (selDate !== 'allDay') {
                 selectQuery += "AND CONVERT(int, CONVERT(char(8), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), 112)) = CONVERT(VARCHAR, GETDATE(), 112) \n";
             }
+            */
             if (selChannel !== 'all') {
                 selectQuery += "AND	CHANNEL = '" + selChannel + "' \n";
             }
@@ -627,20 +638,22 @@ router.post('/getResponseScore', function (req, res) {
         selectQuery += "	 , ISNULL((SELECT MAX(RESPONSE_TIME) FROM TBL_HISTORY_QUERY  \n";
         selectQuery += " WHERE 1=1  \n";
         selectQuery += "AND CONVERT(date, '" + startDate + "') <= CONVERT(date, REG_DATE)  AND  CONVERT(date, REG_DATE)   <= CONVERT(date, '" + endDate + "') ";
-    
+    /*
             if (selDate !== 'allDay') {
                 selectQuery += "AND CONVERT(int, CONVERT(char(8), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), 112)) = CONVERT(VARCHAR, GETDATE(), 112) \n";
             }
+            */
             if (selChannel !== 'all') {
                 selectQuery += "AND	CHANNEL = '" + selChannel + "' \n";
             }
         selectQuery += "	 ), 0) AS MAX_REPLY \n";
         selectQuery += "	 , ISNULL((SELECT MIN(RESPONSE_TIME) FROM TBL_HISTORY_QUERY WHERE RESPONSE_TIME >0 \n";
         selectQuery += "AND CONVERT(date, '" + startDate + "') <= CONVERT(date, REG_DATE)  AND  CONVERT(date, REG_DATE)   <= CONVERT(date, '" + endDate + "') ";
-    
+    /*
             if (selDate !== 'allDay') {
                 selectQuery += "AND CONVERT(int, CONVERT(char(8), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), 112)) = CONVERT(VARCHAR, GETDATE(), 112) \n";
             }
+            */
             if (selChannel !== 'all') {
                 selectQuery += "AND	CHANNEL = '" + selChannel + "' \n";
             }
@@ -651,10 +664,11 @@ router.post('/getResponseScore', function (req, res) {
         selectQuery += "  FROM TBL_HISTORY_QUERY  \n";
         selectQuery += " WHERE 1=1  \n";
         selectQuery += "AND CONVERT(date, '" + startDate + "') <= CONVERT(date, REG_DATE)  AND  CONVERT(date, REG_DATE)   <= CONVERT(date, '" + endDate + "') ";
-    
+    /*
             if (selDate !== 'allDay') {
                 selectQuery += "AND CONVERT(int, CONVERT(char(8), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), 112)) = CONVERT(VARCHAR, GETDATE(), 112) \n";
             }
+            */
             if (selChannel !== 'all') {
                 selectQuery += "AND	CHANNEL = '" + selChannel + "' \n";
             }
@@ -690,10 +704,11 @@ router.post('/getQueryByEachTime', function (req, res) {
         selectQuery += "	   FROM TBL_HISTORY_QUERY \n";
         selectQuery += "	  WHERE 1=1 \n";
         selectQuery += "AND CONVERT(date, '" + startDate + "') <= CONVERT(date, REG_DATE)  AND  CONVERT(date, REG_DATE)   <= CONVERT(date, '" + endDate + "') ";
-    
+    /*
             if (selDate !== 'allDay') {
                 selectQuery += "AND CONVERT(int, CONVERT(char(8), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), 112)) = CONVERT(VARCHAR, GETDATE(), 112) \n";
             }
+            */
             if (selChannel !== 'all') {
                 selectQuery += "AND	CHANNEL = '" + selChannel + "' \n";
             }
@@ -1118,9 +1133,11 @@ router.post('/getScorePanel4', function (req, res) {
                 WHERE 1=1 
                     AND REG_DATE BETWEEN @startDate AND @endDate 
     `;
+    /*
     if (selDate !== 'allDay') {
         pannelQry4 += "AND CONVERT(int, CONVERT(char(8), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), 112)) = CONVERT(VARCHAR, GETDATE(), 112) \n";
     }
+    */
     if (selChannel !== 'all') {
         pannelQry4 += "AND	CHANNEL = @selChannel \n";
     }
@@ -1129,7 +1146,7 @@ router.post('/getScorePanel4', function (req, res) {
         ) B 
     ), 0) AS MAX_QRY  
     `;
-    //console.log("panel=="+selectQuery);
+    //console.log("getScorePanel4=="+pannelQry4);
     dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue).then(pool => {
         return pool.request()
                     .input('startDate', sql.NVarChar, startDate)
