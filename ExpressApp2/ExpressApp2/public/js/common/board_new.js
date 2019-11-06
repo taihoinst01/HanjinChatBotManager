@@ -19,7 +19,23 @@ var language;
         getSimulUrl();
         var myDate = new Date();
         var month = myDate.getMonth() + 1;
-        var prettyDate = month + '/' + myDate.getDate() + '/' + myDate.getFullYear();
+
+        var dayCheck = myDate.getDate();
+        var monthCheck = month;
+        var showMonth = "";
+        if(monthCheck < 10 ){
+            showMonth = '0' + month;
+        }else{
+            showMonth = month;
+        }
+
+        var showDay = "";
+        if(dayCheck < 10 ){
+            showDay = '0' + myDate.getDate();
+        }else{
+            showDay = myDate.getDate();
+        }
+        var prettyDate = showMonth + '/' + showDay + '/' + myDate.getFullYear();
 
         $('#startDate').val(prettyDate);
         $('#endDate').val(prettyDate);
