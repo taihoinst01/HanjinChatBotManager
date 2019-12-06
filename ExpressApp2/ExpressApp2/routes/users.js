@@ -288,20 +288,15 @@ router.post('/login', function (req, res) {
                 || req.socket.remoteAddress
                 || req.connection.socket.remoteAddress;
             */
-            var userLoginIP = "";
-            /*
-            if (req.headers['x-forwarded-for']) {
-                userLoginIP = req.headers['x-forwarded-for'].split(",")[0];
-            } else if (req.connection && req.connection.remoteAddress) {
-                userLoginIP = req.connection.remoteAddress;
-            } else {
-                userLoginIP = req.ip;
-            }
-            if (userLoginIP != "") {
-                var tmpIp = userLoginIP.split(':');
-                userLoginIP = tmpIp[tmpIp.length - 1];
-            */
-
+           var userLoginIP = "";
+           if (req.headers['x-forwarded-for']) {
+               userLoginIP = req.headers['x-forwarded-for'].split(",")[0];
+           } else if (req.connection && req.connection.remoteAddress) {
+               userLoginIP = req.connection.remoteAddress;
+           } else {
+               userLoginIP = req.ip;
+           }
+/*
             var os = require('os'),
             interfaces = os.networkInterfaces(),
             address,
@@ -327,10 +322,11 @@ router.post('/login', function (req, res) {
                 }
             }
             userLoginIP = addresses[0];
-
+*/
             if (userLoginIP != "") {
                 var tmpIp = userLoginIP.split(':');
-                userLoginIP = tmpIp[tmpIp.length - 1];
+                //userLoginIP = tmpIp[tmpIp.length - 1];
+                userLoginIP = tmpIp[0];
 
                 /*
                 if ((userLoginIP != userInfo[0].LOGIN_IP && userInfo[0].LOGIN_IP_YN != 'N') ) {
