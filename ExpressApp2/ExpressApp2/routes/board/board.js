@@ -276,7 +276,7 @@ router.post('/getScorePanel', function (req, res) {
     if (selChannel !== 'all') {
         selectQuery += "AND	CHANNEL = '" + selChannel + "' \n";
     }
-    //console.log("panel=="+selectQuery);
+    console.log("panel=="+selectQuery);
     dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue).then(pool => {
         return pool.request().query(selectQuery)
         }).then(result => {
@@ -837,7 +837,7 @@ router.post('/getSimulUrlInfo', function (req, res) {
 
 });
 
-
+//AND REG_DATE  between CONVERT(date, @startDate) AND CONVERT(date, @endDate) <-- 이게 원래 CONVERT를 DATE 로 함.
 var pannelQry0 = `
 SELECT COUNT(DISTINCT A.USER_NUMBER) AS CUSOMER_CNT 
 FROM  ( 
@@ -846,7 +846,7 @@ FROM  (
     GROUP BY ISNULL(USER_NUMBER, ''), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120) 
   ) A 
  WHERE  1=1  
-   AND REG_DATE  between CONVERT(date, @startDate) AND CONVERT(date, @endDate) 
+   AND REG_DATE  between CONVERT(nvarchar(100), @startDate) AND CONVERT(nvarchar(100), @endDate) 
 `;
 
 var pannelQry1 = `
@@ -854,7 +854,7 @@ SELECT ISNULL(SUM(RESPONSE_TIME)/COUNT(RESPONSE_TIME), 0) AS REPLY_SPEED
        , CASE WHEN COUNT(*) != 0 THEN COUNT(*)/COUNT(DISTINCT USER_NUMBER) ELSE 0 END AS USER_QRY_AVG 
   FROM   TBL_HISTORY_QUERY WITH (INDEX(HISTORY_REGINDEX))
  WHERE  1=1  
-   AND REG_DATE  between CONVERT(date, @startDate) AND CONVERT(date, @endDate) 
+   AND REG_DATE  between CONVERT(nvarchar(100), @startDate) AND CONVERT(nvarchar(100), @endDate) 
 `;
 
 var pannelQry2 = `
@@ -875,7 +875,7 @@ SELECT CASE WHEN COUNT(*) != 0 THEN ROUND(SUM(C.답변율)/ COUNT(*),2) ELSE 0 E
             ) B 
         WHERE  A.CHANNEL = B.CHANNEL 
         AND                A.Dimdate = B.Dimdate 
-        AND A.Dimdate  between CONVERT(date, @startDate) AND CONVERT(date, @endDate) 
+        AND A.Dimdate  between CONVERT(nvarchar(100), @startDate) AND CONVERT(nvarchar(100), @endDate) 
     ) C 
  WHERE 1=1 
 `;
@@ -902,7 +902,7 @@ SELECT CASE WHEN COUNT(*) != 0 THEN ROUND(SUM(C.답변율)/ COUNT(*), 2) ELSE 0 
            AND A.Dimdate = B.Dimdate 
     ) C 
  WHERE 1=1 
-   AND REG_DATE  between CONVERT(date, @startDate) AND CONVERT(date, @endDate) 
+   AND REG_DATE  between CONVERT(nvarchar(100), @startDate) AND CONVERT(nvarchar(100), @endDate) 
 `;
 
 router.post('/getScorePanel1', function (req, res) {
@@ -1146,7 +1146,7 @@ router.post('/getScorePanel4', function (req, res) {
         ) B 
     ), 0) AS MAX_QRY  
     `;
-    //console.log("getScorePanel4=="+pannelQry4);
+    console.log("getScorePanel4=="+pannelQry4);
     dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue).then(pool => {
         return pool.request()
                     .input('startDate', sql.NVarChar, startDate)
