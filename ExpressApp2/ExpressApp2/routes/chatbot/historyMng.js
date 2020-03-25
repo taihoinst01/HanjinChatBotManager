@@ -115,8 +115,10 @@ router.post('/selectHistoryListAll', function (req, res) {
                 QueryStr += "                  ) AS LUIS_ENTITIES \n";
                 QueryStr += "                  ,(CASE RTRIM(A.DLG_ID) WHEN '' THEN 'NONE' \n";
                 QueryStr += "                         ELSE ISNULL(A.DLG_ID, 'NONE') END \n";
-                QueryStr += "                  ) AS DLG_ID, A.SID, TBL_B.SAME_CNT \n";
-                QueryStr += "             FROM TBL_HISTORY_QUERY A WITH (INDEX(HISTORY_REGINDEX)),\n";
+                QueryStr += "                  ) AS DLG_ID, A.SID, 0 AS SAME_CNT \n";
+                //QueryStr += "             FROM TBL_HISTORY_QUERY A WITH (INDEX(HISTORY_REGINDEX)),\n";
+                QueryStr += "             FROM TBL_HISTORY_QUERY A WITH (INDEX(HISTORY_REGINDEX))\n";
+                /*
                 QueryStr += "                  ( \n";
                 QueryStr += "			         SELECT CUSTOMER_COMMENT_KR AS TRANS_COMMENT, COUNT(CUSTOMER_COMMENT_KR) AS SAME_CNT \n";
                 QueryStr += "                  	   FROM TBL_HISTORY_QUERY A WITH (INDEX(HISTORY_REGINDEX))\n";
@@ -128,18 +130,16 @@ router.post('/selectHistoryListAll', function (req, res) {
                 }
                 QueryStr += "                  GROUP BY CUSTOMER_COMMENT_KR\n";
                 QueryStr += "                  ) TBL_B \n";
+                */
                 QueryStr += "            WHERE RTRIM(CUSTOMER_COMMENT_KR) != '' \n";
                 if (selDate == 'today'||selDate == 'select') {
-                    QueryStr += "AND REG_DATE BETWEEN @startDate AND @endDate  \n";
+                    QueryStr += "AND REG_DATE  between CONVERT(nvarchar(100), @startDate) AND CONVERT(nvarchar(100), @endDate)  \n";
                 }else{
                 QueryStr += "";
                 }
-                QueryStr += "              AND A.CUSTOMER_COMMENT_KR = TBL_B.TRANS_COMMENT \n";
 
-                QueryStr += "     ) tbx\n";
-                QueryStr += "     WHERE 1=1\n";
                 if (searchQuestion !== '') {
-                    QueryStr += "     AND TBL_B.TRANS_COMMENT LIKE @searchQuestion \n";
+                    QueryStr += "     AND CUSTOMER_COMMENT_KR LIKE @searchQuestion \n";
                 }
 
                 if (searchUserId !== '') {
@@ -153,6 +153,12 @@ router.post('/selectHistoryListAll', function (req, res) {
                 if (selMobilePc !== 'all') {
                     QueryStr += " AND	MOBILE_YN = @selMobilePc \n";
                 }
+
+                //QueryStr += "              AND A.CUSTOMER_COMMENT_KR = TBL_B.TRANS_COMMENT \n";
+
+                QueryStr += "     ) tbx\n";
+                QueryStr += "     WHERE 1=1\n";
+                
                 logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'TBL_HISTORY_QUERY 테이블 조회 시작');
                 let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
                 let result1 = await pool.request()
@@ -243,8 +249,11 @@ router.post('/selectHistoryList', function (req, res) {
                 QueryStr += "                  ) AS LUIS_ENTITIES \n";
                 QueryStr += "                  ,(CASE RTRIM(A.DLG_ID) WHEN '' THEN 'NONE' \n";
                 QueryStr += "                         ELSE ISNULL(A.DLG_ID, 'NONE') END \n";
-                QueryStr += "                  ) AS DLG_ID, A.SID, TBL_B.SAME_CNT \n";
-                QueryStr += "             FROM TBL_HISTORY_QUERY A WITH (INDEX(HISTORY_REGINDEX)),\n";
+                //QueryStr += "                  ) AS DLG_ID, A.SID, TBL_B.SAME_CNT \n";
+                QueryStr += "                  ) AS DLG_ID, A.SID, 0 AS SAME_CNT \n";
+                //QueryStr += "             FROM TBL_HISTORY_QUERY A WITH (INDEX(HISTORY_REGINDEX)),\n";
+                QueryStr += "             FROM TBL_HISTORY_QUERY A WITH (INDEX(HISTORY_REGINDEX))\n";
+                /*
                 QueryStr += "                  ( \n";
                 QueryStr += "			         SELECT CUSTOMER_COMMENT_KR AS TRANS_COMMENT, COUNT(CUSTOMER_COMMENT_KR) AS SAME_CNT \n";
                 QueryStr += "                  	   FROM TBL_HISTORY_QUERY A WITH (INDEX(HISTORY_REGINDEX))\n";
@@ -256,18 +265,18 @@ router.post('/selectHistoryList', function (req, res) {
                 }
                 QueryStr += "                  GROUP BY CUSTOMER_COMMENT_KR\n";
                 QueryStr += "                  ) TBL_B \n";
+                */
                 QueryStr += "            WHERE RTRIM(CUSTOMER_COMMENT_KR) != '' \n";
                 if (selDate == 'today'||selDate == 'select') {
-                    QueryStr += "AND REG_DATE BETWEEN @startDate AND @endDate  \n";
+                    //QueryStr += "AND REG_DATE BETWEEN @startDate AND @endDate  \n";
+                    QueryStr += "AND REG_DATE  between CONVERT(nvarchar(100), @startDate) AND CONVERT(nvarchar(100), @endDate)  \n";
                 }else{
                 QueryStr += "";
                 }
-                QueryStr += "              AND A.CUSTOMER_COMMENT_KR = TBL_B.TRANS_COMMENT \n";
 
-                QueryStr += "     ) tbx\n";
-                QueryStr += "     WHERE PAGEIDX = @currentPage\n";
                 if (searchQuestion !== '') {
-                    QueryStr += "     AND TBL_B.TRANS_COMMENT LIKE @searchQuestion \n";
+                    //QueryStr += "     AND TBL_B.TRANS_COMMENT LIKE @searchQuestion \n";
+                    QueryStr += "     AND CUSTOMER_COMMENT_KR LIKE @searchQuestion \n";
                 }
 
                 if (searchUserId !== '') {
@@ -281,6 +290,28 @@ router.post('/selectHistoryList', function (req, res) {
                 if (selMobilePc !== 'all') {
                     QueryStr += " AND	MOBILE_YN = @selMobilePc \n";
                 }
+                //QueryStr += "              AND A.CUSTOMER_COMMENT_KR = TBL_B.TRANS_COMMENT \n";
+
+                QueryStr += "     ) tbx\n";
+                QueryStr += "     WHERE PAGEIDX = @currentPage\n";
+                /*
+                if (searchQuestion !== '') {
+                    //QueryStr += "     AND TBL_B.TRANS_COMMENT LIKE @searchQuestion \n";
+                    QueryStr += "     AND CUSTOMER_COMMENT_KR LIKE @searchQuestion \n";
+                }
+
+                if (searchUserId !== '') {
+                    QueryStr += "     AND USER_ID LIKE @searchUserId \n";
+                }
+
+
+                if (selResult !== 'all') {
+                    QueryStr += "AND	RESULT = @selResult \n";
+                }
+                if (selMobilePc !== 'all') {
+                    QueryStr += " AND	MOBILE_YN = @selMobilePc \n";
+                }
+                */
 
                 logger.info('[알림] [id : %s] [url : %s] [내용 : %s] ', req.session.sid, req.originalUrl.indexOf("?")>0?req.originalUrl.split("?")[0]:req.originalUrl, 'TBL_HISTORY_QUERY 테이블 조회 시작');
                 let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
@@ -683,10 +714,11 @@ router.post('/selectSummaryList', function (req, res) {
             "		END AS RESULT,  \n" +
             "		SUBSTRING(REG_DATE,12,2) + '00-' + (REPLICATE('0',2-LEN(SUBSTRING(REG_DATE,12,2) + 1)) +   \n" +
             "		CONVERT(VARCHAR(2), (SUBSTRING(REG_DATE,12,2) + 1)) + '00') AS REG_DATE_TIME  \n" +
-            "FROM TBL_HISTORY_QUERY  \n" +
+            "FROM TBL_HISTORY_QUERY WITH (INDEX(HISTORY_REGINDEX))\n" +
             "WHERE 1=1  \n" +
-            "AND REG_DATE >= '"+startDateTime+"'  \n" +
-            "AND REG_DATE < '"+endDateTime+"'  \n" +
+            //"AND REG_DATE >= '"+startDateTime+"'  \n" +
+            //"AND REG_DATE < '"+endDateTime+"'  \n" +
+            "AND REG_DATE  between CONVERT(nvarchar(100), '"+startDateTime+"') AND CONVERT(nvarchar(100), '"+endDateTime+"') \n" +
 //            "AND USER_ID IS NOT NULL  \n" +
 //            "AND USER_ID <> ''  \n" +
 //            "AND USER_ID NOT IN ('ejnam', 'ep47','sbpark88','lyhaz7','sokang337','srjang','p41044104','parkfaith','tiger820','jmh2244','dbendus','kevin82','eunyeong')  \n" +
@@ -790,9 +822,10 @@ router.post('/selectSummaryListTime', function (req, res) {
             "      SUM(CASE RESULT WHEN 'Q' THEN 1 ELSE 0 END) AS 'Q', SUM(CASE RESULT WHEN 'Z' THEN 1 ELSE 0 END) AS 'Z', \n" +
             "      SUM(CASE RESULT WHEN 'I' THEN 1 ELSE 0 END) AS 'I', SUM(CASE RESULT WHEN 'G' THEN 1 ELSE 0 END) AS 'G', \n" +
             "   SUM(CASE RESULT WHEN 'B' THEN 1 ELSE 0 END) AS 'B', COUNT(*) AS CNT \n" +
-            "    FROM TBL_HISTORY_QUERY \n" +
+            "    FROM TBL_HISTORY_QUERY WITH (INDEX(HISTORY_REGINDEX)) \n" +
             "    WHERE USER_ID IS NOT NULL and USER_ID <> '' AND USER_ID NOT IN ('ep47','eunyeong','sbpark88','lyhaz7','sokang337','srjang','p41044104','parkfaith','tiger820','jmh2244','dbendus','kevin82','ejnam','eunyeong') \n" +
-            "    AND  (REG_DATE > '"+startDateTime+"' AND REG_DATE < '"+endDateTime+"') \n" +
+            //"    AND  (REG_DATE > '"+startDateTime+"' AND REG_DATE < '"+endDateTime+"') \n" +
+            "    AND REG_DATE  between CONVERT(nvarchar(100), '"+startDateTime+"') AND CONVERT(nvarchar(100), '"+endDateTime+"') \n" +
             "    GROUP BY CONVERT(VARCHAR,CONVERT(DATETIME,REG_DATE),112) + LEFT(CONVERT(VARCHAR,CONVERT(DATETIME,REG_DATE),8),2), RESULT \n" +
             "   ) A \n" +
             "  GROUP BY A.DDATE \n" +
@@ -882,18 +915,20 @@ router.post('/selectSummaryListUser', function (req, res) {
 
             var userQueryStr = "";
             userQueryStr = "SELECT * FROM  ( \n" +
-            " SELECT USER_ID, COUNT(USER_ID) AS Q_CNT FROM TBL_HISTORY_QUERY \n" +
+            " SELECT USER_ID, COUNT(USER_ID) AS Q_CNT FROM TBL_HISTORY_QUERY WITH (INDEX(HISTORY_REGINDEX)) \n" +
             " WHERE USER_ID IS NOT NULL AND USER_ID <> ''  AND USER_ID NOT IN ('ejnam', 'ep47','sbpark88','lyhaz7','sokang337','srjang','p41044104','parkfaith','tiger820','jmh2244','dbendus','kevin82','eunyeong') \n" +
-            " AND  (REG_DATE > '"+startDateTime+"' AND REG_DATE < '"+endDateTime+"') \n" +
+            //" AND  (REG_DATE > '"+startDateTime+"' AND REG_DATE < '"+endDateTime+"') \n" +
+            "    AND REG_DATE  between CONVERT(nvarchar(100), '"+startDateTime+"') AND CONVERT(nvarchar(100), '"+endDateTime+"') \n" +
             " GROUP BY USER_ID  \n" +
             " ) A ORDER BY A.Q_CNT DESC; \n";
 
             var pcMobileQueryStr = "";
             pcMobileQueryStr = "SELECT \n" +
             " USER_ID,  COUNT(MOBILE_YN) AS Q_CNT \n" +
-            " FROM TBL_HISTORY_QUERY \n" +
+            " FROM TBL_HISTORY_QUERY WITH (INDEX(HISTORY_REGINDEX)) \n" +
             " WHERE USER_ID IS NOT NULL AND USER_ID <> '' AND USER_ID NOT IN ('ejnam', 'ep47','sbpark88','lyhaz7','sokang337','srjang','p41044104','parkfaith','tiger820','jmh2244','dbendus','kevin82','eunyeong') \n" +
-            " AND   (REG_DATE > '"+startDateTime+"' AND REG_DATE < '"+endDateTime+"')  AND MOBILE_YN='"+pcMobile+"' \n" +
+            //" AND   (REG_DATE > '"+startDateTime+"' AND REG_DATE < '"+endDateTime+"')  AND MOBILE_YN='"+pcMobile+"' \n" +
+            "    AND REG_DATE  between CONVERT(nvarchar(100), '"+startDateTime+"') AND CONVERT(nvarchar(100), '"+endDateTime+"') \n" +
             " GROUP BY MOBILE_YN, USER_ID; \n" ;
 
            
@@ -982,7 +1017,7 @@ router.post('/selectSummaryListIntentDate', function (req, res) {
             QueryStr = "SELECT * FROM ( \n" +
             " SELECT  \n" +
             " CONVERT(VARCHAR,CONVERT(DATETIME,REG_DATE),112) AS 'reg_date', LUIS_INTENT,  COUNT(*) as 'COUNT' \n" +
-            " FROM TBL_HISTORY_QUERY \n" +
+            " FROM TBL_HISTORY_QUERY WITH (INDEX(HISTORY_REGINDEX)) \n" +
             " WHERE USER_ID IS NOT NULL  \n" +
             " AND   USER_ID IS NOT NULL and USER_ID <> '' AND USER_ID NOT IN ('ejnam', 'ep47','sbpark88','lyhaz7','sokang337','srjang','p41044104','parkfaith','tiger820','jmh2244','dbendus','kevin82','eunyeong') \n" +
             " AND  CONVERT(VARCHAR,CONVERT(DATETIME,REG_DATE),112)  = '"+searchDate+"' \n" +

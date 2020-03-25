@@ -276,7 +276,7 @@ router.post('/getScorePanel', function (req, res) {
     if (selChannel !== 'all') {
         selectQuery += "AND	CHANNEL = '" + selChannel + "' \n";
     }
-    console.log("panel=="+selectQuery);
+    //console.log("panel=="+selectQuery);
     dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue).then(pool => {
         return pool.request().query(selectQuery)
         }).then(result => {
@@ -1146,7 +1146,7 @@ router.post('/getScorePanel4', function (req, res) {
         ) B 
     ), 0) AS MAX_QRY  
     `;
-    console.log("getScorePanel4=="+pannelQry4);
+    //console.log("getScorePanel4=="+pannelQry4);
     dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue).then(pool => {
         return pool.request()
                     .input('startDate', sql.NVarChar, startDate)

@@ -97,8 +97,8 @@ $(document).on('click','#excelDownload',function(){
                     //var count = "100";
                     worksheet.columns = [
                         { header: '번호', key: 'num', width: 7, style: {numFmt: "0000"}},
-                        { header: '질문 내용', key: 'question', width: 40, style: {alignment: {wrapText: true} }},
-                        { header: '중복 갯수', key: 'overlapCount', width: 14},
+                        { header: '질문 내용', key: 'question', width: 54, style: {alignment: {wrapText: true} }},
+                        //{ header: '중복 갯수', key: 'overlapCount', width: 14},
                         { header: '사용자ID', key: 'user', width: 20},
                         { header: 'Device유형', key: 'mobilePc', width: 20},
                         { header: '답변 시간', key: 'resultTime', width: 10 },
@@ -121,7 +121,7 @@ $(document).on('click','#excelDownload',function(){
                         worksheet.addRow({
                             num: data.rows[i].NUM
                             , question: data.rows[i].CUSTOMER_COMMENT_KR
-                            , overlapCount: data.rows[i].SAME_CNT
+                            //, overlapCount: data.rows[i].SAME_CNT
                             , user: data.rows[i].USER_ID
                             , mobilePc: data.rows[i].MOBILE_YN
                             , resultTime: data.rows[i].RESPONSE_TIME
@@ -324,7 +324,7 @@ function makeHistoryTable(newPage) {
                         tableHtml += '<td>' + data.rows[i].NUM + '</td>';
                         tableHtml += '<td style="text-align: left; padding-left:1%;"><a href="#" onClick="getHistoryDetail(' + data.rows[i].SID + '); return false;" >'+ data.rows[i].CUSTOMER_COMMENT_KR + '</a></td>';
                         //tableHtml += '<td>' + userIdText + '</td>';
-                        tableHtml += '<td>' + data.rows[i].SAME_CNT + '</td>';
+                        //tableHtml += '<td>' + data.rows[i].SAME_CNT + '</td>';
                         //tableHtml += '<td>' + data.rows[i].CHATBOT_COMMENT_CODE + '</td>';
                         tableHtml += '<td>' + mobilePcText + '</td>';
                         tableHtml += '<td>' + resultText + '</td>';
