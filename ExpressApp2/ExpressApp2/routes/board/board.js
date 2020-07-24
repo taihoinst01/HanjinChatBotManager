@@ -102,9 +102,20 @@ router.get('/', function (req, res) {
 router.get('/dashBoard', function (req, res) {
 
     var selectChannel = "";
+    /* 수정사항
     selectChannel += "  SELECT ISNULL(CHANNEL,'') AS CHANNEL FROM TBL_HISTORY_QUERY \n";
     selectChannel += "   WHERE 1=1 \n";
     selectChannel += "GROUP BY CHANNEL \n";
+    */
+    
+    selectChannel += "  SELECT 'emulator' AS CHANNEL \n";
+    selectChannel += "  UNION ALL \n";
+    selectChannel += "  SELECT 'webchat' AS CHANNEL \n";
+    selectChannel += "  UNION ALL \n";
+    selectChannel += "  SELECT 'telegram' AS CHANNEL \n";
+    selectChannel += "  UNION ALL \n";
+    selectChannel += "  SELECT 'directline' AS CHANNEL \n";
+    
     dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue).then(pool => {
         //new sql.ConnectionPool(dbConfig).connect().then(pool => {
         return pool.request().query(selectChannel)
@@ -914,6 +925,7 @@ router.post('/getScorePanel1', function (req, res) {
     var startDate = req.body.startDate+" 00:00:00";
     var endDate = req.body.endDate+" 23:59:59";
     var selChannel = req.body.selChannel;
+
 /*
     if (selDate !== 'allDay') {
         pannelQry0 += "AND CONVERT(int, CONVERT(char(8), CONVERT(DATE,CONVERT(DATETIME,REG_DATE),120), 112)) = CONVERT(VARCHAR, GETDATE(), 112) \n";
