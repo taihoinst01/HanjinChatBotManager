@@ -106,8 +106,7 @@ router.get('/dashBoard', function (req, res) {
     selectChannel += "  SELECT ISNULL(CHANNEL,'') AS CHANNEL FROM TBL_HISTORY_QUERY \n";
     selectChannel += "   WHERE 1=1 \n";
     selectChannel += "GROUP BY CHANNEL \n";
-    */
-    
+    */    
     selectChannel += "  SELECT 'emulator' AS CHANNEL \n";
     selectChannel += "  UNION ALL \n";
     selectChannel += "  SELECT 'webchat' AS CHANNEL \n";
