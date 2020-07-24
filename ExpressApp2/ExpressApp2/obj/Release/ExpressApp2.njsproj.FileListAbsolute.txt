@@ -1,0 +1,2 @@
+D:\HanjinChatBotManager\ExpressApp2\ExpressApp2\obj\Release\ExpressApp2.njsproj.CoreCompileInputs.cache
+D:\HanjinChatBotManager\ExpressApp2\ExpressApp2\bin\Microsoft.NodejsTools.WebRole.dll

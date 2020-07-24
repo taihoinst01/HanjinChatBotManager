@@ -6,12 +6,13 @@ Stores language files in json files compatible to [webtranslateit](http://webtra
 Adds new strings on-the-fly when first used in your app.
 No extra parsing needed.
 
-[![Linux/OSX Build][travis-image]][travis-url]
-[![Windows Build][appveyor-image]][appveyor-url]
-[![NPM version][npm-image]][npm-url]
-[![Dependency Status][dependency-image]][dependency-url]
+[![Travis][travis-image]][travis-url] 
 [![Test Coverage][coveralls-image]][coveralls-url]
+[![NPM version][npm-image]][npm-url]
+![npm](https://img.shields.io/npm/dw/i18n)
 [![Known Vulnerabilities][snyk-image]][snyk-url]
+[![FOSSA Status][fossa-image]][fossa-url]
+[![Greenkeeper badge][greenkeeper-image]][greenkeeper-url]
 
 ## Install
 ```sh
@@ -152,7 +153,7 @@ i18n.configure({
     // where to store json files - defaults to './locales' relative to modules directory
     directory: './mylocales',
 
-    // controll mode on directory creation - defaults to NULL which defaults to umask of process user. Setting has no effect on win.
+    // control mode on directory creation - defaults to NULL which defaults to umask of process user. Setting has no effect on win.
     directoryPermissions: '755',
 
     // watch for changes in json files to reload locale on updates - defaults to false
@@ -161,7 +162,7 @@ i18n.configure({
     // whether to write new locale information to disk - defaults to true
     updateFiles: false,
 
-    // sync locale information accros all files - defaults to false
+    // sync locale information across all files - defaults to false
     syncFiles: false,
 
     // what to use as the indentation unit - defaults to "\t"
@@ -199,7 +200,12 @@ i18n.configure({
     api: {
       '__': 't',  //now req.__ becomes req.t
       '__n': 'tn' //and req.__n can be called as req.tn
-    }
+    },
+
+    // Downcase locale when passed on queryParam; e.g. lang=en-US becomes
+    // en-us.  When set to false, the queryParam value will be used as passed;
+    // e.g. lang=en-US remains en-US.
+    preserveLegacyCase: true
 });
 ```
 
@@ -215,7 +221,7 @@ After this and until the cookie expires, `i18n.init()` will get the value of the
 
 #### Some words on `register` option
 
-Esp. when used in a cli like scriptyou won't use any `i18n.init()` to guess language settings from your user. Thus `i18n` won't bind itself to any `res` or `req` object and will work like a static module.
+Esp. when used in a cli like script you won't use any `i18n.init()` to guess language settings from your user. Thus `i18n` won't bind itself to any `res` or `req` object and will work like a static module.
 
 ```js
 var anyObject = {};
@@ -354,11 +360,11 @@ res.__n("%s cat", 3); // 3 Katzen
 
 // passing specific locale
 __n({singular: "%s cat", plural: "%s cats", locale: "fr"}, 1); // 1 chat
-__n({singular: "%s cat", plural: "%s cats", locale: "fr"}, 3); // 3 chat
+__n({singular: "%s cat", plural: "%s cats", locale: "fr"}, 3); // 3 chats
 
 // the all in one object signature
 __n({singular: "%s cat", plural: "%s cats", locale: "fr", count: 1}); // 1 chat
-__n({singular: "%s cat", plural: "%s cats", locale: "fr", count: 3}); // 3 chat
+__n({singular: "%s cat", plural: "%s cats", locale: "fr", count: 3}); // 3 chats
 ```
 
 When used in short form like `__n(phrase, count)` the following will get added to your json files:
@@ -415,11 +421,11 @@ __n('%s cat', 6); // --> 6 кошек
 __n('%s cat', 21); // --> 21 кошка
 ```
 
-> __Note__ i18n.__n() will add a blueprint ("one, other" or "one, few, other" for eaxmple) for each locale to your json on updateFiles in a future version.
+> __Note__ i18n.__n() will add a blueprint ("one, other" or "one, few, other" for example) for each locale to your json on updateFiles in a future version.
 
 ### i18n.__mf()
 
-Supports the advanced MessageFormat as provided by excellent [messageformat module](https://www.npmjs.com/package/messageformat). You should definetly head over to [messageformat.github.io](https://messageformat.github.io) for a guide to MessageFormat. i18n takes care of `new MessageFormat('en').compile(msg);` with the current `msg` loaded from it's json files and cache that complied fn in memory. So in short you might use it similar to `__()` plus extra object to accomblish MessageFormat's formating. Ok, some examples:
+Supports the advanced MessageFormat as provided by excellent [messageformat module](https://www.npmjs.com/package/messageformat). You should definetly head over to [messageformat.github.io](https://messageformat.github.io) for a guide to MessageFormat. i18n takes care of `new MessageFormat('en').compile(msg);` with the current `msg` loaded from it's json files and cache that complied fn in memory. So in short you might use it similar to `__()` plus extra object to accomplish MessageFormat's formatting. Ok, some examples:
 
 ```js
 // assume res is set to german
@@ -468,7 +474,7 @@ res.__mf('{N, plural, one{# cat} few{# cats} many{# cats} others{# cats}}', {N: 
 // ru --> 21 кошка       ru uses "__one__" when ending on "1"
 ```
 
-Take a look at [Mozilla](https://developer.mozilla.org/en-US/docs/Mozilla/Localization/Localization_and_Plurals) to quickly get an idea of what pluralization has to deal with. With `__mf()` you get a very powerfull tool, but you need to handle it correctly.
+Take a look at [Mozilla](https://developer.mozilla.org/en-US/docs/Mozilla/Localization/Localization_and_Plurals) to quickly get an idea of what pluralization has to deal with. With `__mf()` you get a very powerful tool, but you need to handle it correctly.
 
 But MessageFormat can handle more! You get ability to process:
 
@@ -527,7 +533,7 @@ i18n.setLocale(res, 'ar'); // --> req: Hallo res: مرحبا res.locals: مرح�
 i18n.setLocale(res.locals, 'ar'); // --> req: Hallo res: Hallo res.locals: مرحبا
 ```
 
-You'll get even more controll when passing an array of objects:
+You'll get even more control when passing an array of objects:
 
 ```js
 i18n.setLocale([req, res.locals], req.params.lang); // --> req: مرحبا res: Hallo res.locals: مرحبا
@@ -549,19 +555,27 @@ getLocale(req); // --> de
 req.getLocale(); // --> de
 ```
 
+### i18n.getLocales()
+
+Returns a list with all configured locales.
+
+```js
+i18n.getLocales(); // --> ['en', 'de', 'en-GB']
+```
+
 ### i18n.getCatalog()
 
 Returns a whole catalog optionally based on current scope and locale.
 
 ```js
-getCatalog(); // returns all locales
-getCatalog('de'); // returns just 'de'
+getCatalog(); // returns catalog for all locales
+getCatalog('de'); // returns just for 'de'
 
-getCatalog(req); // returns current locale of req
-getCatalog(req, 'de'); // returns just 'de'
+getCatalog(req); // returns catalog for all locales
+getCatalog(req, 'de'); // returns just for 'de'
 
-req.getCatalog(); // returns current locale of req
-req.getCatalog('de'); // returns just 'de'
+req.getCatalog(); // returns catalog for all locales
+req.getCatalog('de'); // returns just for 'de'
 ```
 
 ## Attaching helpers for template engines
@@ -942,65 +956,18 @@ i18n.configure({
 });
 ```
 
-[![NPM](https://nodei.co/npm/i18n.svg?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/i18n/)
+## Roadmap
+
+* add a storage adapter (to support .yaml, .js, memory)
+* improved fallbacks
+* refactor dot notation (ie. configurable delimiters)
+* refactor to ES6
+* refactor to standard + prettier
+* move docs + examples to github pages
 
 ## Changelog
 
-* 0.8.3:
-    + __fixed__: #235 objectNotation, #231 Plurals support regions ("en-US", "de-DE")
-* 0.8.2:
-    * __fixed__: typos, objectNotation mutator #226, accept-language headers with fallback #228
-* 0.8.1:
-    * __hotfix__: fixes `i18n.setLocale()` recursion bug on nested res-/req-objects [sails#3631](https://github.com/balderdashy/sails/pull/3631)
-* 0.8.0:
-    * __improved__: `i18n.__n()` supports all plurals
-    * __new__: added MessageFormat by explicit `i18n.__mf()`, `api` alias option, `syncFiles` option
-    * __fixed__: typos, missing and wrong docs, plural bugs like: #210, #191, #190 
-* 0.7.0:
-    * __improved__: `i18n.setLocale()` and `i18n.init()` refactored to comply with most common use cases, much better test coverage and docs
-    * __new__: options: `autoReload`, `directoryPermissions`, `register`, `queryParameter`, read locales from filenames with empty `locales` option (#134)
-    * __fixed__: typos, missing and wrong docs, issues related to `i18n.setLocale()`
-* 0.6.0:
-    * __improved__: Accept-Language header parsing to ICU, delimiters with object notation, jshint, package.json, README;
-    * __new__: prefix for locale files, `i18n.getLocales()`, custom logger, fallback[s];
-    * __fixed__: typos, badges, plural (numbers), `i18n.setLocale()` for `req` _and_ `res`
-* 0.5.0: feature release; added {{mustache}} parsing by #85, added "object.notation" by #110, fixed buggy req.__() implementation by #111 and closed 13 issues
-* 0.4.1: stable release; merged/closed: #57, #60, #67 typo fixes; added more examples and new features: #53, #65, #66 - and some more api reference
-* 0.4.0: stable release; closed: #22, #24, #4, #10, #54; added examples, clarified concurrency usage in different template engines, added `i18n.getCatalog`
-* 0.3.9: express.js usage, named api, jscoverage + more test, refactored configure, closed: #51, #20, #16, #49
-* 0.3.8: fixed: #44, #49; merged: #47, #45, #50; added: #33; updated: README
-* 0.3.7: tests by mocha.js, added `this.locale` to `__` and `__n`
-* 0.3.6: travisCI, writeFileSync, devDependencies, jslint, MIT, fixed: #29, #9, merged: #25, #30, #43
-* 0.3.5: fixed some issues, prepared refactoring, prepared publishing to npm finally
-* 0.3.4: merged pull request #13 from Fuitad/master and updated README
-* 0.3.3: merged pull request from codders/master and modified for backward compatibility. Usage and tests pending
-* 0.3.2: merged pull request #7 from carlptr/master and added tests, modified fswrite to do sync writes
-* 0.3.0: added configure and init with express support (calling guessLanguage() via 'accept-language')
-* 0.2.0: added plurals
-* 0.1.0: added tests
-* 0.0.1: start
-
-## Licensed under MIT
-
-Copyright (c) 2011-2016 Marcus Spiegel <marcus.spiegel@gmail.com>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+For current release notes see [GitHub Release Notes](https://github.com/mashpie/i18n-node/releases). Changes until 0.8.3 are filed as [Changelog Summary](https://github.com/mashpie/i18n-node/blob/master/CHANGELOG.md).
 
 [npm-image]: https://badge.fury.io/js/i18n.svg
 [npm-url]: https://www.npmjs.com/package/i18n
@@ -1008,14 +975,14 @@ SOFTWARE.
 [travis-image]: https://travis-ci.org/mashpie/i18n-node.svg?branch=master
 [travis-url]: https://travis-ci.org/mashpie/i18n-node
 
-[appveyor-image]: https://ci.appveyor.com/api/projects/status/677snewuop7u5xtl?svg=true
-[appveyor-url]: https://ci.appveyor.com/project/mashpie/i18n-node
-
 [coveralls-image]: https://coveralls.io/repos/github/mashpie/i18n-node/badge.svg?branch=master
 [coveralls-url]: https://coveralls.io/github/mashpie/i18n-node?branch=master
 
-[dependency-image]: https://img.shields.io/gemnasium/mashpie/i18n-node.svg
-[dependency-url]: https://gemnasium.com/mashpie/i18n-node
-
 [snyk-image]: https://snyk.io/test/npm/i18n/badge.svg
 [snyk-url]: https://snyk.io/test/npm/i18n
+
+[fossa-image]: https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmashpie%2Fi18n-node.svg?type=shield
+[fossa-url]: https://app.fossa.com/projects/git%2Bgithub.com%2Fmashpie%2Fi18n-node?ref=badge_shield
+
+[greenkeeper-image]: https://badges.greenkeeper.io/mashpie/i18n-node.svg
+[greenkeeper-url]: https://greenkeeper.io/

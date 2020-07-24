@@ -1,3 +1,6 @@
 C:\Users\YOODOOYEON\Source\Repos\new_chatbotMng\ExpressApp2\ExpressApp2\obj\Debug\ExpressApp2.njsprojResolveAssemblyReference.cache
 C:\Users\YOODOOYEON\Source\Repos\new_chatbotMng\ExpressApp2\ExpressApp2\obj\Debug\ExpressApp2.njsproj.CoreCompileInputs.cache
 C:\Users\YOODOOYEON\Source\Repos\new_chatbotMng\ExpressApp2\ExpressApp2\bin\Microsoft.NodejsTools.WebRole.dll
+D:\HanjinChatBotManager\ExpressApp2\ExpressApp2\obj\Debug\ExpressApp2.njsprojAssemblyReference.cache
+D:\HanjinChatBotManager\ExpressApp2\ExpressApp2\obj\Debug\ExpressApp2.njsproj.CoreCompileInputs.cache
+D:\HanjinChatBotManager\ExpressApp2\ExpressApp2\bin\Microsoft.NodejsTools.WebRole.dll
