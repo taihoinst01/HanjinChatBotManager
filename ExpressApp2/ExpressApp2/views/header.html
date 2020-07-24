@@ -293,13 +293,11 @@
         return false;
         });
         //f12 방지
-        $(document).bind('keydown', function (e) {
-            /*
-            if ( e.keyCode == 123 /* F12 * /) {
+        $(document).bind('keydown', function (e) {            
+            if ( e.keyCode == 123 /* F12 */) {
                 e.preventDefault();
                 e.returnValue = false;
-            }
-            */
+            }            
         });
     });
     //드래그방지 주석
